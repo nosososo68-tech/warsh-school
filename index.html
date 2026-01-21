@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام الإمام ورش المطور - المبرمج مصطفى عبد الله أحمد</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-
     <style>
         :root { --primary: #1e4d2b; --secondary: #4a7c44; --gold: #d4af37; --white: #ffffff; --bg: #fdfaf5; --danger: #c0392b; }
         .theme-blue { --primary: #0a192f; --secondary: #112240; --gold: #64ffda; --bg: #f0f4f8; }
@@ -16,27 +14,24 @@
         * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s; }
         body { background-color: var(--bg); margin: 0; padding: 20px; text-align: center; }
         #lockScreen { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--primary); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .glass-card { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); width: 90%; max-width: 400px; border: 3px solid var(--gold); }
-        #contactModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); z-index: 10001; display: none; align-items: center; justify-content: center; }
-        .modal-box { background: white; padding: 30px; border-radius: 20px; max-width: 400px; width: 90%; border: 4px solid var(--primary); }
-        .theme-selector { display: flex; gap: 10px; justify-content: center; margin: 15px 0; }
-        .theme-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
-        .chart-container { background: white; padding: 20px; border-radius: 20px; margin-top: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .bar-chart { display: flex; align-items: flex-end; justify-content: space-around; height: 200px; padding-top: 20px; }
-        .bar { width: 40px; background: linear-gradient(to top, var(--primary), var(--gold)); border-radius: 8px 8px 0 0; position: relative; animation: grow 1.5s ease-out; }
-        .bar-label { position: absolute; bottom: -30px; width: 100%; font-size: 11px; font-weight: bold; transform: rotate(-20deg); }
-        .bar-value { position: absolute; top: -25px; width: 100%; font-size: 12px; font-weight: bold; color: var(--primary); }
-        @keyframes grow { from { height: 0; } }
+        .glass-card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); width: 90%; max-width: 400px; border: 3px solid var(--gold); }
         .container { max-width: 800px; margin: auto; }
-        .card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 25px; border-bottom: 5px solid var(--gold); }
-        .btn { padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; margin: 5px 0; }
+        .card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; border-bottom: 5px solid var(--gold); }
+        .btn { padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; margin: 5px 0; font-size: 16px; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-secondary { background: var(--secondary); color: white; }
-        .btn-danger { background: var(--danger); color: white; padding: 5px 10px; width: auto; font-size: 12px; }
-        input, select, textarea { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #eee; border-radius: 10px; text-align: center; }
+        .btn-danger { background: var(--danger); color: white; }
         .hidden { display: none !important; }
-        .st-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; }
-        footer { margin-top: 40px; font-size: 12px; color: #666; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #eee; border-radius: 10px; text-align: center; font-size: 16px; }
+        .st-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .stat-box { padding: 10px; border-radius: 10px; color: white; font-size: 12px; font-weight: bold; }
+        .history-item { text-align: right; padding: 10px; border: 1px solid #eee; margin: 5px 0; border-radius: 10px; font-size: 14px; position: relative; }
+        .edit-tool { position: absolute; left: 10px; top: 10px; display: flex; gap: 5px; }
+        .bar-chart { display: flex; align-items: flex-end; justify-content: space-around; height: 150px; margin-top: 20px; }
+        .bar { width: 30px; background: var(--primary); border-radius: 5px 5px 0 0; position: relative; }
+        .bar-label { position: absolute; bottom: -25px; font-size: 10px; width: 100%; }
+        footer { margin-top: 30px; font-size: 11px; color: #777; }
     </style>
 </head>
 <body id="bodyTag">
@@ -44,42 +39,54 @@
 <div id="lockScreen">
     <div class="glass-card">
         <h2>مدرسة الإمام ورش</h2>
-        <input type="password" id="siteKey" placeholder="أدخل الرمز السري للوصول">
+        <input type="password" id="siteKey" placeholder="الرمز السري">
         <button class="btn btn-primary" onclick="unlockSite()">فتح النظام</button>
-        <p style="font-size: 11px;">المطور: مصطفى عبد الله أحمد</p>
-    </div>
-</div>
-
-<div id="contactModal">
-    <div class="modal-box">
-        <h3>عزيزي الطالب / ولي الأمر 🌹</h3>
-        <p>إذا واجهت أي مشكلة، تواصل مع المبرمج:</p>
-        <h4 style="color: var(--gold);">مصطفى عبد الله أحمد</h4>
-        <p style="font-weight: bold; font-size: 18px;">0599804296</p>
-        <button class="btn btn-primary" onclick="closeModal()">موافق، دخول</button>
+        <p style="font-size: 11px;">المبرمج: مصطفى عبد الله أحمد</p>
     </div>
 </div>
 
 <div class="container hidden" id="mainApp">
     <header>
-        <h2>نظام الإدارة - مدرسة الإمام ورش</h2>
-        <div class="theme-selector">
-            <div class="theme-btn" style="background: #1e4d2b;" onclick="setTheme('default')"></div>
-            <div class="theme-btn" style="background: #0a192f;" onclick="setTheme('theme-blue')"></div>
-            <div class="theme-btn" style="background: #d35400;" onclick="setTheme('theme-orange')"></div>
-        </div>
-        <p style="background:var(--gold); padding:2px 15px; border-radius:20px; display:inline-block; font-size:12px;">المبرمج المسؤول: مصطفى عبد الله أحمد</p>
+        <h3 style="color: var(--primary);">نظام مدرسة الإمام ورش</h3>
+        <p style="font-size: 12px; font-weight: bold; color: var(--gold);">إشراف المبرمج مصطفى عبد الله أحمد</p>
     </header>
 
     <div id="roleSelection">
         <div class="card">
-            <button class="btn btn-primary" onclick="showScreen('loginScreen')">دخول الأستاذ سعد</button>
-            <button class="btn btn-secondary" onclick="prepareStudentView()">دخول الطلاب</button>
+            <button class="btn btn-primary" onclick="showScreen('loginScreen')">بوابة الإدارة (الأستاذ سعد)</button>
+            <button class="btn btn-secondary" onclick="showScreen('studentPortal')">بوابة الطلاب</button>
         </div>
-        <div class="chart-container">
-            <h3>🏆 لوحة شرف المتفوقين 🏆</h3>
+        <div class="card">
+            <h4>🏆 لوحة المتفوقين</h4>
             <div class="bar-chart" id="honorChart"></div>
         </div>
+    </div>
+
+    <div id="studentPortal" class="hidden card">
+        <h4>استعلام الطالب</h4>
+        <select id="selStudentClass" onchange="fillStudentList('selStudentClass', 'selStudentName')">
+            <option value="">اختر فصلك</option>
+            <option value="3/1">فصل 3/1</option>
+            <option value="3/2">فصل 3/2</option>
+        </select>
+        <select id="selStudentName" class="hidden"><option value="">اختر اسمك</option></select>
+        <button id="btnViewReport" class="btn btn-primary hidden" onclick="viewStudentReport()">عرض ملفي التعليمي</button>
+        <button class="btn" onclick="showScreen('roleSelection')">رجوع</button>
+    </div>
+
+    <div id="studentReport" class="hidden">
+        <div class="card">
+            <h3 id="reportTitle">اسم الطالب</h3>
+            <div class="stats-grid">
+                <div class="stat-box" style="background: #e67e22;">لم يحفظ: <span id="statFail">0</span></div>
+                <div class="stat-box" style="background: #c0392b;">محروم: <span id="statBanned">0</span></div>
+                <div class="stat-box" style="background: #7f8c8d;">غائب: <span id="statAbs">0</span></div>
+            </div>
+            <hr>
+            <h4>سجل التسميع الأخير:</h4>
+            <div id="reportHistory"></div>
+        </div>
+        <button class="btn btn-secondary" onclick="showScreen('studentPortal')">رجوع للبحث</button>
     </div>
 
     <div id="loginScreen" class="card hidden">
@@ -92,179 +99,201 @@
 
     <div id="teacherDash" class="hidden">
         <div class="card">
-            <input type="text" id="stName" placeholder="اسم الطالب الجديد">
-            <select id="stClass"><option value="3/1">فصل 3/1</option><option value="3/2">فصل 3/2</option></select>
-            <button class="btn btn-primary" onclick="addStudent()">إضافة الطالب</button>
-            <div style="display:flex; gap:10px;">
-                <button class="btn btn-secondary" onclick="loadClass('3/1')">فصل 3/1</button>
-                <button class="btn btn-secondary" onclick="loadClass('3/2')">فصل 3/2</button>
+            <input type="text" id="stName" placeholder="اسم طالب جديد">
+            <select id="stClass"><option value="3/1">3/1</option><option value="3/2">3/2</option></select>
+            <button class="btn btn-primary" onclick="addStudent()">إضافة</button>
+            <div style="display:flex; gap:5px;">
+                <button class="btn btn-secondary" onclick="loadClass('3/1')">طلاب 3/1</button>
+                <button class="btn btn-secondary" onclick="loadClass('3/2')">طلاب 3/2</button>
             </div>
         </div>
         <div id="classStudentsList" class="card hidden"></div>
-        <button class="btn" onclick="showScreen('roleSelection')">تسجيل الخروج</button>
+        <button class="btn" onclick="showScreen('roleSelection')">تسجيل خروج</button>
     </div>
 
-    <div id="gradingPage" class="hidden">
-        <div class="card">
-            <h3 id="activeStName">الاسم</h3>
-            <input type="number" id="rPage" placeholder="رقم الصفحة">
-            <select id="rStatus">
-                <option value="حفظ">حفظ ✅</option>
-                <option value="لم يحفظ">لم يحفظ ❌</option>
-                <option value="محروم">محروم ⛔</option>
-                <option value="غائب">غائب 💤</option>
-            </select>
-            <select id="rScore">
-                <option value="0">لا يوجد (0)</option>
-                <option value="7">7 - ممتاز</option>
-                <option value="6">6 - جيد جداً</option>
-                <option value="5">5 - مقبول</option>
-                <option value="4">4 - ضعيف</option>
-            </select>
-            <textarea id="rNote" placeholder="ملاحظات المعلم..."></textarea>
-            <button class="btn btn-primary" onclick="saveRecord()">حفظ وتوثيق الدرجة</button>
-        </div>
+    <div id="gradingPage" class="hidden card">
+        <h3 id="activeStName">الاسم</h3>
+        <input type="number" id="rPage" placeholder="رقم الصفحة">
+        <select id="rStatus">
+            <option value="حفظ">حفظ ✅</option>
+            <option value="لم يحفظ">لم يحفظ ❌</option>
+            <option value="محروم">محروم ⛔</option>
+            <option value="غائب">غائب 💤</option>
+        </select>
+        <select id="rScore">
+            <option value="0">0 (بدون درجة)</option>
+            <option value="7">7 - ممتاز</option>
+            <option value="6">6 - جيد جداً</option>
+            <option value="5">5 - مقبول</option>
+            <option value="4">4 - ضعيف</option>
+        </select>
+        <textarea id="rNote" placeholder="ملاحظات.."></textarea>
+        <button class="btn btn-primary" id="btnSaveRecord" onclick="saveRecord()">حفظ البيانات للسحاب</button>
         <button class="btn btn-secondary" onclick="showScreen('teacherDash')">رجوع</button>
+        <hr>
+        <h4>السجل الحالي (للتعديل):</h4>
+        <div id="editHistory"></div>
     </div>
 
     <footer>
-        <p>جميع الحقوق محفوظة للمبرمج مصطفى عبد الله أحمد © 2026</p>
+        <p>تصميم وتطوير المبرمج: مصطفى عبد الله أحمد | جوال: 0599804296</p>
     </footer>
 </div>
 
 <script>
-    // إعدادات الربط بالسحاب (Firebase)
-    const firebaseConfig = {
-        databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app/"
-    };
-
-    // تشغيل المحرك
+    const firebaseConfig = { databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app/" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
     let students = [];
-    let currentId = null;
-    let currentClass = "";
+    let currentStId = null;
+    let editIndex = null;
 
-    // جلب البيانات فور فتح الموقع
     function loadData() {
         db.ref('students').on('value', (snapshot) => {
-            const data = snapshot.val();
-            students = data ? data : [];
+            students = snapshot.val() || [];
             renderChart();
-            if(currentClass) loadClass(currentClass);
         });
     }
-
-    // إرسال البيانات للسحاب
-    function saveData() {
-        db.ref('students').set(students).then(() => {
-            console.log("Data saved successfully!");
-        }).catch((error) => {
-            alert("خطأ في الاتصال بالسحاب: " + error.message);
-        });
-    }
-
     loadData();
 
-    function setTheme(theme) { document.getElementById('bodyTag').className = (theme === 'default') ? '' : theme; }
+    function saveData() { db.ref('students').set(students); }
 
     function unlockSite() {
         if(document.getElementById('siteKey').value === "2026") {
             document.getElementById('lockScreen').style.display = 'none';
             document.getElementById('mainApp').classList.remove('hidden');
-        } else { alert("الرمز السري خطأ!"); }
-    }
-
-    function prepareStudentView() { document.getElementById('contactModal').style.display = 'flex'; }
-    function closeModal() { document.getElementById('contactModal').style.display = 'none'; }
-
-    function renderChart() {
-        const chart = document.getElementById('honorChart');
-        chart.innerHTML = "";
-        let topStudents = students.map(s => {
-            let total = s.records ? s.records.reduce((sum, r) => sum + parseInt(r.score || 0), 0) : 0;
-            return { name: s.name, total: total };
-        }).filter(s => s.total > 0).sort((a,b) => b.total - a.total).slice(0, 5);
-        
-        if(topStudents.length === 0) { chart.innerHTML = "<p>لا يوجد متفوقون حالياً</p>"; return; }
-        const maxScore = topStudents[0].total;
-        topStudents.forEach(s => {
-            let height = (s.total / maxScore) * 100;
-            chart.innerHTML += `<div class="bar" style="height: ${height}%"><span class="bar-value">${s.total}</span><span class="bar-label">${s.name.split(' ')[0]}</span></div>`;
-        });
+        } else { alert("الرمز خطأ!"); }
     }
 
     function showScreen(id) {
-        document.querySelectorAll('.container > div').forEach(d => { if(d.id !== 'roleSelection') d.classList.add('hidden'); });
-        document.getElementById('roleSelection').classList.add('hidden');
-        document.getElementById(id).classList.remove('hidden');
+        document.querySelectorAll('.container > div').forEach(d => { if(d.id !== 'roleSelection' && d.tagName !== 'HEADER' && d.tagName !== 'FOOTER') d.classList.add('hidden'); });
+        document.getElementById('roleSelection').classList.toggle('hidden', id !== 'roleSelection');
+        if(id !== 'roleSelection') document.getElementById(id).classList.remove('hidden');
     }
 
     function teacherLogin() {
         if(document.getElementById('username').value === 'saad' && document.getElementById('password').value === '1234567891011s') {
             showScreen('teacherDash');
-        } else { alert("بيانات الخطأ!"); }
+        } else { alert("خطأ!"); }
     }
 
-    function addStudent() {
-        const name = document.getElementById('stName').value;
-        const cls = document.getElementById('stClass').value;
-        if(name) { 
-            students.push({id: Date.now(), name, class: cls, records: []}); 
-            saveData(); 
-            document.getElementById('stName').value = "";
-        }
+    function fillStudentList(classSelId, nameSelId) {
+        const cls = document.getElementById(classSelId).value;
+        const nameSel = document.getElementById(nameSelId);
+        nameSel.innerHTML = '<option value="">اختر الاسم</option>';
+        if(!cls) { nameSel.classList.add('hidden'); return; }
+        students.filter(s => s.class === cls).forEach(s => {
+            nameSel.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+        });
+        nameSel.classList.remove('hidden');
+        if(classSelId === 'selStudentClass') document.getElementById('btnViewReport').classList.remove('hidden');
     }
 
-    function deleteStudent(id) {
-        if(confirm("هل أنت متأكد من حذف هذا الطالب نهائياً؟")) {
-            students = students.filter(s => s.id !== id);
-            saveData();
-        }
+    function viewStudentReport() {
+        const id = document.getElementById('selStudentName').value;
+        if(!id) return;
+        const s = students.find(x => x.id == id);
+        document.getElementById('reportTitle').innerText = s.name;
+        const records = s.records || [];
+        document.getElementById('statFail').innerText = records.filter(r => r.status === 'لم يحفظ').length;
+        document.getElementById('statBanned').innerText = records.filter(r => r.status === 'محروم').length;
+        document.getElementById('statAbs').innerText = records.filter(r => r.status === 'غائب').length;
+        
+        const historyDiv = document.getElementById('reportHistory');
+        historyDiv.innerHTML = records.length ? "" : "لا يوجد سجلات.";
+        records.forEach(r => {
+            historyDiv.innerHTML += `<div class="history-item">📅 ${r.date} | ص: ${r.page} | الحالة: <b>${r.status}</b> | الدرجة: ${r.score} <br> 📝 ${r.note || '-'}</div>`;
+        });
+        showScreen('studentReport');
     }
 
     function loadClass(cls) {
-        currentClass = cls;
         const list = document.getElementById('classStudentsList');
         list.classList.remove('hidden');
-        list.innerHTML = `<h4>طلاب فصل ${cls}</h4>`;
+        list.innerHTML = `<h4>فصل ${cls}</h4>`;
         students.filter(s => s.class === cls).forEach(s => {
-            list.innerHTML += `
-                <div class="st-row">
-                    <span style="font-weight:bold;">${s.name}</span>
-                    <div style="display:flex; gap:5px;">
-                        <button class="btn btn-secondary" style="width:auto; padding:5px 10px;" onclick="openGrading(${s.id})">تسميع</button>
-                        <button class="btn btn-danger" onclick="deleteStudent(${s.id})">حذف</button>
-                    </div>
-                </div>`;
+            list.innerHTML += `<div class="st-row"><span>${s.name}</span><div><button class="btn btn-secondary" style="width:auto;" onclick="openGrading(${s.id})">تسميع/تعديل</button> <button class="btn btn-danger" style="width:auto;" onclick="deleteStudent(${s.id})">حذف</button></div></div>`;
         });
     }
 
     function openGrading(id) {
-        currentId = id;
-        const s = students.find(x => x.id === id);
+        currentStId = id;
+        editIndex = null;
+        const s = students.find(x => x.id == id);
         document.getElementById('activeStName').innerText = s.name;
+        document.getElementById('btnSaveRecord').innerText = "حفظ البيانات للسحاب";
+        refreshEditHistory(s);
         showScreen('gradingPage');
     }
 
+    function refreshEditHistory(s) {
+        const div = document.getElementById('editHistory');
+        div.innerHTML = "";
+        (s.records || []).forEach((r, idx) => {
+            div.innerHTML += `<div class="history-item">${r.date} - درجة: ${r.score} <div class="edit-tool"><button onclick="startEdit(${idx})" style="color:blue">تعديل</button><button onclick="deleteRecord(${idx})" style="color:red">حذف</button></div></div>`;
+        });
+    }
+
     function saveRecord() {
-        const sIndex = students.findIndex(x => x.id === currentId);
-        let score = document.getElementById('rScore').value;
-        let status = document.getElementById('rStatus').value;
-        if(status !== 'حفظ') score = 0;
-        if(!students[sIndex].records) students[sIndex].records = [];
-        students[sIndex].records.unshift({
+        const sIdx = students.findIndex(x => x.id == currentStId);
+        const record = {
             date: new Date().toLocaleDateString('ar-SA'),
             page: document.getElementById('rPage').value,
-            status: status,
-            score: score,
+            status: document.getElementById('rStatus').value,
+            score: document.getElementById('rScore').value,
             note: document.getElementById('rNote').value
-        });
+        };
+        if(!students[sIdx].records) students[sIdx].records = [];
+        if(editIndex !== null) students[sIdx].records[editIndex] = record;
+        else students[sIdx].records.unshift(record);
         saveData();
-        alert("تم الحفظ بنجاح ✅");
+        alert("تم التوثيق ✅");
         showScreen('teacherDash');
+    }
+
+    function startEdit(idx) {
+        editIndex = idx;
+        const s = students.find(x => x.id == currentStId);
+        const r = s.records[idx];
+        document.getElementById('rPage').value = r.page;
+        document.getElementById('rStatus').value = r.status;
+        document.getElementById('rScore').value = r.score;
+        document.getElementById('rNote').value = r.note;
+        document.getElementById('btnSaveRecord').innerText = "تحديث السجل الحالي";
+        window.scrollTo(0,0);
+    }
+
+    function deleteRecord(idx) {
+        if(confirm("حذف الدرجة؟")) {
+            const sIdx = students.findIndex(x => x.id == currentStId);
+            students[sIdx].records.splice(idx, 1);
+            saveData();
+            openGrading(currentStId);
+        }
+    }
+
+    function addStudent() {
+        const n = document.getElementById('stName').value;
+        const c = document.getElementById('stClass').value;
+        if(n) { students.push({id: Date.now(), name: n, class: c, records: []}); saveData(); document.getElementById('stName').value=""; }
+    }
+
+    function deleteStudent(id) { if(confirm("حذف الطالب نهائياً؟")) { students = students.filter(s => s.id != id); saveData(); } }
+
+    function renderChart() {
+        const chart = document.getElementById('honorChart');
+        chart.innerHTML = "";
+        let top = students.map(s => ({
+            name: s.name,
+            total: (s.records || []).reduce((a, b) => a + parseInt(b.score || 0), 0)
+        })).filter(s => s.total > 0).sort((a,b) => b.total - a.total).slice(0, 5);
+        if(!top.length) { chart.innerHTML = "لا يوجد متفوقون"; return; }
+        top.forEach(s => {
+            let h = (s.total / top[0].total) * 100;
+            chart.innerHTML += `<div class="bar" style="height:${h}%"><span style="font-size:9px; top:-15px; position:absolute;">${s.total}</span><span class="bar-label">${s.name.split(' ')[0]}</span></div>`;
+        });
     }
 </script>
 </body>
-</html>
+</html> 
