@@ -14,6 +14,7 @@
         .card { background: var(--card); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 10px auto; max-width: 550px; border-top: 5px solid var(--g); }
         .btn { padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; margin: 5px 0; font-size: 16px; }
         .btn-p { background: var(--p); color: white; }
+        .btn-danger { background: #e53935; color: white; font-size: 11px; padding: 5px; width: auto; border-radius: 5px; cursor: pointer; border:none; }
         input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #eee; border-radius: 10px; text-align: center; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
         .grid-item { background: var(--p); color: white; padding: 10px; border-radius: 12px; cursor: pointer; font-size: 11px; text-align: center; height: 60px; display: flex; align-items: center; justify-content: center; }
@@ -22,6 +23,8 @@
         .honor-roll { background: #fffde7; border: 1px solid #fbc02d; padding: 10px; border-radius: 12px; margin-bottom: 10px; font-size: 13px; }
         .footer { font-size: 11px; opacity: 0.7; margin-top: 20px; text-align: center; border-top: 1px solid #ddd; padding-top: 10px; }
         .hidden { display: none !important; }
+        .admin-table { width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 10px; }
+        .admin-table th, .admin-table td { border: 1px solid #eee; padding: 8px; text-align: center; }
     </style>
 </head>
 <body>
@@ -32,19 +35,18 @@
         <input type="number" id="studentCode" placeholder="أدخل مفتاح الطالب">
         <button class="btn btn-p" onclick="studentLogin()">دخول</button>
         <button class="btn" style="background:#455a64; color:white;" onclick="showScreen('staffLogin')">بوابة الأستاذ والإدارة</button>
-        <div class="footer">تصميم وبرمجة: مصطفى ويزن ومحمد</div>
+        <div class="footer">تطوير: مصطفى ويزن ومحمد</div>
     </div>
 
     <div id="studentPage" class="hidden card">
         <div class="honor-roll">🏆 <b>قائمة التميز (أفضل الطلاب):</b> <marquee id="topStudents" scrollamount="4"></marquee></div>
         <h3 id="welcomeMsg" style="color:var(--p)"></h3>
-        <p id="devMsg" style="font-size:12px; background:#e8f5e9; padding:8px; border-radius:8px;"></p>
+        <p id="devMsg" style="font-size:12px; background:#e8f5e9; padding:10px; border-radius:8px; line-height: 1.5;"></p>
         <div class="progress-box">
             <span id="targetLabel">مقرر الأسبوع الحالي</span>
             <h1 id="weekCounter">0 / 4</h1>
             <small id="currentWeekDisplay"></small>
         </div>
-        <div id="missingRecords" class="hidden" style="color:red; font-size:12px; margin-bottom:10px;">⚠️ لديك دروس لم تُحفظ بعد!</div>
         <h4>سجل إنجازاتك:</h4>
         <div id="recordsList" style="max-height:200px; overflow-y:auto;"></div>
         <button class="btn btn-p" onclick="showScreen('mainMenu')">خروج</button>
@@ -55,15 +57,17 @@
         <div style="background:#eee; padding:10px; border-radius:10px; margin-bottom:10px;">
             <div style="display:flex; gap:5px;">
                 <input type="number" id="globalWeekNum" placeholder="الأسبوع">
-                <input type="number" id="weeklyTarget" placeholder="المقرر (مثلاً 5)">
+                <input type="number" id="weeklyTarget" placeholder="المقرر (أوجه)">
             </div>
-            <button class="btn btn-p" onclick="updateSettings()">تحديث الإعدادات للجميع</button>
+            <button class="btn btn-p" onclick="updateSettings()">تحديث الإعدادات العامة</button>
         </div>
-        <div style="display:flex; gap:5px;">
+        <div style="display:flex; gap:5px; margin-bottom:10px;">
             <button class="btn btn-p" onclick="loadClass('3/1')">فصل 3/1</button>
             <button class="btn btn-p" onclick="loadClass('3/2')">فصل 3/2</button>
         </div>
-        <div id="namesGrid" class="grid" style="margin-top:10px;"></div>
+        <div id="namesGrid" class="grid"></div>
+        <hr>
+        <button class="btn" style="background:#607d8b; color:white;" onclick="showManageStudents()">إدارة/حذف الطلاب</button>
         <button class="btn" onclick="showScreen('mainMenu')">خروج</button>
     </div>
 
@@ -76,9 +80,20 @@
             <option value="لم يحفظ">لم يحفظ ⚠️</option>
             <option value="غائب">غائب 💤</option>
         </select>
-        <input type="checkbox" id="isLate"> درس متأخر
+        <label><input type="checkbox" id="isLate"> درس متأخر</label>
         <button class="btn btn-p" onclick="saveGrade()">حفظ</button>
         <button class="btn" onclick="showScreen('teacherDash')">إلغاء</button>
+    </div>
+
+    <div id="manageStudentsPage" class="hidden card" style="max-width:800px;">
+        <h3>قائمة الطلاب المسجلين</h3>
+        <div style="overflow-y:auto; max-height:400px;">
+            <table class="admin-table">
+                <thead><tr><th>الاسم</th><th>الفصل</th><th>الكود</th><th>حذف</th></tr></thead>
+                <tbody id="adminStudentsList"></tbody>
+            </table>
+        </div>
+        <button class="btn btn-p" onclick="showScreen('teacherDash')">رجوع</button>
     </div>
 
     <div id="staffLogin" class="hidden card">
@@ -94,9 +109,8 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // قائمة الطلاب الكاملة
-    const allStudents = [
-        // فصل 3/2
+    // قائمة جميع الطلاب المسبقة (61 طالب)
+    const initialStudents = [
         {id:3278, name:"احمد عبدالله الحارثي", code:3278, class:"3/2"}, {id:3214, name:"انس محمد عيسى", code:3214, class:"3/2"}, {id:3291, name:"تيسير رضا المحمدي", code:3291, class:"3/2"},
         {id:3246, name:"حسان سليمان الجابري", code:3246, class:"3/2"}, {id:3283, name:"حسن عبده", code:3283, class:"3/2"}, {id:3209, name:"عامر يوسف الجهني", code:3209, class:"3/2"},
         {id:3267, name:"عبدالرحمن ماجد الرخيمي", code:3267, class:"3/2"}, {id:3235, name:"عبدالرحمن عمر الرويثي", code:3235, class:"3/2"}, {id:3298, name:"عبدالرحمن صغير", code:3298, class:"3/2"},
@@ -108,7 +122,6 @@
         {id:3205, name:"محمد بندر الجهني", code:3205, class:"3/2"}, {id:3264, name:"محمد سالم الجهني", code:3264, class:"3/2"}, {id:3286, name:"محمد سعيد الجهني", code:3286, class:"3/2"},
         {id:3223, name:"محمد علي الشنقيطي", code:3223, class:"3/2"}, {id:3273, name:"محمد منور العنزي", code:3273, class:"3/2"}, {id:3216, name:"مصطفى عبدالله احمد", code:3216, class:"3/2"},
         {id:3210, name:"يزن انس المحمدي", code:3210, class:"3/2"},
-        // فصل 3/1
         {id:3101, name:"احمد بكر سيكو جياني", code:3101, class:"3/1"}, {id:3102, name:"احمد خالد حمدان الأحمدي", code:3102, class:"3/1"}, {id:3103, name:"احمد ناصر احمد عمر", code:3103, class:"3/1"},
         {id:3104, name:"اسامه اباه محمد الأمين", code:3104, class:"3/1"}, {id:3105, name:"امين عبدالرحمن محمد الشنقيطي", code:3105, class:"3/1"}, {id:3106, name:"أمين محمد بن عبداللطيف محمد", code:3106, class:"3/1"},
         {id:3107, name:"أنس حيدر يحيى نخيفي", code:3107, class:"3/1"}, {id:3108, name:"اياد حمزه راجح الاحمدي", code:3108, class:"3/1"}, {id:3109, name:"تميم طارق بن سعيد الزهراني", code:3109, class:"3/1"},
@@ -123,62 +136,43 @@
 
     let students = [];
     let settings = { currentWeek: 1, target: 4 };
+    let currentSID = null;
 
+    // مزامنة البيانات
     db.ref('students').on('value', s => { 
-        if(!s.exists()) db.ref('students').set(allStudents);
-        students = Object.values(s.val() || {});
+        if(!s.exists()) {
+            // رفع الطلاب للمرة الأولى
+            initialStudents.forEach(st => db.ref('students/' + st.id).set(st));
+        }
+        students = s.exists() ? Object.values(s.val()) : [];
         updateHonorRoll();
     });
     db.ref('settings').on('value', s => { if(s.exists()) settings = s.val(); });
 
+    // نظام الدخول
     function studentLogin() {
-        const code = document.getElementById('studentCode').value;
-        const s = students.find(x => x.code == code);
+        const inputCode = document.getElementById('studentCode').value;
+        const s = students.find(x => String(x.code) === String(inputCode));
         if(s) {
             document.getElementById('welcomeMsg').innerText = `أهلاً بك يا ${s.name} 🌿`;
-            document.getElementById('devMsg').innerText = "لقد قمت أنا ويزن ومحمد بتصميم وبرمجة هذا الموقع خصيصاً لك ولزملائك.";
+            document.getElementById('devMsg').innerHTML = `<b>أنا ويزن ومحمد</b> قمنا بتصميم وبرمجة هذا الموقع ليكون رفيقك في حفظ كتاب الله.. <br>نسأل الله لك التوفيق.`;
             renderStudentRecords(s);
             showScreen('studentPage');
-        } else alert('المفتاح خاطئ!');
-    }
-
-    function updateSettings() {
-        const w = document.getElementById('globalWeekNum').value;
-        const t = document.getElementById('weeklyTarget').value;
-        db.ref('settings').set({ currentWeek: w || settings.currentWeek, target: t || settings.target });
-        alert('تم تحديث الإعدادات');
-    }
-
-    function saveGrade() {
-        const sIdx = students.findIndex(x => x.id == currentSID);
-        const rec = { week: settings.currentWeek, day: document.getElementById('gDay').value, page: document.getElementById('gPage').value, status: document.getElementById('gStatus').value, isLate: document.getElementById('isLate').checked };
-        if(!students[sIdx].records) students[sIdx].records = [];
-        students[sIdx].records.unshift(rec);
-        db.ref('students').set(students).then(() => { alert('تم الحفظ'); showScreen('teacherDash'); });
+        } else alert('الرمز غير مسجل!');
     }
 
     function renderStudentRecords(s) {
         document.getElementById('currentWeekDisplay').innerText = `رقم الأسبوع: ${settings.currentWeek}`;
         const weekRecs = (s.records || []).filter(r => r.week == settings.currentWeek && !r.isLate && r.status === "حافظ");
         document.getElementById('weekCounter').innerText = `${weekRecs.length} / ${settings.target}`;
-        
         document.getElementById('recordsList').innerHTML = (s.records || []).map(r => `
-            <div style="padding:8px; margin:5px 0; background:#f9f9f9; border-radius:8px; border-right:4px solid ${r.status==='حافظ'?'green':'red'}">
-                أسبوع ${r.week} - ص ${r.page} | ${r.status} ${r.isLate?'(متأخر)':''}
+            <div style="padding:10px; margin:5px 0; background:#f9f9f9; border-radius:8px; border-right:5px solid ${r.status==='حافظ'?'green':'red'}">
+                أسبوع ${r.week} - ص ${r.page} - ${r.status} ${r.isLate?'(متأخر)':''}
             </div>
         `).join('');
     }
 
-    function updateHonorRoll() {
-        const sorted = [...students].sort((a,b) => (b.records?.filter(r=>r.status==='حافظ').length || 0) - (a.records?.filter(r=>r.status==='حافظ').length || 0));
-        document.getElementById('topStudents').innerText = sorted.slice(0, 20).map((s, i) => `${i+1}. ${s.name}`).join(' | ');
-    }
-
-    function staffAuth() {
-        if(document.getElementById('user').value === 'saad' && document.getElementById('pass').value === '12345678w') showScreen('teacherDash');
-        else alert('خطأ');
-    }
-
+    // وظائف الأستاذ
     function loadClass(cls) {
         const grid = document.getElementById('namesGrid'); grid.innerHTML = "";
         students.filter(x => x.class === cls).forEach(s => {
@@ -186,6 +180,44 @@
             div.onclick = () => { currentSID = s.id; document.getElementById('targetName').innerText = s.name; showScreen('gradeScreen'); };
             grid.appendChild(div);
         });
+    }
+
+    function saveGrade() {
+        const student = students.find(x => x.id == currentSID);
+        const rec = { week: settings.currentWeek, day: document.getElementById('gDay').value, page: document.getElementById('gPage').value, status: document.getElementById('gStatus').value, isLate: document.getElementById('isLate').checked };
+        if(!student.records) student.records = [];
+        student.records.unshift(rec);
+        db.ref('students/' + currentSID + '/records').set(student.records).then(() => { alert('تم الحفظ'); showScreen('teacherDash'); });
+    }
+
+    function updateSettings() {
+        const w = document.getElementById('globalWeekNum').value;
+        const t = document.getElementById('weeklyTarget').value;
+        db.ref('settings').update({ currentWeek: w ? parseInt(w) : settings.currentWeek, target: t ? parseInt(t) : settings.target });
+        alert('تم التحديث');
+    }
+
+    function showManageStudents() {
+        const list = document.getElementById('adminStudentsList');
+        list.innerHTML = students.sort((a,b)=>a.class.localeCompare(b.class)).map(s => `
+            <tr><td>${s.name}</td><td>${s.class}</td><td>${s.code}</td>
+            <td><button class="btn-danger" onclick="deleteStudent(${s.id})">حذف</button></td></tr>
+        `).join('');
+        showScreen('manageStudentsPage');
+    }
+
+    function deleteStudent(id) {
+        if(confirm("حذف الطالب نهائياً؟")) db.ref('students/' + id).remove();
+    }
+
+    function updateHonorRoll() {
+        const sorted = [...students].sort((a,b) => (b.records?.filter(r=>r.status==='حافظ').length || 0) - (a.records?.filter(r=>r.status==='حافظ').length || 0));
+        document.getElementById('topStudents').innerText = sorted.slice(0, 15).map((s, i) => `${i+1}. ${s.name}`).join(' | ');
+    }
+
+    function staffAuth() {
+        if(document.getElementById('user').value === 'saad' && document.getElementById('pass').value === '12345678w') showScreen('teacherDash');
+        else alert('خطأ');
     }
 
     function showScreen(id) {
