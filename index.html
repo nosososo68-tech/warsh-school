@@ -3,108 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام ورش الذكي - إدارة مصطفى ويزن ومحمد</title>
+    <title>نظام ورش الذكي | تطوير يزن ومصطفى ومحمد</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <style>
-        :root { --p: #1e4d2b; --g: #d4af37; --bg: #f4f7f6; --white: #ffffff; --danger: #e74c3c; }
+        :root { --p: #1e4d2b; --g: #d4af37; --bg: #f4f7f6; --card: #ffffff; --txt: #333; }
+        .t-blue { --p: #1a3a5f; --g: #00bcd4; --bg: #f0f4f8; --card: #ffffff; --txt: #222; }
+        .t-dark { --p: #121212; --g: #bb86fc; --bg: #1e1e1e; --card: #2d2d2d; --txt: #eee; }
+        .t-gold { --p: #443305; --g: #d4af37; --bg: #1a1a1a; --card: #2a2208; --txt: #f1e4bc; }
+        .t-smart { --p: #4e54c8; --g: #ff0080; --bg: #f8f9fa; --card: #ffffff; --txt: #333; }
+
         * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s; }
-        body { background-color: var(--bg); margin: 0; direction: rtl; color: #333; }
+        body { background: var(--bg); color: var(--txt); margin: 0; padding: 10px; direction: rtl; }
+        .card { background: var(--card); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); margin: 15px auto; max-width: 600px; border-top: 5px solid var(--g); animation: slideIn 0.5s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* الأنيميشن والألوان */
-        .card { background: var(--white); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 15px auto; max-width: 500px; border-top: 5px solid var(--g); animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .btn { padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; margin: 8px 0; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn { padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; margin: 8px 0; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-p { background: var(--p); color: white; }
-        .btn-p:hover { transform: scale(1.02); opacity: 0.9; }
-        .btn-admin { background: #2c3e50; color: white; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid rgba(0,0,0,0.05); border-radius: 10px; background: rgba(0,0,0,0.02); color: inherit; text-align: center; }
         
-        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #eee; border-radius: 10px; text-align: center; font-size: 16px; outline: none; }
-        input:focus { border-color: var(--p); }
-
-        /* شبكة الأسماء للأستاذ */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 15px; }
-        .grid-item { background: var(--p); color: white; padding: 15px 5px; border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: bold; }
-
-        .badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; color: white; }
-        .footer-team { font-size: 11px; color: #777; margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px; }
-        .honor-roll { background: linear-gradient(45deg, #1e4d2b, #d4af37); color: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 15px; }
+        .grid-item { background: var(--p); color: white; padding: 10px; border-radius: 12px; cursor: pointer; font-size: 12px; height: 70px; display: flex; align-items: center; justify-content: center; text-align: center; }
+        
+        .progress-box { background: #e8f5e9; border: 2px solid var(--p); border-radius: 15px; padding: 15px; margin: 15px 0; text-align: center; }
+        .progress-box h1 { margin: 5px 0; color: var(--p); font-size: 40px; }
+        
+        /* تنبيه الدروس المفقودة */
+        .missing-box { background: #ffebee; border: 1px dashed #c62828; color: #c62828; padding: 10px; border-radius: 10px; margin-bottom: 15px; font-size: 13px; text-align: right; }
+        
+        .footer { font-size: 11px; opacity: 0.7; margin-top: 30px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 10px; }
+        .hidden { display: none !important; }
+        .theme-ball { width: 25px; height: 25px; border-radius: 50%; cursor: pointer; border: 2px solid #fff; }
     </style>
 </head>
-<body>
+<body id="body">
 
 <div id="app">
-    <div id="loginScreen" class="card" style="margin-top: 50px;">
-        <h2 style="color:var(--p)">مدرسة الإمام ورش 📚</h2>
-        <p style="font-size:13px">أدخل كود الطالب أو دخول الإدارة</p>
-        <input type="number" id="loginID" placeholder="أدخل الكود المكون من 4 أرقام">
-        <button class="btn btn-p" onclick="studentLogin()">دخول الطالب</button>
+    <div id="siteLock" class="card" style="margin-top: 80px;">
+        <h2>مدرسة الإمام ورش 📚</h2>
+        <input type="password" id="siteKey" placeholder="رمز الدخول (12345678w)">
+        <button class="btn btn-p" onclick="unlockSite()">دخول</button>
+    </div>
+
+    <div id="mainMenu" class="hidden card">
+        <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px;">
+            <div class="theme-ball" style="background:#1e4d2b" onclick="setTheme('')"></div>
+            <div class="theme-ball" style="background:#1a3a5f" onclick="setTheme('t-blue')"></div>
+            <div class="theme-ball" style="background:#121212" onclick="setTheme('t-dark')"></div>
+            <div class="theme-ball" style="background:#d4af37" onclick="setTheme('t-gold')"></div>
+            <div class="theme-ball" style="background:#4e54c8" onclick="setTheme('t-smart')"></div>
+        </div>
+        <h3>أدخل كودك الشخصي</h3>
+        <input type="number" id="studentCode" placeholder="كود الطالب الرباعي">
+        <button class="btn btn-p" onclick="studentLogin()">دخول الطالب / ولي الأمر</button>
         <hr>
-        <button class="btn btn-admin" onclick="showScreen('staffLogin')">دخول الإدارة / الأستاذ</button>
-        <div class="footer-team">صنع بواسطة: مصطفى، يزن، محمد <br> للتواصل: 0599804296</div>
+        <button class="btn" style="background:#2c3e50; color:white;" onclick="showScreen('staffLogin')">بوابة الإدارة والأستاذ</button>
+        <div class="footer">تطوير: يزن، مصطفى، محمد | 0599804296</div>
+    </div>
+
+    <div id="studentPage" class="hidden card">
+        <h2 id="welcomeMsg"></h2>
+        <div class="progress-box">
+            <span>مقرر الأسبوع الحالي (4 أوجه)</span>
+            <h1 id="weekCounter">0 / 4</h1>
+            <small id="currentWeekDisplay"></small>
+        </div>
+
+        <div id="missingRecords" class="missing-box hidden">
+            <b>⚠️ دروس لم تسمعها بعد:</b>
+            <ul id="missingList" style="margin: 5px 0; padding-right: 20px;"></ul>
+        </div>
+
+        <div style="background:#fff3e0; padding:10px; border-radius:10px; color:#e65100; font-size:12px; margin-bottom:15px;">
+             💡 ملاحظة: الدروس "المتأخرة" تظهر في السجل ولكن لا تزيد العداد الأسبوعي.
+        </div>
+        
+        <h4>سجل إنجازاتك الكامل:</h4>
+        <div id="recordsList"></div>
+        <button class="btn btn-p" onclick="showScreen('mainMenu')">خروج</button>
     </div>
 
     <div id="staffLogin" class="hidden card">
         <h3>دخول الطاقم</h3>
-        <input type="text" id="staffUser" placeholder="اسم المستخدم">
-        <input type="password" id="staffPass" placeholder="كلمة المرور">
-        <button class="btn btn-p" onclick="staffLogin()">دخول</button>
-        <button class="btn" onclick="showScreen('loginScreen')">رجوع</button>
+        <input type="text" id="user" placeholder="المستخدم">
+        <input type="password" id="pass" placeholder="كلمة المرور">
+        <button class="btn btn-p" onclick="staffAuth()">دخول</button>
+        <button class="btn" onclick="showScreen('mainMenu')">رجوع</button>
     </div>
 
-    <div id="studentPage" class="hidden card">
-        <div class="honor-roll">⭐ لوحة الأوائل لهذا الأسبوع: <br> <span id="topStudents">قريباً..</span></div>
-        <h2 id="stNameDisplay">اسم الطالب</h2>
-        <p id="stCodeDisplay" class="badge" style="background:var(--p)"></p>
-        <div style="background: #fff4e5; padding: 10px; border-radius: 10px; font-size: 13px; color: #d35400; font-weight: bold; margin-bottom: 15px;">
-            ⚠️ تنبيه: المقرر اليومي هو "صفحة واحدة" فقط.
-        </div>
-        <h4>سجل التقارير:</h4>
-        <div id="stRecords"></div>
-        <div class="footer-team">المبرمجين: مصطفى، يزن، محمد</div>
-    </div>
-
-    <div id="teacherDash" class="hidden card" style="max-width: 800px;">
+    <div id="teacherDash" class="hidden card" style="max-width:800px;">
         <h3>لوحة الأستاذ سعد 🛠️</h3>
-        <div style="display:flex; gap:10px;">
-            <button class="btn btn-p" onclick="renderGrid('3/1')">فصل 3/1</button>
-            <button class="btn btn-p" onclick="renderGrid('3/2')">فصل 3/2</button>
+        <div style="background:#eee; padding:15px; border-radius:15px; margin-bottom:15px;">
+            <label>تحديد رقم الأسبوع الحالي (للجميع):</label>
+            <input type="number" id="globalWeekNum" placeholder="أدخل رقم فقط (مثلاً: 8)">
+            <button class="btn-p" style="padding:5px 15px; border-radius:8px;" onclick="updateGlobalWeek()">تحديث الأسبوع للجميع</button>
         </div>
-        <div id="namesGrid" class="grid-container"></div>
+        <div style="display:flex; gap:10px;">
+            <button class="btn btn-p" onclick="loadClass('3/1')">فصل 3/1</button>
+            <button class="btn btn-p" onclick="loadClass('3/2')">فصل 3/2</button>
+        </div>
+        <div id="namesGrid" class="grid"></div>
         <hr>
-        <h4>إدارة الطلاب</h4>
-        <input type="text" id="newStName" placeholder="اسم الطالب">
-        <input type="number" id="newStCode" placeholder="الكود (مثال: 3101)">
-        <select id="newStClass"><option value="3/1">3/1</option><option value="3/2">3/2</option></select>
-        <button class="btn btn-p" onclick="addNewStudent()">إضافة طالب جديد</button>
-        <button class="btn" style="background:var(--danger); color:#fff;" onclick="showScreen('loginScreen')">تسجيل خروج</button>
+        <button class="btn" style="background:#c0392b; color:white" onclick="showScreen('mainMenu')">خروج</button>
     </div>
 
-    <div id="gradeModal" class="hidden card">
-        <h3 id="targetStName">رصد للطالب</h3>
-        <input type="text" id="weekNum" placeholder="رقم الأسبوع (مثال: الأسبوع التاسع)">
-        <input type="text" id="dayName" placeholder="اليوم (مثال: الخميس)">
-        <input type="text" id="pageNumber" placeholder="رقم الصفحة">
-        <input type="text" id="manualGrade" placeholder="الدرجة يدوياً (مثال: 10/10)">
-        <select id="statusSelect">
+    <div id="gradeScreen" class="hidden card">
+        <h3 id="targetName"></h3>
+        <p>الأسبوع الحالي: <b id="activeWeekLabel"></b></p>
+        <input type="text" id="gDay" placeholder="اليوم">
+        <input type="number" id="gPage" placeholder="رقم الصفحة">
+        <input type="text" id="gMark" placeholder="الدرجة">
+        <select id="gStatus">
             <option value="حافظ">حافظ ✅</option>
-            <option value="لم يحفظ">لم يحفظ (خطأ) ⚠️</option>
-            <option value="لم يسمع">لم يسمع (لم يحفظ ببيته) ❌</option>
-            <option value="محروم">محروم (مخالفة قوانين) ⛔</option>
+            <option value="لم يحفظ">لم يحفظ ⚠️</option>
+            <option value="لم يسمع">لم يسمع ❌</option>
             <option value="غائب">غائب 💤</option>
+            <option value="محروم">محروم ⛔</option>
         </select>
-        <textarea id="teacherNote" placeholder="ملاحظات إضافية"></textarea>
-        <button class="btn btn-p" onclick="submitGrade()">حفظ البيانات</button>
-        <button class="btn" onclick="deleteStudent()">حذف الطالب نهائياً</button>
+        <div style="background:#f0f0f0; padding:10px; border-radius:10px; margin:10px 0;">
+            <input type="checkbox" id="isLate" style="width:auto;"> <label for="isLate">هذا درس "متأخر" (قديم)</label>
+        </div>
+        <textarea id="gNote" placeholder="ملاحظات الأستاذ..."></textarea>
+        <button class="btn btn-p" onclick="saveGrade()">حفظ الرصد</button>
         <button class="btn" onclick="showScreen('teacherDash')">إلغاء</button>
-    </div>
-
-    <div id="adminDash" class="hidden card" style="max-width: 800px;">
-        <h3>لوحة الإدارة (للاطلاع فقط) 👁️</h3>
-        <div id="adminContent"></div>
-        <button class="btn" onclick="showScreen('loginScreen')">خروج</button>
     </div>
 </div>
 
@@ -115,150 +137,102 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    
+
     let students = [];
-    let selectedStId = null;
-    let isReadOnly = false;
+    let currentSID = null;
+    let globalWeek = 1;
 
-    // جلب البيانات ومزامنتها
-    db.ref('students').on('value', snap => {
-        students = snap.val() || [];
-        updateHonorRoll();
-    });
+    db.ref('students').on('value', s => { students = Object.values(s.val() || {}); });
+    db.ref('settings/currentWeek').on('value', s => { globalWeek = parseInt(s.val()) || 1; });
 
-    // منطق الدخول
+    function unlockSite() { if(document.getElementById('siteKey').value === '12345678w') showScreen('mainMenu'); else alert('خطأ'); }
+    function setTheme(t) { document.getElementById('body').className = t; }
+
     function studentLogin() {
-        const code = document.getElementById('loginID').value;
+        const code = document.getElementById('studentCode').value;
         const s = students.find(x => x.code == code);
         if(s) {
-            document.getElementById('stNameDisplay').innerText = s.name;
-            document.getElementById('stCodeDisplay').innerText = "كود الطالب: " + s.code;
+            document.getElementById('welcomeMsg').innerText = `أهلاً بك يا ${s.name}`;
+            document.getElementById('currentWeekDisplay').innerText = `رقم الأسبوع: ${globalWeek}`;
             renderStudentRecords(s);
             showScreen('studentPage');
-        } else { alert("الكود غير صحيح!"); }
+        } else alert('الكود غير صحيح');
     }
 
-    function staffLogin() {
-        const u = document.getElementById('staffUser').value;
-        const p = document.getElementById('staffPass').value;
-        if(u === 'saad' && p === '1234567891011s') {
-            isReadOnly = false;
-            showScreen('teacherDash');
-        } else if(u === 'admin' && p === 'admin2026') {
-            isReadOnly = true;
-            renderAdminView();
-            showScreen('adminDash');
-        } else { alert("خطأ في البيانات!"); }
+    function staffAuth() {
+        const u = document.getElementById('user').value;
+        const p = document.getElementById('pass').value;
+        if(u==='saad' && p==='12345678s') showScreen('teacherDash');
+        else alert('خطأ');
     }
 
-    // شاشة الأستاذ
-    function renderGrid(cls) {
-        const container = document.getElementById('namesGrid');
-        container.innerHTML = "";
-        students.filter(s => s.class === cls).forEach(s => {
+    function loadClass(cls) {
+        const grid = document.getElementById('namesGrid'); grid.innerHTML = "";
+        students.filter(x => x.class === cls).forEach(s => {
             const div = document.createElement('div');
-            div.className = "grid-item";
-            div.innerText = s.name;
-            div.onclick = () => openGradeModal(s.id);
-            container.appendChild(div);
+            div.className = "grid-item"; div.innerText = s.name;
+            div.onclick = () => { 
+                currentSID = s.id; document.getElementById('targetName').innerText = s.name;
+                document.getElementById('activeWeekLabel').innerText = globalWeek;
+                showScreen('gradeScreen'); 
+            };
+            grid.appendChild(div);
         });
     }
 
-    function openGradeModal(id) {
-        selectedStId = id;
-        const s = students.find(x => x.id == id);
-        document.getElementById('targetStName').innerText = "رصد: " + s.name;
-        showScreen('gradeModal');
+    function updateGlobalWeek() {
+        const val = document.getElementById('globalWeekNum').value;
+        if(val) db.ref('settings/currentWeek').set(val).then(()=>alert('تم تحديث الأسبوع'));
     }
 
-    function submitGrade() {
-        const idx = students.findIndex(x => x.id == selectedStId);
-        const newRecord = {
-            week: document.getElementById('weekNum').value,
-            day: document.getElementById('dayName').value,
-            page: document.getElementById('pageNumber').value,
-            grade: document.getElementById('manualGrade').value,
-            status: document.getElementById('statusSelect').value,
-            note: document.getElementById('teacherNote').value,
-            isRetry: false
+    function saveGrade() {
+        const sIdx = students.findIndex(x => x.id == currentSID);
+        const rec = {
+            week: globalWeek,
+            day: document.getElementById('gDay').value,
+            page: document.getElementById('gPage').value,
+            mark: document.getElementById('gMark').value,
+            status: document.getElementById('gStatus').value,
+            note: document.getElementById('gNote').value,
+            isLate: document.getElementById('isLate').checked
         };
-
-        // منطق الإعادة: إذا كان السجل السابق لنفس الصفحة "لم يحفظ"
-        const oldRec = students[idx].records || [];
-        if(oldRec.some(r => r.page == newRecord.page && r.status === "لم يحفظ")) {
-            newRecord.isRetry = true;
-        }
-
-        if(!students[idx].records) students[idx].records = [];
-        students[idx].records.unshift(newRecord);
-        
-        db.ref('students').set(students).then(() => {
-            alert("تم الرصد!");
-            showScreen('teacherDash');
-        });
+        if(!students[sIdx].records) students[sIdx].records = [];
+        students[sIdx].records.unshift(rec);
+        db.ref('students').set(students).then(() => { alert('تم الحفظ'); showScreen('teacherDash'); });
     }
 
-    // عرض التقارير للطالب
     function renderStudentRecords(s) {
-        const container = document.getElementById('stRecords');
-        container.innerHTML = s.records ? "" : "لا يوجد سجلات حالياً.";
-        (s.records || []).forEach(r => {
-            const color = r.status === "حافظ" ? "#27ae60" : "#c0392b";
-            container.innerHTML += `
-                <div style="border-right:4px solid ${color}; padding:10px; background:#f9f9f9; margin-bottom:10px; text-align:right; border-radius:8px;">
-                    <b>${r.week} - ${r.day}</b> ${r.isRetry ? '<span style="color:blue">[إعادة]</span>' : ''}<br>
-                    الصفحة: ${r.page} | الدرجة: ${r.grade} <br>
-                    الحالة: ${r.status} <br>
-                    <small>ملاحظة: ${r.note || "لا يوجد"}</small>
-                </div>`;
-        });
-    }
+        const list = document.getElementById('recordsList');
+        const counter = document.getElementById('weekCounter');
+        const missingBox = document.getElementById('missingRecords');
+        const missingList = document.getElementById('missingList');
+        
+        // 1. حساب العداد الأسبوعي
+        const weekRecs = (s.records || []).filter(r => r.week == globalWeek && !r.isLate && r.status === "حافظ");
+        counter.innerText = `${weekRecs.length} / 4`;
 
-    // إدارة الإضافة والحذف
-    function addNewStudent() {
-        const n = document.getElementById('newStName').value;
-        const c = document.getElementById('newStCode').value;
-        const cls = document.getElementById('newStClass').value;
-        if(n && c) {
-            students.push({ id: Date.now(), name: n, code: c, class: cls, records: [] });
-            db.ref('students').set(students);
-            alert("تمت الإضافة");
+        // 2. كشف الدروس التي لم تسمع (بناءً على الحالة)
+        const missing = (s.records || []).filter(r => r.status !== "حافظ");
+        if(missing.length > 0) {
+            missingBox.classList.remove('hidden');
+            missingList.innerHTML = missing.map(m => `<li>أسبوع ${m.week}: صفحة (${m.page}) - حالتها: ${m.status}</li>`).join('');
+        } else {
+            missingBox.classList.add('hidden');
         }
-    }
 
-    function deleteStudent() {
-        if(confirm("هل أنت متأكد من حذف الطالب؟")) {
-            students = students.filter(s => s.id != selectedStId);
-            db.ref('students').set(students).then(() => showScreen('teacherDash'));
-        }
-    }
-
-    function updateHonorRoll() {
-        // منطق بسيط: أول 3 طلاب لم يأخذوا "لم يحفظ" أو "محروم"
-        const top = students.filter(s => s.records && s.records[0].status === "حافظ").slice(0, 3).map(s => s.name).join(' - ');
-        document.getElementById('topStudents').innerText = top || "بانتظار المتفوقين..";
+        // 3. عرض السجل الكامل
+        list.innerHTML = (s.records || []).map(r => `
+            <div style="border-right:5px solid ${r.status==='حافظ'?'#27ae60':'#c0392b'}; padding:10px; margin:10px 0; background:white; border-radius:10px;">
+                <b>أسبوع ${r.week} - يوم ${r.day}</b><br>
+                ص: ${r.page} | الحالة: ${r.status}
+            </div>
+        `).join('');
     }
 
     function showScreen(id) {
         document.querySelectorAll('#app > div').forEach(d => d.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
     }
-
-    function renderAdminView() {
-        const cont = document.getElementById('adminContent');
-        cont.innerHTML = students.map(s => `<p>${s.name} (${s.class}): ${s.records ? s.records.length : 0} تسميعات</p>`).join('');
-    }
-
-    // تصفير الأوائل كل خميس
-    setInterval(() => {
-        const now = new Date();
-        if(now.getDay() === 4 && now.getHours() === 23) { // الخميس الساعة 11 مساءً
-            // هنا يمكنك إضافة منطق لتصفير ميزة معينة إذا أردت
-        }
-    }, 3600000);
-
 </script>
-
-<style> .hidden { display: none !important; } </style>
 </body>
 </html>
