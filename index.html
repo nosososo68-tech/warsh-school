@@ -9,164 +9,174 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <style>
         :root { --p: #1e4d2b; --g: #d4af37; --bg: #f4f7f6; --card: #ffffff; --txt: #333; }
-        .t-blue { --p: #1a3a5f; --g: #00bcd4; --bg: #f0f4f8; --card: #ffffff; --txt: #222; }
-        .t-dark { --p: #121212; --g: #bb86fc; --bg: #1e1e1e; --card: #2d2d2d; --txt: #eee; }
         * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s; }
         body { background: var(--bg); color: var(--txt); margin: 0; padding: 10px; direction: rtl; }
-        .card { background: var(--card); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); margin: 15px auto; max-width: 550px; border-top: 5px solid var(--g); animation: slideIn 0.4s ease; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .btn { padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; margin: 8px 0; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .card { background: var(--card); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 10px auto; max-width: 550px; border-top: 5px solid var(--g); }
+        .btn { padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; margin: 5px 0; font-size: 16px; }
         .btn-p { background: var(--p); color: white; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid rgba(0,0,0,0.05); border-radius: 10px; background: rgba(0,0,0,0.02); color: inherit; text-align: center; font-size: 16px; outline: none; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-top: 15px; }
-        .grid-item { background: var(--p); color: white; padding: 10px; border-radius: 12px; cursor: pointer; font-size: 11px; height: 65px; display: flex; align-items: center; justify-content: center; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
-        .progress-box { background: rgba(30, 77, 43, 0.05); border: 2px solid var(--p); border-radius: 15px; padding: 15px; margin: 15px 0; text-align: center; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #eee; border-radius: 10px; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+        .grid-item { background: var(--p); color: white; padding: 10px; border-radius: 12px; cursor: pointer; font-size: 11px; text-align: center; height: 60px; display: flex; align-items: center; justify-content: center; }
+        .progress-box { background: rgba(30, 77, 43, 0.05); border: 2px solid var(--p); border-radius: 15px; padding: 15px; margin: 10px 0; text-align: center; }
         .progress-box h1 { margin: 5px 0; color: var(--p); font-size: 35px; }
-        .missing-box { background: #fff5f5; border: 1px dashed #e53935; color: #b71c1c; padding: 10px; border-radius: 10px; margin-bottom: 15px; font-size: 12px; }
-        .honor-roll { background: linear-gradient(135deg, var(--p), var(--g)); color: white; padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 13px; text-align: center; }
-        .footer { font-size: 11px; opacity: 0.7; margin-top: 25px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 10px; text-align: center; }
+        .honor-roll { background: #fffde7; border: 1px solid #fbc02d; padding: 10px; border-radius: 12px; margin-bottom: 10px; font-size: 13px; }
+        .footer { font-size: 11px; opacity: 0.7; margin-top: 20px; text-align: center; border-top: 1px solid #ddd; padding-top: 10px; }
         .hidden { display: none !important; }
-        .theme-ball { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; border: 1px solid #fff; }
     </style>
 </head>
-<body id="body">
+<body>
 
 <div id="app">
-    <div id="mainMenu" class="card" style="margin-top: 50px;">
-        <div style="display:flex; justify-content:center; gap:8px; margin-bottom:15px;">
-            <div class="theme-ball" style="background:#1e4d2b" onclick="setTheme('')"></div>
-            <div class="theme-ball" style="background:#1a3a5f" onclick="setTheme('t-blue')"></div>
-            <div class="theme-ball" style="background:#121212" onclick="setTheme('t-dark')"></div>
-        </div>
-        <h2 style="color:var(--p)">مدرسة الإمام ورش 📚</h2>
+    <div id="mainMenu" class="card">
+        <h2 style="color:var(--p); text-align:center;">مدرسة الإمام ورش 📚</h2>
         <input type="number" id="studentCode" placeholder="أدخل مفتاح الطالب">
-        <button class="btn btn-p" onclick="studentLogin()">دخول الطالب / ولي الأمر</button>
-        <hr style="opacity: 0.2;">
-        <button class="btn" style="background:#455a64; color:white; font-size: 13px;" onclick="showScreen('staffLogin')">بوابة الإدارة والأستاذ</button>
-        <div class="footer">تطوير فريق: يزن، مصطفى، محمد <br> الدعم الفني: 0599804296</div>
+        <button class="btn btn-p" onclick="studentLogin()">دخول</button>
+        <button class="btn" style="background:#455a64; color:white;" onclick="showScreen('staffLogin')">بوابة الأستاذ والإدارة</button>
+        <div class="footer">تصميم وبرمجة: مصطفى ويزن ومحمد</div>
     </div>
 
     <div id="studentPage" class="hidden card">
-        <div class="honor-roll">
-            🏆 <b>لوحة الـ 20 الأوائل:</b> <br>
-            <marquee id="top20" scrollamount="3">جاري التحميل...</marquee>
-        </div>
-        <h2 id="welcomeMsg" style="color:var(--p)"></h2>
+        <div class="honor-roll">🏆 <b>قائمة التميز (أفضل الطلاب):</b> <marquee id="topStudents" scrollamount="4"></marquee></div>
+        <h3 id="welcomeMsg" style="color:var(--p)"></h3>
+        <p id="devMsg" style="font-size:12px; background:#e8f5e9; padding:8px; border-radius:8px;"></p>
         <div class="progress-box">
-            <span>مقرر الأسبوع الحالي (4 أوجه)</span>
+            <span id="targetLabel">مقرر الأسبوع الحالي</span>
             <h1 id="weekCounter">0 / 4</h1>
-            <small id="currentWeekDisplay" style="font-weight: bold;"></small>
+            <small id="currentWeekDisplay"></small>
         </div>
-        <div id="missingRecords" class="missing-box hidden">
-            <b>⚠️ دروس لم تُحفظ (دين):</b>
-            <ul id="missingList" style="margin: 5px 0; padding-right: 15px;"></ul>
-        </div>
-        <h4>سجل الإنجازات:</h4>
-        <div id="recordsList"></div>
+        <div id="missingRecords" class="hidden" style="color:red; font-size:12px; margin-bottom:10px;">⚠️ لديك دروس لم تُحفظ بعد!</div>
+        <h4>سجل إنجازاتك:</h4>
+        <div id="recordsList" style="max-height:200px; overflow-y:auto;"></div>
         <button class="btn btn-p" onclick="showScreen('mainMenu')">خروج</button>
-        <div class="footer">تطوير فريق: يزن، مصطفى، محمد</div>
     </div>
 
-    <div id="staffLogin" class="hidden card">
-        <h3>دخول الطاقم التعليمي</h3>
-        <input type="text" id="user" placeholder="اسم المستخدم">
-        <input type="password" id="pass" placeholder="كلمة المرور">
-        <button class="btn btn-p" onclick="staffAuth()">تسجيل دخول</button>
-        <button class="btn" onclick="showScreen('mainMenu')">رجوع</button>
-    </div>
-
-    <div id="teacherDash" class="hidden card" style="max-width:850px;">
+    <div id="teacherDash" class="hidden card" style="max-width:800px;">
         <h3>لوحة الأستاذ سعد 🛠️</h3>
-        <div style="background:#f0f4f1; padding:12px; border-radius:12px; margin-bottom:15px;">
-            <label>رقم الأسبوع للجميع:</label>
+        <div style="background:#eee; padding:10px; border-radius:10px; margin-bottom:10px;">
             <div style="display:flex; gap:5px;">
-                <input type="number" id="globalWeekNum" placeholder="مثلاً: 9" style="margin:0;">
-                <button class="btn-p" style="padding:0 15px; border-radius:8px;" onclick="updateGlobalWeek()">تحديث</button>
+                <input type="number" id="globalWeekNum" placeholder="الأسبوع">
+                <input type="number" id="weeklyTarget" placeholder="المقرر (مثلاً 5)">
             </div>
+            <button class="btn btn-p" onclick="updateSettings()">تحديث الإعدادات للجميع</button>
         </div>
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex; gap:5px;">
             <button class="btn btn-p" onclick="loadClass('3/1')">فصل 3/1</button>
             <button class="btn btn-p" onclick="loadClass('3/2')">فصل 3/2</button>
         </div>
-        <div id="namesGrid" class="grid"></div>
-        <hr>
-        <button class="btn" style="background:#c0392b; color:white" onclick="showScreen('mainMenu')">خروج</button>
+        <div id="namesGrid" class="grid" style="margin-top:10px;"></div>
+        <button class="btn" onclick="showScreen('mainMenu')">خروج</button>
     </div>
 
     <div id="gradeScreen" class="hidden card">
         <h3 id="targetName"></h3>
-        <div class="grid" style="grid-template-columns: 1fr 1fr;">
-            <input type="text" id="gDay" placeholder="اليوم">
-            <input type="number" id="gPage" placeholder="رقم الصفحة">
-        </div>
-        <input type="text" id="gMark" placeholder="الدرجة">
+        <input type="text" id="gDay" placeholder="اليوم">
+        <input type="number" id="gPage" placeholder="الصفحة">
         <select id="gStatus">
             <option value="حافظ">حافظ ✅</option>
             <option value="لم يحفظ">لم يحفظ ⚠️</option>
             <option value="غائب">غائب 💤</option>
-            <option value="لم يسمع">لم يسمع ❌</option>
         </select>
-        <div style="background:#f9f9f9; padding:10px; border-radius:10px; margin:5px 0;">
-            <input type="checkbox" id="isLate"> <label for="isLate">درس متأخر (لا يحسب في العداد)</label>
-        </div>
-        <textarea id="gNote" placeholder="ملاحظات..."></textarea>
-        <button class="btn btn-p" onclick="saveGrade()">تأكيد وحفظ</button>
+        <input type="checkbox" id="isLate"> درس متأخر
+        <button class="btn btn-p" onclick="saveGrade()">حفظ</button>
         <button class="btn" onclick="showScreen('teacherDash')">إلغاء</button>
     </div>
 
-    <div id="adminDash" class="hidden card">
-        <h3>بوابة الإدارة - عرض الأكواد</h3>
-        <div id="adminContent" style="text-align: right;"></div>
-        <button class="btn btn-p" onclick="showScreen('mainMenu')">خروج</button>
+    <div id="staffLogin" class="hidden card">
+        <input type="text" id="user" placeholder="المستخدم">
+        <input type="password" id="pass" placeholder="كلمة المرور">
+        <button class="btn btn-p" onclick="staffAuth()">دخول</button>
+        <button class="btn" onclick="showScreen('mainMenu')">رجوع</button>
     </div>
 </div>
 
 <script>
-    // الإعدادات وقاعدة البيانات
     const firebaseConfig = { apiKey: "AIzaSyAC9BzBpw66oBDriZoi9A5zsThKLFZiNv8", databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // دمج الأسماء التي طلبتها
-    const initialStudents = [
-        {id:3278, name:"احمد عبدالله الحارثي", code:3278, class:"3/2"},
-        {id:3214, name:"انس محمد عيسى", code:3214, class:"3/2"},
-        {id:3216, name:"مصطفى عبدالله احمد", code:3216, class:"3/2"},
+    // قائمة الطلاب الكاملة
+    const allStudents = [
+        // فصل 3/2
+        {id:3278, name:"احمد عبدالله الحارثي", code:3278, class:"3/2"}, {id:3214, name:"انس محمد عيسى", code:3214, class:"3/2"}, {id:3291, name:"تيسير رضا المحمدي", code:3291, class:"3/2"},
+        {id:3246, name:"حسان سليمان الجابري", code:3246, class:"3/2"}, {id:3283, name:"حسن عبده", code:3283, class:"3/2"}, {id:3209, name:"عامر يوسف الجهني", code:3209, class:"3/2"},
+        {id:3267, name:"عبدالرحمن ماجد الرخيمي", code:3267, class:"3/2"}, {id:3235, name:"عبدالرحمن عمر الرويثي", code:3235, class:"3/2"}, {id:3298, name:"عبدالرحمن صغير", code:3298, class:"3/2"},
+        {id:3218, name:"عبدالعزيز حكمي", code:3218, class:"3/2"}, {id:3271, name:"عبدالعزيز مروان", code:3271, class:"3/2"}, {id:3242, name:"عبدالله فهد الشنقيطي", code:3242, class:"3/2"},
+        {id:3289, name:"عبدالمجيد بدر العوفي", code:3289, class:"3/2"}, {id:3226, name:"عبدالمجيد عبدالهادي العمري", code:3226, class:"3/2"}, {id:3275, name:"عبدالملك محمد الجهني", code:3275, class:"3/2"},
+        {id:3207, name:"عبدالملك عياده الجهني", code:3207, class:"3/2"}, {id:3294, name:"عماد حمدان الاحمدي", code:3294, class:"3/2"}, {id:3231, name:"عمر عبدالعزيز السهلي", code:3231, class:"3/2"},
+        {id:3260, name:"عمر عبدالله الساعدي", code:3260, class:"3/2"}, {id:3281, name:"فيصل قوشيح", code:3281, class:"3/2"}, {id:3212, name:"لزام ماهر ابو حسين", code:3212, class:"3/2"},
+        {id:3279, name:"مالك محمد الجهني", code:3279, class:"3/2"}, {id:3249, name:"محمد احمد الأمين", code:3249, class:"3/2"}, {id:3290, name:"محمد التراد", code:3290, class:"3/2"},
+        {id:3205, name:"محمد بندر الجهني", code:3205, class:"3/2"}, {id:3264, name:"محمد سالم الجهني", code:3264, class:"3/2"}, {id:3286, name:"محمد سعيد الجهني", code:3286, class:"3/2"},
+        {id:3223, name:"محمد علي الشنقيطي", code:3223, class:"3/2"}, {id:3273, name:"محمد منور العنزي", code:3273, class:"3/2"}, {id:3216, name:"مصطفى عبدالله احمد", code:3216, class:"3/2"},
         {id:3210, name:"يزن انس المحمدي", code:3210, class:"3/2"},
-        {id:3101, name:"احمد بكر سيكو جياني", code:3101, class:"3/1"},
-        // ... (سيتم إضافة باقي الـ 60 طالباً آلياً عند تشغيل البرنامج لأول مرة)
+        // فصل 3/1
+        {id:3101, name:"احمد بكر سيكو جياني", code:3101, class:"3/1"}, {id:3102, name:"احمد خالد حمدان الأحمدي", code:3102, class:"3/1"}, {id:3103, name:"احمد ناصر احمد عمر", code:3103, class:"3/1"},
+        {id:3104, name:"اسامه اباه محمد الأمين", code:3104, class:"3/1"}, {id:3105, name:"امين عبدالرحمن محمد الشنقيطي", code:3105, class:"3/1"}, {id:3106, name:"أمين محمد بن عبداللطيف محمد", code:3106, class:"3/1"},
+        {id:3107, name:"أنس حيدر يحيى نخيفي", code:3107, class:"3/1"}, {id:3108, name:"اياد حمزه راجح الاحمدي", code:3108, class:"3/1"}, {id:3109, name:"تميم طارق بن سعيد الزهراني", code:3109, class:"3/1"},
+        {id:3110, name:"تميم فهد بن جزاء التميمي", code:3110, class:"3/1"}, {id:3111, name:"جهاد مشعل سعيد الردادي", code:3111, class:"3/1"}, {id:3112, name:"حمزه محمد نور رياض شاهين", code:3112, class:"3/1"},
+        {id:3113, name:"راشد عمر بن علي الاحمدي", code:3113, class:"3/1"}, {id:3114, name:"ريان محمد جابر محمد", code:3114, class:"3/1"}, {id:3115, name:"عبدالرحيم محمد الامين الشنقيطي", code:3115, class:"3/1"},
+        {id:3116, name:"عبدالعزيز احمد بن عبدالعزيز بخاري", code:3116, class:"3/1"}, {id:3117, name:"عبدالعزيز عبدالله بن جزاء التميمي", code:3117, class:"3/1"}, {id:3118, name:"عبدالله محمود محمد الشنقيطي", code:3118, class:"3/1"},
+        {id:3119, name:"عبدالملك سعد عبدالله الشريده", code:3119, class:"3/1"}, {id:3120, name:"عمر عبدالرحمن حضيض التميمي", code:3120, class:"3/1"}, {id:3121, name:"عمر عبدالله محمد العمري", code:3121, class:"3/1"},
+        {id:3122, name:"عمر عبدالواحد احمد بكاري", code:3122, class:"3/1"}, {id:3123, name:"قاسم بندر بن قاسم الانصاري", code:3123, class:"3/1"}, {id:3124, name:"قصي سعدي عبدالله العثيميني", code:3124, class:"3/1"},
+        {id:3125, name:"محمد محمود عبدالله الشنقيطي", code:3125, class:"3/1"}, {id:3126, name:"محمد مختار بن محمد ولد ابا", code:3126, class:"3/1"}, {id:3127, name:"محمود عابد احمد الشنقيطي", code:3127, class:"3/1"},
+        {id:3128, name:"مصطفى عمر بن الأمين الشنقيطي", code:3128, class:"3/1"}, {id:3129, name:"معاذ ابراهيم بن محمد الطيب الولي", code:3129, class:"3/1"}, {id:3130, name:"معاذ الامين بن خضر الشنقيطي", code:3130, class:"3/1"}
     ];
 
     let students = [];
-    let currentSID = null;
-    let globalWeek = 1;
+    let settings = { currentWeek: 1, target: 4 };
 
     db.ref('students').on('value', s => { 
-        if(!s.exists()) db.ref('students').set(initialStudents);
+        if(!s.exists()) db.ref('students').set(allStudents);
         students = Object.values(s.val() || {});
         updateHonorRoll();
     });
-    db.ref('settings/currentWeek').on('value', s => { globalWeek = parseInt(s.val()) || 1; });
-
-    function setTheme(t) { document.getElementById('body').className = t; }
+    db.ref('settings').on('value', s => { if(s.exists()) settings = s.val(); });
 
     function studentLogin() {
         const code = document.getElementById('studentCode').value;
         const s = students.find(x => x.code == code);
         if(s) {
             document.getElementById('welcomeMsg').innerText = `أهلاً بك يا ${s.name} 🌿`;
-            document.getElementById('currentWeekDisplay').innerText = `الأسبوع: ${globalWeek}`;
+            document.getElementById('devMsg').innerText = "لقد قمت أنا ويزن ومحمد بتصميم وبرمجة هذا الموقع خصيصاً لك ولزملائك.";
             renderStudentRecords(s);
             showScreen('studentPage');
-        } else alert('المفتاح خاطئ');
+        } else alert('المفتاح خاطئ!');
+    }
+
+    function updateSettings() {
+        const w = document.getElementById('globalWeekNum').value;
+        const t = document.getElementById('weeklyTarget').value;
+        db.ref('settings').set({ currentWeek: w || settings.currentWeek, target: t || settings.target });
+        alert('تم تحديث الإعدادات');
+    }
+
+    function saveGrade() {
+        const sIdx = students.findIndex(x => x.id == currentSID);
+        const rec = { week: settings.currentWeek, day: document.getElementById('gDay').value, page: document.getElementById('gPage').value, status: document.getElementById('gStatus').value, isLate: document.getElementById('isLate').checked };
+        if(!students[sIdx].records) students[sIdx].records = [];
+        students[sIdx].records.unshift(rec);
+        db.ref('students').set(students).then(() => { alert('تم الحفظ'); showScreen('teacherDash'); });
+    }
+
+    function renderStudentRecords(s) {
+        document.getElementById('currentWeekDisplay').innerText = `رقم الأسبوع: ${settings.currentWeek}`;
+        const weekRecs = (s.records || []).filter(r => r.week == settings.currentWeek && !r.isLate && r.status === "حافظ");
+        document.getElementById('weekCounter').innerText = `${weekRecs.length} / ${settings.target}`;
+        
+        document.getElementById('recordsList').innerHTML = (s.records || []).map(r => `
+            <div style="padding:8px; margin:5px 0; background:#f9f9f9; border-radius:8px; border-right:4px solid ${r.status==='حافظ'?'green':'red'}">
+                أسبوع ${r.week} - ص ${r.page} | ${r.status} ${r.isLate?'(متأخر)':''}
+            </div>
+        `).join('');
+    }
+
+    function updateHonorRoll() {
+        const sorted = [...students].sort((a,b) => (b.records?.filter(r=>r.status==='حافظ').length || 0) - (a.records?.filter(r=>r.status==='حافظ').length || 0));
+        document.getElementById('topStudents').innerText = sorted.slice(0, 20).map((s, i) => `${i+1}. ${s.name}`).join(' | ');
     }
 
     function staffAuth() {
-        const u = document.getElementById('user').value;
-        const p = document.getElementById('pass').value;
-        if(u==='saad' && p==='12345678w') showScreen('teacherDash');
-        else if(u==='admin' && p==='admin26') { renderAdmin(); showScreen('adminDash'); }
-        else alert('خطأ!');
+        if(document.getElementById('user').value === 'saad' && document.getElementById('pass').value === '12345678w') showScreen('teacherDash');
+        else alert('خطأ');
     }
 
     function loadClass(cls) {
@@ -176,46 +186,6 @@
             div.onclick = () => { currentSID = s.id; document.getElementById('targetName').innerText = s.name; showScreen('gradeScreen'); };
             grid.appendChild(div);
         });
-    }
-
-    function updateGlobalWeek() {
-        const val = document.getElementById('globalWeekNum').value;
-        if(val) db.ref('settings/currentWeek').set(val).then(()=>alert('تم التحديث'));
-    }
-
-    function saveGrade() {
-        const sIdx = students.findIndex(x => x.id == currentSID);
-        const rec = { week: globalWeek, day: document.getElementById('gDay').value, page: document.getElementById('gPage').value, mark: document.getElementById('gMark').value, status: document.getElementById('gStatus').value, note: document.getElementById('gNote').value, isLate: document.getElementById('isLate').checked };
-        if(!students[sIdx].records) students[sIdx].records = [];
-        students[sIdx].records.unshift(rec);
-        db.ref('students').set(students).then(() => { alert('تم الحفظ'); showScreen('teacherDash'); });
-    }
-
-    function renderStudentRecords(s) {
-        const weekRecs = (s.records || []).filter(r => r.week == globalWeek && !r.isLate && r.status === "حافظ");
-        document.getElementById('weekCounter').innerText = `${weekRecs.length} / 4`;
-        
-        const missing = (s.records || []).filter(r => r.status !== "حافظ");
-        const mBox = document.getElementById('missingRecords');
-        if(missing.length > 0) {
-            mBox.classList.remove('hidden');
-            document.getElementById('missingList').innerHTML = missing.map(m => `<li>أسبوع ${m.week}: ص (${m.page}) - [${m.status}]</li>`).join('');
-        } else mBox.classList.add('hidden');
-
-        document.getElementById('recordsList').innerHTML = (s.records || []).map(r => `
-            <div style="border-right:5px solid ${r.status==='حافظ'?'#27ae60':'#c0392b'}; padding:10px; margin:5px 0; background:rgba(0,0,0,0.02); border-radius:10px;">
-                <b>أسبوع ${r.week} - ص ${r.page}</b> ${r.isLate?'(متأخر)':''} | ${r.status}
-            </div>
-        `).join('');
-    }
-
-    function updateHonorRoll() {
-        const sorted = [...students].sort((a,b) => (b.records?.filter(r=>r.status==='حافظ').length || 0) - (a.records?.filter(r=>r.status==='حافظ').length || 0));
-        document.getElementById('top20').innerText = sorted.slice(0, 20).map((s, i) => `${i+1}. ${s.name}`).join(' | ');
-    }
-
-    function renderAdmin() {
-        document.getElementById('adminContent').innerHTML = students.map(s => `<div>${s.name} - المفتاح: <b>${s.code}</b></div>`).join('<hr>');
     }
 
     function showScreen(id) {
