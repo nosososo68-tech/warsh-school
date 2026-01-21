@@ -3,297 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام الإمام ورش المطور - المبرمج مصطفى عبد الله أحمد</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>نظام الإمام ورش الذكي - المبرمج مصطفى</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <style>
-        :root { --primary: #1e4d2b; --secondary: #4a7c44; --gold: #d4af37; --white: #ffffff; --bg: #fdfaf5; --danger: #c0392b; }
-        .theme-blue { --primary: #0a192f; --secondary: #112240; --gold: #64ffda; --bg: #f0f4f8; }
-        .theme-orange { --primary: #d35400; --secondary: #e67e22; --gold: #c0392b; --bg: #fff5e6; }
-        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s; }
-        body { background-color: var(--bg); margin: 0; padding: 20px; text-align: center; }
-        #lockScreen { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--primary); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .glass-card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); width: 90%; max-width: 400px; border: 3px solid var(--gold); }
-        .container { max-width: 800px; margin: auto; }
-        .card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; border-bottom: 5px solid var(--gold); }
-        .btn { padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; margin: 5px 0; font-size: 16px; }
+        :root { --primary: #1e4d2b; --gold: #d4af37; --bg: #fdfaf5; }
+        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { background-color: var(--bg); text-align: center; padding: 10px; direction: rtl; }
+        .card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 20px; border-bottom: 4px solid var(--gold); }
+        .btn { padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; margin: 5px 0; font-size: 16px; transition: 0.3s; }
         .btn-primary { background: var(--primary); color: white; }
-        .btn-secondary { background: var(--secondary); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
+        .btn-secondary { background: #4a7c44; color: white; }
         .hidden { display: none !important; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #eee; border-radius: 10px; text-align: center; font-size: 16px; }
-        .st-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .stat-box { padding: 10px; border-radius: 10px; color: white; font-size: 12px; font-weight: bold; }
-        .history-item { text-align: right; padding: 10px; border: 1px solid #eee; margin: 5px 0; border-radius: 10px; font-size: 14px; position: relative; }
-        .edit-tool { position: absolute; left: 10px; top: 10px; display: flex; gap: 5px; }
-        .bar-chart { display: flex; align-items: flex-end; justify-content: space-around; height: 150px; margin-top: 20px; }
-        .bar { width: 30px; background: var(--primary); border-radius: 5px 5px 0 0; position: relative; }
-        .bar-label { position: absolute; bottom: -25px; font-size: 10px; width: 100%; }
-        footer { margin-top: 30px; font-size: 11px; color: #777; }
+        select, input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; text-align: center; font-size: 16px; background: #fff; }
+        .stat-box { display: inline-block; width: 30%; padding: 10px; border-radius: 10px; color: white; font-size: 11px; margin: 1%; font-weight: bold; }
+        .history-card { border-right: 4px solid var(--primary); background: #f9f9f9; padding: 10px; margin: 10px 0; text-align: right; font-size: 13px; border-radius: 8px; }
+        .teacher-rec { font-size: 12px; background: #eee; padding: 5px; margin: 5px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .badge { background: var(--gold); padding: 2px 8px; border-radius: 10px; font-size: 11px; }
     </style>
 </head>
-<body id="bodyTag">
+<body>
 
-<div id="lockScreen">
-    <div class="glass-card">
-        <h2>مدرسة الإمام ورش</h2>
-        <input type="password" id="siteKey" placeholder="الرمز السري">
-        <button class="btn btn-primary" onclick="unlockSite()">فتح النظام</button>
-        <p style="font-size: 11px;">المبرمج: مصطفى عبد الله أحمد</p>
-    </div>
+<div id="lockScreen" class="card" style="margin-top: 50px;">
+    <h2>مدرسة الإمام ورش 📚</h2>
+    <p>أهلاً بك في نظام المتابعة الإلكتروني</p>
+    <input type="password" id="siteKey" placeholder="أدخل الرمز السري">
+    <button class="btn btn-primary" onclick="unlockSite()">دخول النظام</button>
+    <p style="font-size: 11px; color: #777;">برمجة وتطوير: مصطفى عبد الله أحمد</p>
 </div>
 
-<div class="container hidden" id="mainApp">
-    <header>
-        <h3 style="color: var(--primary);">نظام مدرسة الإمام ورش</h3>
-        <p style="font-size: 12px; font-weight: bold; color: var(--gold);">إشراف المبرمج مصطفى عبد الله أحمد</p>
-    </header>
+<div id="mainApp" class="hidden">
+    <header><h2 style="color: var(--primary);">نظام مدرسة الإمام ورش</h2></header>
 
-    <div id="roleSelection">
-        <div class="card">
-            <button class="btn btn-primary" onclick="showScreen('loginScreen')">بوابة الإدارة (الأستاذ سعد)</button>
-            <button class="btn btn-secondary" onclick="showScreen('studentPortal')">بوابة الطلاب</button>
-        </div>
-        <div class="card">
-            <h4>🏆 لوحة المتفوقين</h4>
-            <div class="bar-chart" id="honorChart"></div>
-        </div>
+    <div id="home">
+        <button class="btn btn-primary" onclick="showScreen('teacherLogin')">بوابة الأستاذ سعد (الإدارة)</button>
+        <button class="btn btn-secondary" onclick="showScreen('studentPortal')">بوابة الطلاب (الاستعلام)</button>
     </div>
 
     <div id="studentPortal" class="hidden card">
-        <h4>استعلام الطالب</h4>
-        <select id="selStudentClass" onchange="fillStudentList('selStudentClass', 'selStudentName')">
-            <option value="">اختر فصلك</option>
+        <h4>استعلام مستوى الطالب</h4>
+        <select id="pClass" onchange="updateStudentList()">
+            <option value="">اختر الفصل</option>
             <option value="3/1">فصل 3/1</option>
             <option value="3/2">فصل 3/2</option>
         </select>
-        <select id="selStudentName" class="hidden"><option value="">اختر اسمك</option></select>
-        <button id="btnViewReport" class="btn btn-primary hidden" onclick="viewStudentReport()">عرض ملفي التعليمي</button>
-        <button class="btn" onclick="showScreen('roleSelection')">رجوع</button>
+        <select id="pName" class="hidden"></select>
+        <button id="btnView" class="btn btn-primary hidden" onclick="showStudentReport()">عرض مقرراتي ومستواي</button>
+        <button class="btn" onclick="showScreen('home')">رجوع</button>
     </div>
 
-    <div id="studentReport" class="hidden">
-        <div class="card">
-            <h3 id="reportTitle">اسم الطالب</h3>
-            <div class="stats-grid">
-                <div class="stat-box" style="background: #e67e22;">لم يحفظ: <span id="statFail">0</span></div>
-                <div class="stat-box" style="background: #c0392b;">محروم: <span id="statBanned">0</span></div>
-                <div class="stat-box" style="background: #7f8c8d;">غائب: <span id="statAbs">0</span></div>
-            </div>
-            <hr>
-            <h4>سجل التسميع الأخير:</h4>
-            <div id="reportHistory"></div>
+    <div id="studentReport" class="hidden card">
+        <h3 id="rName">الاسم</h3>
+        <div style="margin-bottom: 10px;">
+            <div class="stat-box" style="background: #e67e22;">لم يحفظ: <span id="rFail">0</span></div>
+            <div class="stat-box" style="background: #c0392b;">محروم: <span id="rBan">0</span></div>
+            <div class="stat-box" style="background: #7f8c8d;">غائب: <span id="rAbs">0</span></div>
         </div>
-        <button class="btn btn-secondary" onclick="showScreen('studentPortal')">رجوع للبحث</button>
+        <hr>
+        <h4>المقررات والتسميعات:</h4>
+        <div id="rHistory"></div>
+        <button class="btn btn-secondary" onclick="showScreen('studentPortal')">بحث جديد</button>
     </div>
 
-    <div id="loginScreen" class="card hidden">
-        <h3>دخول الإدارة</h3>
-        <input type="text" id="username" placeholder="اسم المستخدم">
-        <input type="password" id="password" placeholder="كلمة المرور">
-        <button class="btn btn-primary" onclick="teacherLogin()">دخول</button>
-        <button class="btn" onclick="showScreen('roleSelection')">رجوع</button>
+    <div id="teacherLogin" class="hidden card">
+        <h4>دخول الإدارة</h4>
+        <input type="text" id="user" placeholder="اسم المستخدم">
+        <input type="password" id="pass" placeholder="كلمة المرور">
+        <button class="btn btn-primary" onclick="checkTeacher()">دخول</button>
+        <button class="btn" onclick="showScreen('home')">إلغاء</button>
     </div>
 
-    <div id="teacherDash" class="hidden">
-        <div class="card">
-            <input type="text" id="stName" placeholder="اسم طالب جديد">
-            <select id="stClass"><option value="3/1">3/1</option><option value="3/2">3/2</option></select>
-            <button class="btn btn-primary" onclick="addStudent()">إضافة</button>
-            <div style="display:flex; gap:5px;">
-                <button class="btn btn-secondary" onclick="loadClass('3/1')">طلاب 3/1</button>
-                <button class="btn btn-secondary" onclick="loadClass('3/2')">طلاب 3/2</button>
-            </div>
+    <div id="teacherDash" class="hidden card">
+        <h4>لوحة تحكم الأستاذ سعد</h4>
+        <div style="border: 1px dashed #ccc; padding: 10px; margin-bottom: 10px;">
+            <input type="text" id="newName" placeholder="اسم الطالب">
+            <select id="newClass"><option value="3/1">3/1</option><option value="3/2">3/2</option></select>
+            <button class="btn btn-primary" onclick="addStudent()">+ إضافة طالب جديد</button>
         </div>
-        <div id="classStudentsList" class="card hidden"></div>
-        <button class="btn" onclick="showScreen('roleSelection')">تسجيل خروج</button>
+        <button class="btn btn-secondary" onclick="listForTeacher('3/1')">طلاب 3/1</button>
+        <button class="btn btn-secondary" onclick="listForTeacher('3/2')">طلاب 3/2</button>
+        <div id="stList" style="margin-top: 15px;"></div>
+        <button class="btn" onclick="showScreen('home')">تسجيل خروج</button>
     </div>
 
-    <div id="gradingPage" class="hidden card">
-        <h3 id="activeStName">الاسم</h3>
-        <input type="number" id="rPage" placeholder="رقم الصفحة">
-        <select id="rStatus">
+    <div id="gradeScreen" class="hidden card">
+        <h3 id="activeSt">الاسم</h3>
+        <input type="number" id="gPage" placeholder="رقم الصفحة">
+        <select id="gStatus">
             <option value="حفظ">حفظ ✅</option>
             <option value="لم يحفظ">لم يحفظ ❌</option>
             <option value="محروم">محروم ⛔</option>
             <option value="غائب">غائب 💤</option>
         </select>
-        <select id="rScore">
-            <option value="0">0 (بدون درجة)</option>
+        <select id="gScore">
+            <option value="0">درجة 0</option>
             <option value="7">7 - ممتاز</option>
             <option value="6">6 - جيد جداً</option>
             <option value="5">5 - مقبول</option>
             <option value="4">4 - ضعيف</option>
         </select>
-        <textarea id="rNote" placeholder="ملاحظات.."></textarea>
-        <button class="btn btn-primary" id="btnSaveRecord" onclick="saveRecord()">حفظ البيانات للسحاب</button>
-        <button class="btn btn-secondary" onclick="showScreen('teacherDash')">رجوع</button>
+        <button class="btn btn-primary" onclick="saveGrade()">حفظ وتوثيق بالسحاب ✅</button>
         <hr>
-        <h4>السجل الحالي (للتعديل):</h4>
-        <div id="editHistory"></div>
+        <p style="font-size: 12px; font-weight: bold;">السجل (للتعديل والحذف):</p>
+        <div id="teacherHistory"></div>
+        <button class="btn" onclick="showScreen('teacherDash')">رجوع</button>
     </div>
-
-    <footer>
-        <p>تصميم وتطوير المبرمج: مصطفى عبد الله أحمد | جوال: 0599804296</p>
-    </footer>
 </div>
 
 <script>
-    const firebaseConfig = { databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app/" };
+    const firebaseConfig = {
+        apiKey: "AIzaSyAC9BzBpw66oBDriZoi9A5zsThKLFZiNv8",
+        authDomain: "imam-warsh.firebaseapp.com",
+        databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "imam-warsh",
+        storageBucket: "imam-warsh.firebasestorage.app",
+        messagingSenderId: "898520924315",
+        appId: "1:898520924315:web:b74dbd20340ef53b0a463e",
+        measurementId: "G-YGY41LQF8J"
+    };
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
     let students = [];
-    let currentStId = null;
-    let editIndex = null;
+    let currentId = null;
 
-    function loadData() {
-        db.ref('students').on('value', (snapshot) => {
-            students = snapshot.val() || [];
-            renderChart();
-        });
-    }
-    loadData();
-
-    function saveData() { db.ref('students').set(students); }
+    db.ref('students').on('value', s => { students = s.val() || []; });
 
     function unlockSite() {
         if(document.getElementById('siteKey').value === "2026") {
-            document.getElementById('lockScreen').style.display = 'none';
+            document.getElementById('lockScreen').classList.add('hidden');
             document.getElementById('mainApp').classList.remove('hidden');
         } else { alert("الرمز خطأ!"); }
     }
 
     function showScreen(id) {
-        document.querySelectorAll('.container > div').forEach(d => { if(d.id !== 'roleSelection' && d.tagName !== 'HEADER' && d.tagName !== 'FOOTER') d.classList.add('hidden'); });
-        document.getElementById('roleSelection').classList.toggle('hidden', id !== 'roleSelection');
-        if(id !== 'roleSelection') document.getElementById(id).classList.remove('hidden');
+        document.querySelectorAll('#mainApp > div').forEach(d => d.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+        if(id === 'home') document.getElementById('home').classList.remove('hidden');
     }
 
-    function teacherLogin() {
-        if(document.getElementById('username').value === 'saad' && document.getElementById('password').value === '1234567891011s') {
-            showScreen('teacherDash');
-        } else { alert("خطأ!"); }
-    }
-
-    function fillStudentList(classSelId, nameSelId) {
-        const cls = document.getElementById(classSelId).value;
-        const nameSel = document.getElementById(nameSelId);
-        nameSel.innerHTML = '<option value="">اختر الاسم</option>';
+    function updateStudentList() {
+        const cls = document.getElementById('pClass').value;
+        const nameSel = document.getElementById('pName');
+        nameSel.innerHTML = '<option value="">اختر اسمك</option>';
         if(!cls) { nameSel.classList.add('hidden'); return; }
         students.filter(s => s.class === cls).forEach(s => {
             nameSel.innerHTML += `<option value="${s.id}">${s.name}</option>`;
         });
         nameSel.classList.remove('hidden');
-        if(classSelId === 'selStudentClass') document.getElementById('btnViewReport').classList.remove('hidden');
+        document.getElementById('btnView').classList.remove('hidden');
     }
 
-    function viewStudentReport() {
-        const id = document.getElementById('selStudentName').value;
-        if(!id) return;
+    function showStudentReport() {
+        const id = document.getElementById('pName').value;
         const s = students.find(x => x.id == id);
-        document.getElementById('reportTitle').innerText = s.name;
-        const records = s.records || [];
-        document.getElementById('statFail').innerText = records.filter(r => r.status === 'لم يحفظ').length;
-        document.getElementById('statBanned').innerText = records.filter(r => r.status === 'محروم').length;
-        document.getElementById('statAbs').innerText = records.filter(r => r.status === 'غائب').length;
-        
-        const historyDiv = document.getElementById('reportHistory');
-        historyDiv.innerHTML = records.length ? "" : "لا يوجد سجلات.";
-        records.forEach(r => {
-            historyDiv.innerHTML += `<div class="history-item">📅 ${r.date} | ص: ${r.page} | الحالة: <b>${r.status}</b> | الدرجة: ${r.score} <br> 📝 ${r.note || '-'}</div>`;
-        });
+        if(!s) return;
+        document.getElementById('rName').innerText = s.name;
+        const recs = s.records || [];
+        document.getElementById('rFail').innerText = recs.filter(r => r.status === 'لم يحفظ').length;
+        document.getElementById('rBan').innerText = recs.filter(r => r.status === 'محروم').length;
+        document.getElementById('rAbs').innerText = recs.filter(r => r.status === 'غائب').length;
+        document.getElementById('rHistory').innerHTML = recs.map(r => `<div class="history-card">📅 ${r.date} | ص: ${r.page} | <span class="badge">${r.status}</span> | الدرجة: ${r.score}</div>`).join('');
         showScreen('studentReport');
     }
 
-    function loadClass(cls) {
-        const list = document.getElementById('classStudentsList');
-        list.classList.remove('hidden');
-        list.innerHTML = `<h4>فصل ${cls}</h4>`;
-        students.filter(s => s.class === cls).forEach(s => {
-            list.innerHTML += `<div class="st-row"><span>${s.name}</span><div><button class="btn btn-secondary" style="width:auto;" onclick="openGrading(${s.id})">تسميع/تعديل</button> <button class="btn btn-danger" style="width:auto;" onclick="deleteStudent(${s.id})">حذف</button></div></div>`;
-        });
-    }
-
-    function openGrading(id) {
-        currentStId = id;
-        editIndex = null;
-        const s = students.find(x => x.id == id);
-        document.getElementById('activeStName').innerText = s.name;
-        document.getElementById('btnSaveRecord').innerText = "حفظ البيانات للسحاب";
-        refreshEditHistory(s);
-        showScreen('gradingPage');
-    }
-
-    function refreshEditHistory(s) {
-        const div = document.getElementById('editHistory');
-        div.innerHTML = "";
-        (s.records || []).forEach((r, idx) => {
-            div.innerHTML += `<div class="history-item">${r.date} - درجة: ${r.score} <div class="edit-tool"><button onclick="startEdit(${idx})" style="color:blue">تعديل</button><button onclick="deleteRecord(${idx})" style="color:red">حذف</button></div></div>`;
-        });
-    }
-
-    function saveRecord() {
-        const sIdx = students.findIndex(x => x.id == currentStId);
-        const record = {
-            date: new Date().toLocaleDateString('ar-SA'),
-            page: document.getElementById('rPage').value,
-            status: document.getElementById('rStatus').value,
-            score: document.getElementById('rScore').value,
-            note: document.getElementById('rNote').value
-        };
-        if(!students[sIdx].records) students[sIdx].records = [];
-        if(editIndex !== null) students[sIdx].records[editIndex] = record;
-        else students[sIdx].records.unshift(record);
-        saveData();
-        alert("تم التوثيق ✅");
-        showScreen('teacherDash');
-    }
-
-    function startEdit(idx) {
-        editIndex = idx;
-        const s = students.find(x => x.id == currentStId);
-        const r = s.records[idx];
-        document.getElementById('rPage').value = r.page;
-        document.getElementById('rStatus').value = r.status;
-        document.getElementById('rScore').value = r.score;
-        document.getElementById('rNote').value = r.note;
-        document.getElementById('btnSaveRecord').innerText = "تحديث السجل الحالي";
-        window.scrollTo(0,0);
-    }
-
-    function deleteRecord(idx) {
-        if(confirm("حذف الدرجة؟")) {
-            const sIdx = students.findIndex(x => x.id == currentStId);
-            students[sIdx].records.splice(idx, 1);
-            saveData();
-            openGrading(currentStId);
-        }
+    function checkTeacher() {
+        if(document.getElementById('user').value==='saad' && document.getElementById('pass').value==='1234567891011s') showScreen('teacherDash');
+        else alert("بيانات المعلم خاطئة");
     }
 
     function addStudent() {
-        const n = document.getElementById('stName').value;
-        const c = document.getElementById('stClass').value;
-        if(n) { students.push({id: Date.now(), name: n, class: c, records: []}); saveData(); document.getElementById('stName').value=""; }
+        const n = document.getElementById('newName').value;
+        const c = document.getElementById('newClass').value;
+        if(n) {
+            students.push({id: Date.now(), name: n, class: c, records: []});
+            db.ref('students').set(students).then(() => { alert("تمت الإضافة"); document.getElementById('newName').value=""; });
+        }
     }
 
-    function deleteStudent(id) { if(confirm("حذف الطالب نهائياً؟")) { students = students.filter(s => s.id != id); saveData(); } }
-
-    function renderChart() {
-        const chart = document.getElementById('honorChart');
-        chart.innerHTML = "";
-        let top = students.map(s => ({
-            name: s.name,
-            total: (s.records || []).reduce((a, b) => a + parseInt(b.score || 0), 0)
-        })).filter(s => s.total > 0).sort((a,b) => b.total - a.total).slice(0, 5);
-        if(!top.length) { chart.innerHTML = "لا يوجد متفوقون"; return; }
-        top.forEach(s => {
-            let h = (s.total / top[0].total) * 100;
-            chart.innerHTML += `<div class="bar" style="height:${h}%"><span style="font-size:9px; top:-15px; position:absolute;">${s.total}</span><span class="bar-label">${s.name.split(' ')[0]}</span></div>`;
+    function listForTeacher(cls) {
+        const list = document.getElementById('stList');
+        list.innerHTML = `<h5>طلاب ${cls}</h5>`;
+        students.filter(s => s.class === cls).forEach(s => {
+            list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${s.name}</span> <button class="btn-primary" style="width:auto; padding:2px 10px;" onclick="openGrade(${s.id})">رصد/تعديل</button></div>`;
         });
+    }
+
+    function openGrade(id) {
+        currentId = id;
+        const s = students.find(x => x.id == id);
+        document.getElementById('activeSt').innerText = s.name;
+        const hist = document.getElementById('teacherHistory');
+        hist.innerHTML = (s.records || []).map((r, i) => `<div class="teacher-rec"><span>${r.date} - ص:${r.page}</span> <button onclick="delRec(${i})" style="color:red; background:none; border:none; cursor:pointer;">[حذف]</button></div>`).join('');
+        showScreen('gradeScreen');
+    }
+
+    function saveGrade() {
+        const idx = students.findIndex(x => x.id == currentId);
+        const rec = { date: new Date().toLocaleDateString('ar-SA'), page: document.getElementById('gPage').value, status: document.getElementById('gStatus').value, score: document.getElementById('gScore').value };
+        if(!students[idx].records) students[idx].records = [];
+        students[idx].records.unshift(rec);
+        db.ref('students').set(students).then(() => { alert("تم الحفظ"); showScreen('teacherDash'); });
+    }
+
+    function delRec(i) {
+        if(confirm("حذف الدرجة؟")) {
+            const idx = students.findIndex(x => x.id == currentId);
+            students[idx].records.splice(i, 1);
+            db.ref('students').set(students).then(() => openGrade(currentId));
+        }
     }
 </script>
 </body>
-</html> 
+</html>
