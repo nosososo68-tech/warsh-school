@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الإمام ورش المطور - المبرمج مصطفى عبد الله أحمد</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1e4d2b; --secondary: #4a7c44; --gold: #d4af37; --white: #ffffff; --bg: #fdfaf5; }
+        .theme-blue { --primary: #0a192f; --secondary: #112240; --gold: #64ffda; --bg: #f0f4f8; }
+        .theme-orange { --primary: #d35400; --secondary: #e67e22; --gold: #c0392b; --bg: #fff5e6; }
+        
+        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s; }
+        body { background-color: var(--bg); margin: 0; padding: 20px; text-align: center; }
+
+        /* شاشة القفل */
+        #lockScreen { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--primary); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .glass-card { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); width: 90%; max-width: 400px; border: 3px solid var(--gold); }
+
+        /* نافذة التنبيه (Modal) */
+        #contactModal { 
+            position: fixed; top:0; left:0; width:100%; height:100%; 
+            background: rgba(0,0,0,0.6); z-index: 10001; 
+            display: none; align-items: center; justify-content: center; 
+        }
+        .modal-box { 
+            background: white; padding: 30px; border-radius: 20px; 
+            max-width: 400px; width: 90%; border: 4px solid var(--primary);
+        }
+
+        /* الثيمات */
+        .theme-selector { display: flex; gap: 10px; justify-content: center; margin: 15px 0; }
+        .theme-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid white; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        /* مخطط المتفوقين */
+        .chart-container { background: white; padding: 20px; border-radius: 20px; margin-top: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .bar-chart { display: flex; align-items: flex-end; justify-content: space-around; height: 200px; padding-top: 20px; }
+        .bar { width: 40px; background: linear-gradient(to top, var(--primary), var(--gold)); border-radius: 8px 8px 0 0; position: relative; animation: grow 1.5s ease-out; }
+        .bar-label { position: absolute; bottom: -30px; width: 100%; font-size: 11px; font-weight: bold; transform: rotate(-20deg); }
+        .bar-value { position: absolute; top: -25px; width: 100%; font-size: 12px; font-weight: bold; color: var(--primary); }
+
+        @keyframes grow { from { height: 0; } }
+
+        .container { max-width: 800px; margin: auto; }
+        .card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 25px; border-bottom: 5px solid var(--gold); }
+        .btn { padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; margin: 5px 0; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: var(--secondary); color: white; }
+        
+        input, select, textarea { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #eee; border-radius: 10px; text-align: center; font-size: 15px; }
+        
+        .hidden { display: none !important; }
+        footer { margin-top: 40px; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body id="bodyTag">
+
+<div id="lockScreen">
+    <div class="glass-card">
+        <h2 style="color: var(--primary);">مدرسة الإمام ورش</h2>
+        <input type="password" id="siteKey" placeholder="أدخل الرمز السري للوصول">
+        <button class="btn btn-primary" onclick="unlockSite()">فتح النظام</button>
+        <p style="font-size: 11px;">برمجة المطور: مصطفى عبد الله أحمد</p>
+    </div>
+</div>
+
+<div id="contactModal">
+    <div class="modal-box">
+        <h3 style="color: var(--primary);">عزيزي الطالب / ولي الأمر 🌹</h3>
+        <p>إذا واجهت أي مشكلة في النظام أو لم تجد اسمك، فضلاً لا تتردد في التواصل مع المبرمج:</p>
+        <h4 style="color: var(--gold);">مصطفى عبد الله أحمد</h4>
+        <p style="font-weight: bold; font-size: 18px; direction: ltr;">0599804296</p>
+        <button class="btn btn-primary" onclick="closeModal()">موافق، دخول</button>
+    </div>
+</div>
+
+<div class="container hidden" id="mainApp">
+    <header>
+        <h2 style="color: var(--primary);">نظام الإدارة - مدرسة الإمام ورش</h2>
+        <div class="theme-selector">
+            <div class="theme-btn" style="background: #1e4d2b;" onclick="setTheme('default')"></div>
+            <div class="theme-btn" style="background: #0a192f;" onclick="setTheme('theme-blue')"></div>
+            <div class="theme-btn" style="background: #d35400;" onclick="setTheme('theme-orange')"></div>
+        </div>
+        <p style="background:var(--gold); display:inline-block; padding:2px 15px; border-radius:20px; font-size:12px; font-weight:bold;">المبرمج المسؤول: مصطفى عبد الله أحمد</p>
+    </header>
+
+    <div id="roleSelection">
+        <div class="card">
+            <button class="btn btn-primary" onclick="showScreen('loginScreen')">دخول الأستاذ سعد</button>
+            <button class="btn btn-secondary" onclick="prepareStudentView()">دخول الطلاب</button>
+        </div>
+
+        <div class="chart-container">
+            <h3 style="color: var(--primary); margin-bottom: 30px;">🏆 لوحة شرف المتفوقين 🏆</h3>
+            <div class="bar-chart" id="honorChart"></div>
+            <p style="margin-top:40px; font-size:13px; color:#555;">أبنائي الطلاب.. همتكم تصل بكم إلى القمة! 🚀</p>
+        </div>
+    </div>
+
+    <div id="loginScreen" class="card hidden">
+        <h3>دخول الإدارة</h3>
+        <input type="text" id="username" placeholder="اسم المستخدم">
+        <input type="password" id="password" placeholder="كلمة المرور">
+        <button class="btn btn-primary" onclick="teacherLogin()">دخول</button>
+        <button class="btn" onclick="showScreen('roleSelection')">رجوع</button>
+    </div>
+
+    <div id="teacherDash" class="hidden">
+        <div class="card">
+            <input type="text" id="stName" placeholder="اسم الطالب الجديد">
+            <select id="stClass"><option value="3/1">فصل 3/1</option><option value="3/2">فصل 3/2</option></select>
+            <button class="btn btn-primary" onclick="addStudent()">إضافة الطالب</button>
+            <div style="display:flex; gap:10px;">
+                <button class="btn btn-secondary" onclick="loadClass('3/1')">فصل 3/1</button>
+                <button class="btn btn-secondary" onclick="loadClass('3/2')">فصل 3/2</button>
+            </div>
+        </div>
+        <div id="classStudentsList" class="card hidden"></div>
+    </div>
+
+    <div id="gradingPage" class="hidden">
+        <div class="card">
+            <h3 id="activeStName">الاسم</h3>
+            <input type="number" id="rPage" placeholder="رقم الصفحة">
+            
+            <label>الحالة الشخصية:</label>
+            <select id="rStatus">
+                <option value="حفظ">حفظ ✅</option>
+                <option value="لم يحفظ">لم يحفظ ❌</option>
+                <option value="محروم">محروم ⛔</option>
+                <option value="غائب">غائب 💤</option>
+            </select>
+
+            <label>درجة التسميع:</label>
+            <select id="rScore">
+                <option value="0">لا يوجد (0)</option>
+                <option value="7">7 - ممتاز</option>
+                <option value="6">6 - جيد جداً</option>
+                <option value="5">5 - مقبول</option>
+                <option value="4">4 - ضعيف</option>
+            </select>
+
+            <textarea id="rNote" placeholder="ملاحظات المعلم..."></textarea>
+            <button class="btn btn-primary" onclick="saveRecord()">حفظ وتوثيق الدرجة</button>
+        </div>
+        <button class="btn btn-secondary" onclick="showScreen('teacherDash')">رجوع</button>
+    </div>
+
+    <footer>
+        <p>جميع الحقوق محفوظة للمبرمج مصطفى عبد الله أحمد © 2026</p>
+        <p>تواصل: 0599804296</p>
+    </footer>
+</div>
+
+<script>
+    let students = JSON.parse(localStorage.getItem('madrassa_v4')) || [];
+    let currentId = null;
+
+    // تغيير الثيم
+    function setTheme(theme) {
+        document.getElementById('bodyTag').className = (theme === 'default') ? '' : theme;
+        localStorage.setItem('saved_theme', theme);
+    }
+
+    // استعادة الثيم المحفوظ
+    if(localStorage.getItem('saved_theme')) setTheme(localStorage.getItem('saved_theme'));
+
+    function unlockSite() {
+        if(document.getElementById('siteKey').value === "2026") {
+            document.getElementById('lockScreen').style.display = 'none';
+            document.getElementById('mainApp').classList.remove('hidden');
+            renderChart();
+        } else { alert("الرمز السري غير صحيح!"); }
+    }
+
+    // فتح نافذة الطالب مع التنبيه
+    function prepareStudentView() {
+        document.getElementById('contactModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('contactModal').style.display = 'none';
+        alert("سيتم عرض قائمة درجات الطلاب قريباً");
+    }
+
+    function renderChart() {
+        const chart = document.getElementById('honorChart');
+        chart.innerHTML = "";
+        let topStudents = students.map(s => {
+            let total = s.records.reduce((sum, r) => sum + parseInt(r.score || 0), 0);
+            return { name: s.name, total: total };
+        }).filter(s => s.total > 0).sort((a,b) => b.total - a.total).slice(0, 5);
+
+        if(topStudents.length === 0) {
+            chart.innerHTML = "<p>لا يوجد متفوقون مسجلون حالياً</p>";
+            return;
+        }
+        const maxScore = topStudents[0].total;
+        topStudents.forEach(s => {
+            let height = (s.total / maxScore) * 100;
+            chart.innerHTML += `<div class="bar" style="height: ${height}%"><span class="bar-value">${s.total}</span><span class="bar-label">${s.name.split(' ')[0]}</span></div>`;
+        });
+    }
+
+    function showScreen(id) {
+        document.querySelectorAll('.container > div').forEach(d => { if(d.id !== 'roleSelection') d.classList.add('hidden'); });
+        document.getElementById('roleSelection').classList.add('hidden');
+        document.getElementById(id).classList.remove('hidden');
+        if(id === 'roleSelection') renderChart();
+    }
+
+    function teacherLogin() {
+        if(document.getElementById('username').value === 'saad' && document.getElementById('password').value === '1234567891011s') {
+            showScreen('teacherDash');
+        } else { alert("بيانات الدخول غير صحيحة!"); }
+    }
+
+    function addStudent() {
+        const name = document.getElementById('stName').value;
+        const cls = document.getElementById('stClass').value;
+        if(name) { students.push({id: Date.now(), name, class: cls, records: []}); saveData(); loadClass(cls); }
+    }
+
+    function loadClass(cls) {
+        const list = document.getElementById('classStudentsList');
+        list.classList.remove('hidden');
+        list.innerHTML = `<h4>طلاب ${cls}</h4>`;
+        students.filter(s => s.class === cls).forEach(s => {
+            list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;"><span>${s.name}</span> <button class="btn btn-secondary" style="width:auto; padding:5px 15px;" onclick="openGrading(${s.id})">تسميع</button></div>`;
+        });
+    }
+
+    function openGrading(id) {
+        currentId = id;
+        const s = students.find(x => x.id === id);
+        document.getElementById('activeStName').innerText = s.name;
+        showScreen('gradingPage');
+    }
+
+    function saveRecord() {
+        const sIndex = students.findIndex(x => x.id === currentId);
+        let score = document.getElementById('rScore').value;
+        let status = document.getElementById('rStatus').value;
+        if(status !== 'حفظ') score = 0;
+        students[sIndex].records.unshift({
+            date: new Date().toLocaleDateString('ar-SA'),
+            page: document.getElementById('rPage').value,
+            status: status,
+            score: score,
+            note: document.getElementById('rNote').value
+        });
+        saveData();
+        alert("تم حفظ السجل بنجاح");
+        showScreen('teacherDash');
+    }
+
+    function saveData() { localStorage.setItem('madrassa_v4', JSON.stringify(students)); }
+</script>
+</body>
+</html>
