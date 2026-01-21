@@ -33,6 +33,7 @@
         .theme-selector { display: flex; gap: 5px; justify-content: center; margin-bottom: 15px; }
         .theme-dot { width: 25px; height: 25px; border-radius: 50%; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
         .badge-re { background: #4caf50; color: white; padding: 2px 5px; border-radius: 4px; font-size: 9px; margin-right: 5px; }
+        .stat-card { background: var(--p); color: white; padding: 10px; border-radius: 10px; text-align: center; font-size: 12px; flex: 1; }
     </style>
 </head>
 <body class="theme-default">
@@ -71,7 +72,7 @@
         </div>
         <h4>سجل الإنجازات والأرشيف:</h4>
         <div id="recordsList" style="max-height:300px; overflow-y:auto;"></div>
-        <button class="btn btn-p" onclick="showScreen('mainMenu')">خروج</button>
+        <button class="btn btn-p" id="exitStudentBtn" onclick="showScreen('mainMenu')">خروج</button>
     </div>
 
     <div id="teacherDash" class="hidden card" style="max-width:800px;">
@@ -95,15 +96,30 @@
 
     <div id="adminDash" class="hidden card" style="max-width:900px;">
         <h3 style="color:var(--p)">تقارير الإدارة والمتابعة 📊</h3>
-        <div style="overflow-x:auto;">
+        
+        <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <div class="stat-card">عدد الطلاب: <b id="statTotal">0</b></div>
+            <div class="stat-card">إجمالي الحفظ: <b id="statHafiz">0</b></div>
+            <div class="stat-card">نسبة الانجاز: <b id="statPerc">0%</b></div>
+        </div>
+
+        <h4 onclick="toggleAdminTable('adminTable31')" style="cursor:pointer; background:#eee; padding:10px; border-radius:5px;">📁 طلاب فصل 3/1 (انقر للعرض)</h4>
+        <div id="adminTable31" class="hidden" style="overflow-x:auto;">
             <table class="admin-table">
-                <thead>
-                    <tr><th>الطالب</th><th>الفصل</th><th>الكود</th><th>آخر إنجاز</th><th>الحالة</th></tr>
-                </thead>
-                <tbody id="adminReportsList"></tbody>
+                <thead><tr><th>الطالب (اضغط للعرض)</th><th>الكود</th><th>آخر إنجاز</th><th>الحالة</th></tr></thead>
+                <tbody id="list31"></tbody>
             </table>
         </div>
-        <button class="btn btn-p" onclick="showScreen('mainMenu')">خروج</button>
+
+        <h4 onclick="toggleAdminTable('adminTable32')" style="cursor:pointer; background:#eee; padding:10px; border-radius:5px; margin-top:10px;">📁 طلاب فصل 3/2 (انقر للعرض)</h4>
+        <div id="adminTable32" class="hidden" style="overflow-x:auto;">
+            <table class="admin-table">
+                <thead><tr><th>الطالب (اضغط للعرض)</th><th>الكود</th><th>آخر إنجاز</th><th>الحالة</th></tr></thead>
+                <tbody id="list32"></tbody>
+            </table>
+        </div>
+
+        <button class="btn btn-p" style="margin-top:20px;" onclick="showScreen('mainMenu')">خروج</button>
     </div>
 
     <div id="gradeScreen" class="hidden card">
@@ -125,7 +141,15 @@
 
     <div id="manageStudentsPage" class="hidden card">
         <h3>إدارة الأسماء</h3>
-        <button class="btn btn-p" onclick="showAddStudent()">+ إضافة طالب جديد</button>
+        <div style="background:#f0f0f0; padding:15px; border-radius:10px; margin-bottom:15px;">
+            <input type="text" id="newSName" placeholder="اسم الطالب الجديد">
+            <input type="text" id="newSCode" placeholder="رمز الدخول">
+            <select id="newSClass">
+                <option value="3/1">فصل 3/1</option>
+                <option value="3/2">فصل 3/2</option>
+            </select>
+            <button class="btn btn-p" onclick="addNewStudent()">إضافة الطالب الآن</button>
+        </div>
         <div style="overflow-y:auto; max-height:300px;">
             <table class="admin-table">
                 <tbody id="adminStudentsList"></tbody>
@@ -153,9 +177,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // قائمة الطلاب المدمجة
     const initialStudents = [
-        // فصل 3/2
         {id:3278, name:"احمد عبدالله الحارثي", code:"3278", class:"3/2"}, {id:3214, name:"انس محمد عيسى", code:"3214", class:"3/2"}, {id:3291, name:"تيسير رضا المحمدي", code:"3291", class:"3/2"},
         {id:3246, name:"حسان سليمان الجابري", code:"3246", class:"3/2"}, {id:3283, name:"حسن عبده", code:"3283", class:"3/2"}, {id:3209, name:"عامر يوسف الجهني", code:"3209", class:"3/2"},
         {id:3267, name:"عبدالرحمن ماجد الرخيمي", code:"3267", class:"3/2"}, {id:3235, name:"عبدالرحمن عمر الرويثي", code:"3235", class:"3/2"}, {id:3298, name:"عبدالرحمن صغير", code:"3298", class:"3/2"},
@@ -167,7 +189,6 @@
         {id:3205, name:"محمد بندر الجهني", code:"3205", class:"3/2"}, {id:3264, name:"محمد سالم الجهني", code:"3264", class:"3/2"}, {id:3286, name:"محمد سعيد الجهني", code:"3286", class:"3/2"},
         {id:3223, name:"محمد علي الشنقيطي", code:"3223", class:"3/2"}, {id:3273, name:"محمد منور العنزي", code:"3273", class:"3/2"}, {id:3216, name:"مصطفى عبدالله احمد", code:"3216", class:"3/2"},
         {id:3210, name:"يزن انس المحمدي", code:"3210", class:"3/2"},
-        // فصل 3/1
         {id:3101, name:"احمد بكر سيكو جياني", code:"3101", class:"3/1"}, {id:3102, name:"احمد خالد حمدان الأحمدي", code:"3102", class:"3/1"}, {id:3103, name:"احمد ناصر احمد عمر", code:"3103", class:"3/1"},
         {id:3104, name:"اسامه اباه محمد الأمين", code:"3104", class:"3/1"}, {id:3105, name:"امين عبدالرحمن محمد الشنقيطي", code:"3105", class:"3/1"}, {id:3106, name:"أمين محمد بن عبداللطيف محمد", code:"3106", class:"3/1"},
         {id:3107, name:"أنس حيدر يحيى نخيفي", code:"3107", class:"3/1"}, {id:3108, name:"اياد حمزه راجح الاحمدي", code:"3108", class:"3/1"}, {id:3109, name:"تميم طارق بن سعيد الزهراني", code:"3109", class:"3/1"},
@@ -194,7 +215,7 @@
     function studentLogin() {
         const inputCode = document.getElementById('studentCode').value.trim();
         const s = students.find(x => String(x.code).trim() === inputCode);
-        if(s) { renderStudentPage(s); showScreen('studentPage'); }
+        if(s) { renderStudentPage(s); showScreen('studentPage'); document.getElementById('exitStudentBtn').onclick = () => showScreen('mainMenu'); }
         else alert('الرمز غير صحيح!');
     }
 
@@ -205,7 +226,7 @@
         document.getElementById('weekCounter').innerText = `${weekRecs.length} / ${settings.target}`;
         document.getElementById('recordsList').innerHTML = (s.records || []).map(r => `
             <div style="padding:10px; margin-bottom:8px; background:rgba(255,255,255,0.9); border-radius:8px; border-right:5px solid ${getStatusColor(r.status)};">
-                <b>الأسبوع ${r.week} - ${r.day}</b> | ص ${r.page} ${r.isRe ? '<span class="badge-re">تم الإعادة</span>' : ''}
+                <b>الأسبوع ${r.week} - ${r.day}</b> | ص ${r.page} ${r.isRe ? '<span class="badge-re">تعديل/إعادة</span>' : ''}
                 <div style="color:${getStatusColor(r.status)}">${r.status}</div>
                 <div style="font-size:11px; color:#666;">${r.note || ''}</div>
             </div>
@@ -224,15 +245,22 @@
     function saveGrade() {
         const s = students.find(x => x.id == currentSID);
         const week = document.getElementById('gWeek').value;
+        const page = document.getElementById('gPage').value;
         const status = document.getElementById('gStatus').value;
         const note = document.getElementById('gNote').value;
         if((status !== 'حافظ' && status !== 'غائب') && !note) return alert('يجب كتابة ملاحظة توضح السبب!');
         if(!s.records) s.records = [];
+        
+        // تعديل الدرجة: إذا وجد سجل لنفس الأسبوع والصفحة يتم حذفه أولاً
+        const existingIdx = s.records.findIndex(r => r.week == week && r.page == page);
         let isRe = false;
-        const oldRecord = s.records.find(r => r.week == week && r.page == document.getElementById('gPage').value);
-        if(oldRecord && oldRecord.status !== 'حافظ' && status === 'حافظ') isRe = true;
-        s.records.unshift({ week, day: document.getElementById('gDay').value, page: document.getElementById('gPage').value, status, note, isRe });
-        db.ref('students/' + currentSID + '/records').set(s.records).then(() => { alert('تم الحفظ'); showScreen('teacherDash'); });
+        if(existingIdx !== -1) {
+            isRe = true;
+            s.records.splice(existingIdx, 1);
+        }
+
+        s.records.unshift({ week, day: document.getElementById('gDay').value, page, status, note, isRe });
+        db.ref('students/' + currentSID + '/records').set(s.records).then(() => { alert('تم الحفظ والتحديث'); showScreen('teacherDash'); });
     }
 
     function staffAuth() {
@@ -240,27 +268,73 @@
         const p = document.getElementById('pass').value;
         if(u === 'saad' && p === '12345678w') showScreen('teacherDash');
         else if(u === 'admin' && p === 'admin2026') {
-            document.getElementById('adminReportsList').innerHTML = students.map(s => `<tr><td>${s.name}</td><td>${s.class}</td><td>${s.code}</td><td>${(s.records||[{}])[0].page||'-'}</td><td>${(s.records||[{}])[0].status||'-'}</td></tr>`).join('');
+            renderAdminDash();
             showScreen('adminDash');
         } else alert('خطأ في البيانات');
     }
 
+    function renderAdminDash() {
+        const list31 = document.getElementById('list31');
+        const list32 = document.getElementById('list32');
+        list31.innerHTML = ""; list32.innerHTML = "";
+        
+        let totalHafiz = 0;
+        students.forEach(s => {
+            const lastRec = (s.records || [{}])[0];
+            const row = `<tr style="cursor:pointer" onclick="viewAsStudent(${s.id})">
+                <td>${s.name}</td><td>${s.code}</td><td>${lastRec.page || '-'}</td><td>${lastRec.status || '-'}</td>
+            </tr>`;
+            if(s.class === '3/1') list31.innerHTML += row;
+            else list32.innerHTML += row;
+            
+            totalHafiz += (s.records || []).filter(r => r.status === 'حافظ').length;
+        });
+
+        document.getElementById('statTotal').innerText = students.length;
+        document.getElementById('statHafiz').innerText = totalHafiz;
+        document.getElementById('statPerc').innerText = students.length ? Math.round((totalHafiz / (students.length * settings.target * settings.currentWeek)) * 100) + '%' : '0%';
+    }
+
+    function viewAsStudent(sid) {
+        const s = students.find(x => x.id == sid);
+        renderStudentPage(s);
+        showScreen('studentPage');
+        document.getElementById('exitStudentBtn').onclick = () => showScreen('adminDash');
+    }
+
+    function toggleAdminTable(id) { document.getElementById(id).classList.toggle('hidden'); }
+
     function getStatusColor(s) { return {'حافظ':'green', 'لم يحفظ':'orange', 'لم يسمع':'red', 'محروم':'black', 'غائب':'gray'}[s] || 'blue'; }
     function showScreen(id) { document.querySelectorAll('#app > div').forEach(d => d.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
-    function showManageStudents() { document.getElementById('adminStudentsList').innerHTML = students.map(s => `<tr><td>${s.name} (${s.class})</td><td><button class="btn-danger" onclick="deleteStudent(${s.id})">حذف</button></td></tr>`).join(''); showScreen('manageStudentsPage'); }
-    function deleteStudent(id) { if(confirm("حذف الطالب؟")) db.ref('students/' + id).remove(); }
-    function updateSettings() { db.ref('settings').update({ currentWeek: document.getElementById('globalWeekNum').value, target: document.getElementById('weeklyTarget').value }); alert('تم التحديث'); }
+    
+    function showManageStudents() { 
+        document.getElementById('adminStudentsList').innerHTML = students.map(s => `<tr><td>${s.name} (${s.class})</td><td><button class="btn-danger" onclick="deleteStudent(${s.id})">حذف</button></td></tr>`).join(''); 
+        showScreen('manageStudentsPage'); 
+    }
+
     function addNewStudent() {
         const id = Date.now();
         const name = document.getElementById('newSName').value;
         const code = document.getElementById('newSCode').value;
-        if(name && code) db.ref('students/' + id).set({ id, name, code, class: document.getElementById('newSClass').value }).then(() => { alert('تمت الإضافة'); showScreen('manageStudentsPage'); });
+        const cls = document.getElementById('newSClass').value;
+        if(name && code) {
+            db.ref('students/' + id).set({ id, name, code, class: cls }).then(() => { 
+                alert('تمت إضافة الطالب'); 
+                document.getElementById('newSName').value = "";
+                document.getElementById('newSCode').value = "";
+                showManageStudents(); 
+            });
+        }
     }
+
+    function deleteStudent(id) { if(confirm("هل أنت متأكد من حذف الطالب نهائياً؟")) db.ref('students/' + id).remove().then(() => showManageStudents()); }
+    
+    function updateSettings() { db.ref('settings').update({ currentWeek: document.getElementById('globalWeekNum').value, target: document.getElementById('weeklyTarget').value }); alert('تم التحديث'); }
+    
     function updateHonorRoll() {
         const sorted = [...students].sort((a,b) => ((b.records||[]).filter(r=>r.status==='حافظ').length) - ((a.records||[]).filter(r=>r.status==='حافظ').length));
         document.getElementById('topStudents').innerText = sorted.slice(0, 10).map((s, i) => `${i+1}. ${s.name}`).join(' | ');
     }
-    function showAddStudent() { showScreen('addStudentPage'); }
 </script>
 </body>
 </html>
