@@ -8,35 +8,37 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <style>
-        /* نظام الثيمات */
-        :root { --p: #003366; --g: #00ffcc; --bg: #000b18; --card: #001a33; --txt: #e0f2f1; }
-        .theme-dark { --bg: #0a0a0a; --card: #1a1a1a; --g: #bb86fc; }
-        .theme-gold { --bg: #1a1a00; --card: #2a2a00; --g: #ffd700; }
+        /* نظام الثيمات الرباعي */
+        :root { --bg: #f4f7f6; --card: #ffffff; --p: #2c3e50; --g: #27ae60; --txt: #2c3e50; }
+        .theme-black { --bg: #0a0a0a; --card: #1a1a1a; --g: #00ffcc; --txt: #e0f2f1; }
+        .theme-blue { --bg: #001a33; --card: #002b55; --g: #00d4ff; --txt: #ffffff; }
+        .theme-green { --bg: #e8f5e9; --card: #ffffff; --g: #2e7d32; --txt: #1b5e20; }
 
         * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s; }
         body { background: var(--bg); color: var(--txt); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .card { background: var(--card); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%; max-width: 700px; border: 1px solid rgba(0,255,204,0.1); margin: 10px 0; position: relative; }
-        .mustafa-tag { color: var(--g); font-weight: bold; font-size: 13px; text-align: center; display: block; margin: 10px 0; text-shadow: 0 0 10px var(--g); }
+        .card { background: var(--card); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 700px; margin: 10px 0; position: relative; border: 1px solid rgba(0,0,0,0.05); }
+        .mustafa-tag { color: var(--g); font-weight: bold; font-size: 13px; text-align: center; display: block; margin: 10px 0; text-shadow: 0 0 5px rgba(0,0,0,0.1); }
         .btn { padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; margin: 5px 0; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-tech { background: linear-gradient(90deg, #003366, #00509d); color: white; border: 1px solid var(--g); }
-        .btn-back { background: rgba(255,255,255,0.1); color: var(--txt); width: auto; padding: 5px 15px; font-size: 12px; position: absolute; top: 10px; right: 10px; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #1a3a5a; background: #00254d; color: white; }
+        .btn-tech { background: var(--g); color: white; }
+        .btn-back { background: rgba(0,0,0,0.1); color: var(--txt); width: auto; padding: 5px 15px; font-size: 12px; position: absolute; top: 10px; right: 10px; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; background: rgba(255,255,255,0.9); color: #333; }
         .hidden { display: none !important; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-        .grid-item { background: #00254d; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #004080; cursor: pointer; }
-        .history-item { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-right: 4px solid var(--g); }
-        footer { margin-top: auto; text-align: center; font-size: 11px; padding: 20px; color: #666; width: 100%; }
-        .theme-selector { display: flex; gap: 5px; margin-bottom: 10px; }
-        .theme-dot { width: 20px; height: 20px; border-radius: 50%; cursor: pointer; border: 2px solid white; }
+        .grid-item { background: var(--card); padding: 15px; border-radius: 12px; text-align: center; border: 2px solid var(--g); cursor: pointer; font-weight: bold; }
+        .history-item { background: rgba(0,0,0,0.03); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-right: 5px solid var(--g); position: relative; }
+        footer { margin-top: auto; text-align: center; font-size: 11px; padding: 20px; color: #888; width: 100%; }
+        .theme-selector { display: flex; gap: 8px; justify-content: center; margin-bottom: 15px; }
+        .theme-dot { width: 25px; height: 25px; border-radius: 50%; cursor: pointer; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
     </style>
 </head>
-<body class="theme-default">
+<body>
 
 <div id="loginGate" class="card">
     <div class="theme-selector">
-        <div class="theme-dot" style="background:#003366;" onclick="setTheme('default')"></div>
-        <div class="theme-dot" style="background:#1a1a1a;" onclick="setTheme('dark')"></div>
-        <div class="theme-dot" style="background:#ffd700;" onclick="setTheme('gold')"></div>
+        <div class="theme-dot" style="background:#f4f7f6;" onclick="setTheme('default')"></div>
+        <div class="theme-dot" style="background:#e8f5e9;" onclick="setTheme('green')"></div>
+        <div class="theme-dot" style="background:#001a33;" onclick="setTheme('blue')"></div>
+        <div class="theme-dot" style="background:#0a0a0a;" onclick="setTheme('black')"></div>
     </div>
     <div class="mustafa-tag">تم التطوير والبرمجة بواسطة المبرمج مصطفى عبد الله</div>
     <h2 style="text-align:center;">مدرسة الإمام ورش الذكية 🛡️</h2>
@@ -45,8 +47,8 @@
         <input type="password" id="entryPass" placeholder="كلمة المرور">
     </div>
     <button class="btn btn-tech" onclick="mainAuth()">دخول النظام</button>
-    <button id="staffBtn" class="btn" style="background:transparent; color:var(--g); font-size:12px;" onclick="toggleStaff()">دخول الكادر التعليمي</button>
-    <button id="backToStudent" class="btn hidden" style="background:transparent; color:var(--g); font-size:12px;" onclick="toggleStaff()">الرجوع لدخول الطلاب</button>
+    <button id="staffBtn" class="btn" style="background:transparent; color:var(--g);" onclick="toggleStaff()">دخول الكادر التعليمي</button>
+    <button id="backToStudent" class="btn hidden" style="background:transparent; color:var(--g);" onclick="toggleStaff()">الرجوع لدخول الطلاب</button>
 </div>
 
 <div id="app" class="hidden" style="width:100%; max-width:700px;">
@@ -55,7 +57,7 @@
         <button class="btn btn-back" onclick="logout()">خروج</button>
         <div class="mustafa-tag">برمجة وتطوير: مصطفى عبد الله</div>
         <h3 id="welcomeMsg"></h3>
-        <div id="delayBox" style="color:#ff5252; font-size:12px; margin-bottom:10px;"></div>
+        <div id="studentStats" style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px; margin-bottom:15px; text-align:center;"></div>
         <div style="display:flex; gap:5px; margin-bottom:15px;">
             <button class="btn btn-tech" onclick="toggleTopTen()">🏆 الأوائل</button>
             <button class="btn btn-tech" onclick="showScreen('termsPage')">📖 المصطلحات</button>
@@ -67,53 +69,66 @@
 
     <div id="teacherDash" class="hidden card">
         <button class="btn btn-back" onclick="logout()">خروج</button>
-        <div class="mustafa-tag">لوحة الأستاذ سعد - تحكم بالدرجات</div>
+        <div class="mustafa-tag">لوحة الأستاذ سعد - صلاحيات مطلقة</div>
         <input type="text" id="searchBox" placeholder="🔍 بحث عن طالب..." oninput="filterGrid()">
         <div style="display:flex; gap:10px; margin:10px 0;">
-            <button class="btn btn-tech" onclick="loadClass('3/1')">3/1</button>
-            <button class="btn btn-tech" onclick="loadClass('3/2')">3/2</button>
+            <button class="btn btn-tech" onclick="loadClass('3/1')">فصل 3/1</button>
+            <button class="btn btn-tech" onclick="loadClass('3/2')">فصل 3/2</button>
         </div>
         <div id="namesGrid" class="grid"></div>
+        <button class="btn" style="background:#444; color:white; margin-top:15px;" onclick="showManageStudents()">⚙️ إدارة الطلاب والأكواد</button>
     </div>
 
     <div id="adminDash" class="hidden card">
         <button class="btn btn-back" onclick="logout()">خروج</button>
-        <div class="mustafa-tag">لوحة الإدارة - إدارة الحسابات</div>
-        <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; margin-bottom:15px;">
-            <h4>إضافة طالب جديد</h4>
-            <input type="text" id="admName" placeholder="الاسم">
-            <input type="text" id="admCode" placeholder="رمز الدخول">
-            <select id="admClass"><option value="3/1">3/1</option><option value="3/2">3/2</option></select>
-            <button class="btn btn-tech" onclick="adminAddStudent()">إضافة</button>
-        </div>
-        <div id="adminList"></div>
+        <div class="mustafa-tag">لوحة الإدارة - رقابة الحسابات</div>
+        <button class="btn btn-tech" onclick="showManageStudents()">➕ إضافة / تعديل الطلاب</button>
+        <div id="adminList" style="margin-top:20px;"></div>
     </div>
 
     <div id="gradeScreen" class="hidden card">
         <button class="btn btn-back" onclick="showScreen('teacherDash')">رجوع</button>
         <h3 id="targetName"></h3>
-        <select id="gWeek"></select>
-        <input type="number" id="gPage" placeholder="الصفحة">
+        <div style="display:flex; align-items:center; gap:10px; background:rgba(0,0,0,0.05); padding:10px; border-radius:10px;">
+            <input type="checkbox" id="isLate" style="width:20px;"> <label>دَرس مُتأخر (لا يحسب في العداد الأسبوعي)</label>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <select id="gWeek"></select>
+            <select id="gDay">
+                <option>الأحد</option><option>الإثنين</option><option>الثلاثاء</option><option>الأربعاء</option><option>الخميس</option>
+            </select>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <input type="number" id="gPage" placeholder="رقم الصفحة">
+            <input type="number" id="gMark" placeholder="الدرجة من 7" max="7">
+        </div>
         <select id="gStatus">
             <option value="حافظ">حافظ ✅</option>
+            <option value="غير حافظ">غير حافظ ⚠️</option>
+            <option value="لم يسمع">لم يسمع ❌</option>
             <option value="محروم">محروم 🚫</option>
             <option value="غائب">غائب 💤</option>
-            <option value="غير حافظ">غير حافظ ⚠️</option>
         </select>
-        <button class="btn btn-tech" onclick="saveGrade()">حفظ الدرجة</button>
+        <textarea id="gNote" placeholder="اكتب ملاحظة لولي الأمر..."></textarea>
+        <button class="btn btn-tech" id="saveBtn" onclick="saveGrade()">رصد الدرجة الآن</button>
+        <hr>
+        <h4>تعديل السجلات السابقة لهذا الطالب:</h4>
         <div id="editHistory"></div>
     </div>
 
-    <div id="viewOnlyRecords" class="hidden card">
-        <button class="btn btn-back" onclick="showScreen('adminDash')">رجوع</button>
-        <h3 id="viewTitle"></h3>
-        <div id="viewList"></div>
+    <div id="manageStudentsPage" class="hidden card">
+        <button class="btn btn-back" id="backFromManage">رجوع</button>
+        <h3>إضافة طالب جديد</h3>
+        <input type="text" id="newSName" placeholder="الاسم الثلاثي">
+        <input type="text" id="newSCode" placeholder="كود الدخول">
+        <select id="newSClass"><option value="3/1">3/1</option><option value="3/2">3/2</option></select>
+        <button class="btn btn-tech" onclick="addNewStudent()">إضافة الطالب للنظام</button>
+        <div id="fullList" style="margin-top:20px;"></div>
     </div>
-
 </div>
 
 <footer>
-    <b>الدعم الفني: 0599804296</b> | برمجة: مصطفى عبد الله
+    <b>الدعم الفني: 0599804296</b><br>تطوير المبرمج: مصطفى عبد الله
 </footer>
 
 <script>
@@ -121,13 +136,14 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let students = []; let currentSID = null;
+    let students = []; let currentSID = null; let userRole = '';
 
-    function setTheme(t) {
-        document.body.className = 'theme-' + t;
-        localStorage.setItem('theme', t);
-    }
-    if(localStorage.getItem('theme')) setTheme(localStorage.getItem('theme'));
+    // تعبئة الأسابيع لغوياً
+    const weeks = ["الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر","الحادي عشر","الثاني عشر","الثالث عشر","الرابع عشر","الخامس عشر","السادس عشر","السابع عشر","الثامن عشر","التاسع عشر","العشرون","الحادي والعشرون","الثاني والعشرون","الثالث والعشرون","الرابع والعشرون","الخامس والعشرون","السادس والعشرون","السابع والعشرون","الثامن والعشرون","التاسع والعشرون","الثلاثون"];
+    document.getElementById('gWeek').innerHTML = weeks.map(w => `<option value="الأسبوع ${w}">الأسبوع ${w}</option>`).join('');
+
+    function setTheme(t) { document.body.className = 'theme-' + t; localStorage.setItem('userTheme', t); }
+    if(localStorage.getItem('userTheme')) setTheme(localStorage.getItem('userTheme'));
 
     function toggleStaff() {
         document.getElementById('staffSection').classList.toggle('hidden');
@@ -140,12 +156,12 @@
         const pass = document.getElementById('entryPass').value.trim();
         db.ref('students').once('value', s => {
             students = s.exists() ? Object.values(s.val()) : [];
-            if(key === 'saad' && pass === 'saad2026') { showScreen('teacherDash'); }
-            else if(key === 'admin' && pass === 'admin2026') { showScreen('adminDash'); renderAdminList(); }
+            if(key === 'saad' && pass === 'saad2026') { userRole = 'saad'; showScreen('teacherDash'); }
+            else if(key === 'admin' && pass === 'admin2026') { userRole = 'admin'; showScreen('adminDash'); renderAdminList(); }
             else {
                 const std = students.find(x => x.code === key);
-                if(std) { currentSID = std.id; showScreen('studentPage'); renderStudentRecords(std); }
-                else alert('المفتاح خطأ');
+                if(std) { currentSID = std.id; userRole = 'student'; showScreen('studentPage'); renderStudentRecords(std); }
+                else alert('بيانات الدخول خاطئة!');
             }
         });
     }
@@ -155,42 +171,22 @@
         document.getElementById('app').classList.remove('hidden');
         document.querySelectorAll('#app > div').forEach(d => d.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
+        document.getElementById('backFromManage').onclick = () => showScreen(userRole === 'saad' ? 'teacherDash' : 'adminDash');
     }
 
-    function logout() { location.reload(); }
-
-    // وظائف الإدارة (Admin)
-    function renderAdminList() {
-        const list = document.getElementById('adminList');
-        list.innerHTML = students.map(s => `
-            <div class="history-item" style="font-size:12px;">
-                <b>${s.name}</b> (فصل: ${s.class} | رمز: ${s.code})
-                <div style="display:flex; gap:5px; margin-top:5px;">
-                    <button onclick="adminDelete('${s.id}')" style="background:red; color:white; border:none; padding:3px 10px; border-radius:5px;">حذف</button>
-                    <button onclick="adminView('${s.id}')" style="background:gray; color:white; border:none; padding:3px 10px; border-radius:5px;">عرض السجل</button>
-                </div>
+    function renderStudentRecords(s) {
+        document.getElementById('welcomeMsg').innerText = "مرحباً يا " + s.name;
+        const recs = s.records || [];
+        document.getElementById('recordsList').innerHTML = recs.map(r => `
+            <div class="history-item">
+                <div style="display:flex; justify-content:space-between"><b>${r.week} - ${r.day}</b> <span>الدرجة: ${r.mark || 0}/7</span></div>
+                <small>رقم الصفحة: ${r.page}</small> | <b>الحالة: ${r.status}</b>
+                ${r.prevStatus ? `<div style="color:orange; font-size:11px;">(أصل الحالة قبل الإعادة: ${r.prevStatus})</div>` : ''}
+                <div style="font-size:11px; color:#777;">${r.note || ''}</div>
             </div>
-        `).join('');
+        `).reverse().join('');
     }
 
-    function adminAddStudent() {
-        const id = Date.now();
-        const name = document.getElementById('admName').value;
-        const code = document.getElementById('admCode').value;
-        const cls = document.getElementById('admClass').value;
-        if(name && code) db.ref('students/'+id).set({id, name, code, class: cls}).then(() => location.reload());
-    }
-
-    function adminDelete(id) { if(confirm('حذف الطالب؟')) db.ref('students/'+id).remove().then(() => location.reload()); }
-
-    function adminView(id) {
-        const s = students.find(x => x.id == id);
-        document.getElementById('viewTitle').innerText = "سجل الطالب: " + s.name;
-        document.getElementById('viewList').innerHTML = (s.records || []).map(r => `<div>${r.week}: ${r.status}</div>`).join('');
-        showScreen('viewOnlyRecords');
-    }
-
-    // وظائف الأستاذ سعد
     function loadClass(cls) {
         const g = document.getElementById('namesGrid'); g.innerHTML = "";
         students.filter(x => x.class === cls).forEach(s => {
@@ -200,34 +196,102 @@
         });
     }
 
-    function saveGrade() {
+    function saveGrade(editIdx = null) {
         const s = students.find(x => x.id == currentSID);
         if(!s.records) s.records = [];
-        const newRec = { week: document.getElementById('gWeek').value, status: document.getElementById('gStatus').value, page: document.getElementById('gPage').value };
+        
+        let oldStatus = null;
+        if(editIdx !== null) { oldStatus = s.records[editIdx].status; s.records.splice(editIdx, 1); }
+
+        const newRec = {
+            week: document.getElementById('gWeek').value,
+            day: document.getElementById('gDay').value,
+            page: document.getElementById('gPage').value,
+            mark: document.getElementById('gMark').value,
+            status: document.getElementById('gStatus').value,
+            note: document.getElementById('gNote').value,
+            isLate: document.getElementById('isLate').checked,
+            prevStatus: oldStatus
+        };
+
         s.records.push(newRec);
-        db.ref('students/'+currentSID+'/records').set(s.records).then(() => { alert('تم'); showScreen('teacherDash'); });
+        db.ref('students/'+currentSID+'/records').set(s.records).then(() => {
+            alert('تم الرصد بنجاح');
+            showScreen('teacherDash');
+        });
     }
 
     function renderEditHistory(s) {
-        document.getElementById('editHistory').innerHTML = (s.records || []).map((r,i) => `
-            <div style="font-size:11px;">${r.week} - ${r.status} <button onclick="delRec(${i})" style="color:red; border:none; background:none;">حذف</button></div>
+        const h = document.getElementById('editHistory');
+        h.innerHTML = (s.records || []).map((r, i) => `
+            <div style="font-size:12px; border-bottom:1px solid #ddd; padding:5px; display:flex; justify-content:space-between">
+                <span>${r.week} - ص${r.page} - ${r.status}</span>
+                <div>
+                    <button onclick="editGrade(${i})" style="color:blue; border:none; background:none; cursor:pointer">تعديل</button>
+                    <button onclick="delGrade(${i})" style="color:red; border:none; background:none; cursor:pointer">حذف</button>
+                </div>
+            </div>
         `).join('');
     }
 
-    function delRec(i) {
+    function editGrade(i) {
         const s = students.find(x => x.id == currentSID);
-        s.records.splice(i,1);
-        db.ref('students/'+currentSID+'/records').set(s.records).then(() => renderEditHistory(s));
+        const r = s.records[i];
+        document.getElementById('gPage').value = r.page;
+        document.getElementById('gMark').value = r.mark;
+        document.getElementById('gStatus').value = r.status;
+        document.getElementById('gNote').value = r.note;
+        document.getElementById('saveBtn').onclick = () => saveGrade(i);
+        alert('تم تحميل البيانات، عدلها ثم اضغط حفظ');
     }
 
-    const weeks = ["الأسبوع الأول","الأسبوع الثاني","الأسبوع الثالث"]; // مثال للتبسيط
-    document.getElementById('gWeek').innerHTML = weeks.map(w => `<option value="${w}">${w}</option>`).join('');
-
-    function renderStudentRecords(s) {
-        document.getElementById('welcomeMsg').innerText = "مرحباً: " + s.name;
-        document.getElementById('recordsList').innerHTML = (s.records || []).map(r => `<div class="history-item">${r.week} - الحالة: ${r.status}</div>`).reverse().join('');
+    function delGrade(i) {
+        if(confirm('هل تريد حذف هذه الدرجة نهائياً؟')) {
+            const s = students.find(x => x.id == currentSID);
+            s.records.splice(i, 1);
+            db.ref('students/'+currentSID+'/records').set(s.records).then(() => renderEditHistory(s));
+        }
     }
 
+    function showManageStudents() {
+        showScreen('manageStudentsPage');
+        const list = document.getElementById('fullList');
+        list.innerHTML = students.map(s => `
+            <div class="history-item">
+                <b>${s.name}</b> (فصل: ${s.class} | رمز: ${s.code})
+                <div style="margin-top:5px;">
+                    <button onclick="deleteStudent('${s.id}')" style="background:red; color:white; border:none; border-radius:5px; padding:3px 8px;">حذف الطالب</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function addNewStudent() {
+        const id = Date.now();
+        const n = document.getElementById('newSName').value;
+        const c = document.getElementById('newSCode').value;
+        const cl = document.getElementById('newSClass').value;
+        if(n && c) db.ref('students/'+id).set({id, name: n, code: c, class: cl}).then(() => location.reload());
+    }
+
+    function deleteStudent(id) { if(confirm('سيتم حذف الطالب وسجله نهائياً!')) db.ref('students/'+id).remove().then(() => location.reload()); }
+    function renderAdminList() {
+        const l = document.getElementById('adminList');
+        l.innerHTML = "<h4>كشوف الطلاب (رقابة):</h4>" + students.map(s => `
+            <div class="history-item">
+                <b>${s.name}</b> (الرمز: ${s.code})
+                <button onclick="adminView('${s.id}')" style="background:#eee; border:1px solid #ccc; float:left;">عرض السجل</button>
+            </div>
+        `).join('');
+    }
+    function adminView(id) {
+        const s = students.find(x => x.id == id);
+        currentSID = s.id;
+        showScreen('studentPage');
+        renderStudentRecords(s);
+        document.querySelector('#studentPage .btn-back').onclick = () => showScreen('adminDash');
+    }
+    function logout() { location.reload(); }
     function filterGrid() {
         const q = document.getElementById('searchBox').value.toLowerCase();
         document.querySelectorAll('.grid-item').forEach(i => i.style.display = i.innerText.toLowerCase().includes(q) ? 'block' : 'none');
