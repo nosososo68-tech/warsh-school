@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام ورش الذكي | تطوير مصطفى عبد الله</title>
+    <title> نظام ورش الذكي | تطوير مصطفى عبد الله احمد </title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
@@ -41,8 +41,8 @@
         <div class="theme-dot" style="background:#001a33;" onclick="setTheme('blue')"></div>
         <div class="theme-dot" style="background:#0a0a0a;" onclick="setTheme('black')"></div>
     </div>
-    <div class="mustafa-tag">| فريق العمل: تطوير وبرمجة مصطفى عبد الله | يزن أنس & محمد علي | أفكار وتصميم |</div>
-    <h2 style="text-align:center;">مدرسة الإمام ورش الذكية 🛡️</h2>
+    <div class="mustafa-tag">| فريق العمل: تطوير وبرمجة مصطفى عبد الله احمد | يزن أنس & محمد علي | مساعدين |</div>
+    <h2 style="text-align:center;">مدرسة الإمام ورش 🛡️</h2>
     <input type="text" id="entryKey" placeholder="أدخل مفتاح الدخول">
     <div id="staffSection" class="hidden">
         <input type="password" id="entryPass" placeholder="كلمة المرور">
@@ -226,11 +226,11 @@
         dyn.classList.remove('hidden');
         dyn.innerHTML = `
             <h3>📖 قاموس المصطلحات</h3>
-            <p><b>غائب:</b> الطالب لم يحضر الحلقة نهائياً.</p>
-            <p><b>لم يسمع:</b> الطالب حضر ولكنه لم يتقدم للاختبار.</p>
+            <p><b>غائب:</b> الطالب لم يحضر الحصه نهائياً.</p>
+            <p><b>لم يسمع:</b> الطالب حضر ولكنه لم يقم ب التسميع.</p>
             <p><b>غير حافظ:</b> الطالب سمع ولكن أخطاؤه كثيرة ولم يجتز.</p>
             <p><b>محروم:</b> عقوبة إدارية لعدم الانضباط تمنع من التسميع.</p>
-            <p style="color:var(--g)">* يمكن للطالب تسميع أي درس حالته غير "حافظ" في أي وقت يحدده الأستاذ.</p>
+            <p style="color:var(--g)">* يمكن للطالب تسميع أي درس حالته غير "حافظ" في أي وقت بعد تسميع الدرس المقرر ل اليوم اولا .</p>
             <button class="btn" onclick="this.parentElement.classList.add('hidden')">إغلاق</button>
         `;
     }
@@ -306,3 +306,4 @@
 </script>
 </body>
 </html>
+
