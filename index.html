@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام ورش الذكي | تطوير مصطفى عبد الله</title>
+    <title>نظام مدرسه الامام ورش الذكي | تطوير مصطفى عبد الله احمد</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
@@ -31,7 +31,7 @@
 <div id="loginGate" class="card">
     <div class="mustafa-tag">| نظام مدرسة الإمام ورش الذكي |</div>
     <h2 style="text-align:center;">تسجيل الدخول 🛡️</h2>
-    <input type="text" id="entryKey" placeholder="الكود أو admin أو saad">
+    <input type="text" id="entryKey" placeholder="ادخل الكود الذي حصلت عليه من المرشد او الوكيل او الاستاذ سعد">
     <div id="staffSection" class="hidden">
         <input type="password" id="entryPass" placeholder="كلمة المرور">
     </div>
@@ -80,7 +80,7 @@
         </div>
 
         <div id="adminNotice" class="hidden" style="color: var(--red); font-weight: bold; text-align: center; padding: 10px;">
-            ⚠️ حساب الصيانة: للعرض فقط
+            ⚠️ حساب الاداره: للعرض فقط
         </div>
 
         <hr>
@@ -99,7 +99,7 @@
     </div>
 </div>
 
-<footer><b>تطوير: مصطفى عبد الله | 0599804296</b></footer>
+<footer><b>تطوير: مصطفى عبد الله احمد | 0599804296 </b></footer>
 
 <script>
     const firebaseConfig = { apiKey: "AIzaSyAC9BzBpw66oBDriZoi9A5zsThKLFZiNv8", databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app" };
@@ -108,7 +108,7 @@
 
     let students = []; let currentSID = null; let userRole = ''; let editingIdx = null;
 
-    const weeksArr = ["الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر"];
+const weeksArr = ["الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر","الحادي عشر","الثاني عشر","الثالث عشر","الرابع عشر","الخامس عشر","السادس عشر","السابع عشر","الثامن عشر","التاسع عشر","العشرون"];
     document.getElementById('gWeek').innerHTML = weeksArr.map(w => `<option value="الأسبوع ${w}">الأسبوع ${w}</option>`).join('');
 
     function mainAuth() {
@@ -217,3 +217,4 @@
 </script>
 </body>
 </html>
+
