@@ -27,6 +27,15 @@
         .top-rank { background: linear-gradient(135deg, #f1c40f, #f39c12); color: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; }
         footer { margin-top: auto; padding: 20px; font-size: 12px; color: #777; text-align: center; }
         .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:1000; }
+        
+        /* استايل إضافي لميزة التعميم */
+        .broadcast-box { background: #ebf5ee; padding: 10px; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--g); }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--g); }
+        input:checked + .slider:before { transform: translateX(20px); }
     </style>
 </head>
 <body>
@@ -57,8 +66,7 @@
         <div id="recordsList"></div>
 
         <div class="terms-box">
-            <h4 style="margin-top:0; color:var(--g)">📖تنويه : يمكنك إعادة تسميع أي درس ( مهما كانت حالة الدرس )
-وذلك بالترتيب مع الأستاذ .:</h4>
+            <h4 style="margin-top:0; color:var(--g)">📖تنويه : يمكنك إعادة تسميع أي درس ( مهما كانت حالة الدرس ) وذلك بالترتيب مع الأستاذ .:</h4>
             <b>✅ حافظ:</b> أتممت التسميع بنجاح.<br>
             <b>⚠️ غير حافظ:</b> سمعت الدرس ولكن لم تتقن الحفظ.<br>
             <b>❌ لم يسمع:</b> حضرت ولكن لم تتقدم للتسميع.<br>
@@ -84,6 +92,14 @@
         <h3 id="targetName" style="color:var(--g)"></h3>
         
         <div id="gradeForm" class="hidden">
+            <div class="broadcast-box">
+                <label class="switch">
+                  <input type="checkbox" id="broadcastMode">
+                  <span class="slider"></span>
+                </label>
+                <span style="font-size: 13px; font-weight: bold; color: var(--g);">تفعيل التعميم التلقائي (تثبيت الاختيارات)</span>
+            </div>
+
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                 <select id="gWeek"></select>
                 <select id="gDay">
@@ -146,6 +162,9 @@
 
     let students = []; let currentSID = null; let currentUser = ''; let editingIdx = null;
 
+    // ذاكرة التعميم
+    let broadcastData = { week: null, day: null, page: null };
+
     const weeksArr = [
         "الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر",
         "الأحد عشر","الثاني عشر","الثالث عشر","الرابع عشر","الخامس عشر","السادس عشر","السابع عشر","الثامن عشر","التاسع عشر","العشرون",
@@ -195,6 +214,13 @@
                 if(currentUser === 'saad') {
                     document.getElementById('gradeForm').classList.remove('hidden');
                     document.getElementById('adminReadOnlyView').classList.add('hidden');
+                    
+                    // تطبيق التعميم إذا كان مفعلاً
+                    if(document.getElementById('broadcastMode').checked && broadcastData.week) {
+                        document.getElementById('gWeek').value = broadcastData.week;
+                        document.getElementById('gDay').value = broadcastData.day;
+                        document.getElementById('gPage').value = broadcastData.page;
+                    }
                 } else {
                     document.getElementById('gradeForm').classList.add('hidden');
                     document.getElementById('adminReadOnlyView').classList.remove('hidden');
@@ -228,6 +254,11 @@
             note: document.getElementById('gNote').value,
             oldStatus: oldSt || (editingIdx !== null ? "كانت معدلة" : null)
         };
+
+        // تحديث ذاكرة التعميم في حال كان الخيار مفعلاً
+        if(document.getElementById('broadcastMode').checked) {
+            broadcastData = { week: newRec.week, day: newRec.day, page: newRec.page };
+        }
 
         s.records.push(newRec);
         db.ref('students/'+currentSID+'/records').set(s.records).then(() => {
@@ -326,5 +357,3 @@
 </script>
 </body>
 </html>
-
-
