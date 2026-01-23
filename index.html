@@ -22,10 +22,11 @@
         .grid-item { background: var(--card); padding: 15px; border-radius: 12px; text-align: center; border: 2px solid var(--g); cursor: pointer; font-weight: bold; }
         .history-item { background: rgba(0,0,0,0.03); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-right: 5px solid var(--g); position: relative; text-align: right; }
         .re-tag { font-size: 11px; background: var(--orange); color: white; padding: 3px 8px; border-radius: 5px; display: inline-block; margin-top: 5px; }
-        .badge-missed { background: var(--red); color: white; padding: 10px; border-radius: 10px; margin-bottom: 15px; font-size: 13px; font-weight: bold; text-align: center; }
+        .badge-missed { background: var(--red); color: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; font-weight: bold; text-align: center; cursor: pointer; }
         .terms-box { background: #f9f9f9; padding: 15px; border-radius: 15px; font-size: 13px; margin-top: 20px; border: 1px dashed var(--g); }
         .top-rank { background: linear-gradient(135deg, #f1c40f, #f39c12); color: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; }
         footer { margin-top: auto; padding: 20px; font-size: 12px; color: #777; text-align: center; }
+        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:1000; }
     </style>
 </head>
 <body>
@@ -51,7 +52,7 @@
     <div id="studentPage" class="hidden card">
         <button class="btn btn-back" onclick="location.reload()">خروج</button>
         <h3 id="welcomeMsg"></h3>
-        <div id="missedAlert" class="badge-missed hidden"></div>
+        <div id="missedAlert" class="badge-missed hidden" onclick="showMissedDetails()"></div>
         <h4>سجلك الدراسي:</h4>
         <div id="recordsList"></div>
 
@@ -81,7 +82,7 @@
         <button class="btn btn-back" onclick="showScreen('teacherDash')">رجوع للقائمة</button>
         <h3 id="targetName" style="color:var(--g)"></h3>
         
-        <div id="gradeForm">
+        <div id="gradeForm" class="hidden">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                 <select id="gWeek"></select>
                 <select id="gDay">
@@ -107,9 +108,19 @@
             <button class="btn btn-tech" onclick="saveGrade()">حفظ البيانات</button>
         </div>
 
+        <div id="adminReadOnlyView" class="mustafa-tag hidden">وضع العرض فقط (أدمن)</div>
+
         <hr>
         <h4>السجل التاريخي (مع سجل التعديلات):</h4>
         <div id="editHistory"></div>
+    </div>
+
+    <div id="missedModal" class="modal hidden">
+        <div class="card" style="max-width:500px;">
+            <h3>قائمة المتأخرات (تحتاج تسميع)</h3>
+            <div id="missedListContent" style="max-height:300px; overflow-y:auto;"></div>
+            <button class="btn btn-tech" onclick="document.getElementById('missedModal').classList.add('hidden')">إغلاق</button>
+        </div>
     </div>
 
     <div id="manageStudentsPage" class="hidden card">
@@ -132,7 +143,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let students = []; let currentSID = null; let userRole = ''; let editingIdx = null;
+    let students = []; let currentSID = null; let currentUser = ''; let editingIdx = null;
 
     const weeksArr = [
         "الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر",
@@ -147,10 +158,15 @@
         db.ref('students').once('value', s => {
             students = s.exists() ? Object.values(s.val()) : [];
             fetchTopTen();
-            if((key === 'saad' && pass === 'saad2026') || (key === 'admin' && pass === 'admin2026')) { 
-                userRole = 'teacher'; 
+            if(key === 'saad' && pass === 'saad2026') { 
+                currentUser = 'saad'; 
                 document.getElementById('adminBtn').classList.remove('hidden');
                 showScreen('teacherDash'); 
+            }
+            else if(key === 'admin' && pass === 'admin2026') {
+                currentUser = 'admin';
+                document.getElementById('adminBtn').classList.remove('hidden');
+                showScreen('teacherDash');
             }
             else {
                 const std = students.find(x => x.code === key);
@@ -174,8 +190,15 @@
             d.onclick = () => { 
                 currentSID = s.id; editingIdx = null;
                 document.getElementById('targetName').innerText = s.name;
-                document.getElementById('gNote').value = "";
-                document.getElementById('gPage').value = "";
+                
+                if(currentUser === 'saad') {
+                    document.getElementById('gradeForm').classList.remove('hidden');
+                    document.getElementById('adminReadOnlyView').classList.add('hidden');
+                } else {
+                    document.getElementById('gradeForm').classList.add('hidden');
+                    document.getElementById('adminReadOnlyView').classList.remove('hidden');
+                }
+                
                 renderEditHistory(s); showScreen('gradeScreen'); 
             };
             g.appendChild(d);
@@ -183,6 +206,7 @@
     }
 
     function saveGrade() {
+        if(currentUser !== 'saad') return alert('عذراً، الأستاذ سعد فقط مخول للرصد');
         const s = students.find(x => x.id == currentSID);
         if(!s.records) s.records = [];
         
@@ -197,7 +221,7 @@
         const newRec = {
             week: document.getElementById('gWeek').value,
             day: document.getElementById('gDay').value,
-            page: document.getElementById('gPage').value, // حفظ رقم الصفحة
+            page: document.getElementById('gPage').value,
             mark: document.getElementById('gMark').value,
             status: document.getElementById('gStatus').value,
             note: document.getElementById('gNote').value,
@@ -214,11 +238,15 @@
     function renderStudentRecords(s) {
         document.getElementById('welcomeMsg').innerText = "أهلاً بك: " + s.name;
         const recs = s.records || [];
-        const alertRecs = recs.filter(r => ['غير حافظ', 'لم يسمع', 'غائب', 'محروم'].includes(r.status));
-        if(alertRecs.length > 0) {
+        const missed = recs.filter(r => ['غير حافظ', 'لم يسمع', 'غائب', 'محروم'].includes(r.status));
+        
+        if(missed.length > 0) {
             document.getElementById('missedAlert').classList.remove('hidden');
-            document.getElementById('missedAlert').innerHTML = `⚠️ تنبيه: لديك ${alertRecs.length} ملاحظات دراسية تتطلب المراجعة.`;
+            document.getElementById('missedAlert').innerHTML = `📌 لديك عدد (${missed.length}) متأخرات | اضغط للتفاصيل`;
+        } else {
+            document.getElementById('missedAlert').classList.add('hidden');
         }
+
         document.getElementById('recordsList').innerHTML = recs.map(r => `
             <div class="history-item">
                 <b>${r.week} - ${r.day}</b><br>
@@ -230,14 +258,35 @@
         `).reverse().join('');
     }
 
+    function showMissedDetails() {
+        const s = students.find(x => x.id == currentSID);
+        const missed = (s.records || []).filter(r => ['غير حافظ', 'لم يسمع', 'غائب', 'محروم'].includes(r.status));
+        document.getElementById('missedListContent').innerHTML = missed.map(m => `
+            <div style="padding:10px; border-bottom:1px solid #eee; text-align:right;">
+                <b>${m.week} - ${m.day}</b><br>
+                الحالة: <span style="color:red">${m.status}</span>
+            </div>
+        `).join('');
+        document.getElementById('missedModal').classList.remove('hidden');
+    }
+
     function renderEditHistory(s) {
-        document.getElementById('editHistory').innerHTML = (s.records || []).map((r, i) => `
+        const recs = s.records || [];
+        const missedCount = recs.filter(r => ['غير حافظ', 'لم يسمع', 'غائب', 'محروم'].includes(r.status)).length;
+        
+        let html = `<div class="mustafa-tag" style="background:#eee; padding:10px; border-radius:10px;">إجمالي المتأخرات لهذا الطالب: ${missedCount}</div><br>`;
+        
+        html += recs.map((r, i) => `
             <div class="history-item">
                 ${r.week} - ${r.day} | ${r.status} (${r.mark}/7) ${r.page ? `| ص ${r.page}` : ''}
+                ${currentUser === 'saad' ? `
                 <button onclick="editRec(${i})" style="color:blue; border:none; background:none; cursor:pointer;">[تعديل]</button> 
                 <button onclick="delRec(${i})" style="color:red; border:none; background:none; cursor:pointer;">[حذف]</button>
+                ` : ''}
+                ${r.note ? `<br><small style="color:blue">الملاحظة: ${r.note}</small>` : ''}
             </div>
         `).reverse().join('');
+        document.getElementById('editHistory').innerHTML = html;
     }
 
     function editRec(i) {
@@ -249,7 +298,8 @@
         document.getElementById('gMark').value = r.mark;
         document.getElementById('gStatus').value = r.status;
         document.getElementById('gNote').value = r.note || "";
-        alert('أنت الآن في وضع تعديل درجة سابقة، سيتم تدوين التغيير في سجل الطالب.');
+        window.scrollTo(0,0);
+        alert('أنت الآن في وضع التعديل');
     }
 
     function fetchTopTen() {
@@ -275,4 +325,3 @@
 </script>
 </body>
 </html>
-
