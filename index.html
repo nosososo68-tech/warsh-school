@@ -8,7 +8,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <style>
-        /* نظام الثيمات الرباعي */
         :root { --bg: #f4f7f6; --card: #ffffff; --p: #2c3e50; --g: #27ae60; --txt: #2c3e50; }
         .theme-black { --bg: #0a0a0a; --card: #1a1a1a; --g: #00ffcc; --txt: #e0f2f1; }
         .theme-blue { --bg: #001a33; --card: #002b55; --g: #00d4ff; --txt: #ffffff; }
@@ -20,7 +19,7 @@
         .mustafa-tag { color: var(--g); font-weight: bold; font-size: 13px; text-align: center; display: block; margin: 10px 0; text-shadow: 0 0 5px rgba(0,0,0,0.1); }
         .btn { padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; margin: 5px 0; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-tech { background: var(--g); color: white; }
-        .btn-back { background: rgba(0,0,0,0.1); color: var(--txt); width: auto; padding: 5px 15px; font-size: 12px; position: absolute; top: 10px; right: 10px; }
+        .btn-back { background: rgba(0,0,0,0.1); color: var(--txt); width: auto; padding: 5px 15px; font-size: 12px; position: absolute; top: 10px; right: 10px; z-index: 100; }
         input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; background: rgba(255,255,255,0.9); color: #333; }
         .hidden { display: none !important; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
@@ -29,6 +28,8 @@
         footer { margin-top: auto; text-align: center; font-size: 11px; padding: 20px; color: #888; width: 100%; }
         .theme-selector { display: flex; gap: 8px; justify-content: center; margin-bottom: 15px; }
         .theme-dot { width: 25px; height: 25px; border-radius: 50%; cursor: pointer; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .badge-missed { background: #ff5252; color: white; padding: 5px 15px; border-radius: 50px; font-size: 13px; cursor: pointer; display: inline-block; margin-bottom: 10px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -40,7 +41,7 @@
         <div class="theme-dot" style="background:#001a33;" onclick="setTheme('blue')"></div>
         <div class="theme-dot" style="background:#0a0a0a;" onclick="setTheme('black')"></div>
     </div>
-    <div class="mustafa-tag"> |فريق العمل: تم التطوير والبرمجة بواسطة مصطفى عبد الله|يزن انس& محمد علي |افكار وتصميم </div>
+    <div class="mustafa-tag">| فريق العمل: تطوير وبرمجة مصطفى عبد الله | يزن أنس & محمد علي | أفكار وتصميم |</div>
     <h2 style="text-align:center;">مدرسة الإمام ورش الذكية 🛡️</h2>
     <input type="text" id="entryKey" placeholder="أدخل مفتاح الدخول">
     <div id="staffSection" class="hidden">
@@ -57,12 +58,21 @@
         <button class="btn btn-back" onclick="logout()">خروج</button>
         <div class="mustafa-tag">برمجة وتطوير: مصطفى عبد الله</div>
         <h3 id="welcomeMsg"></h3>
-        <div id="studentStats" style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px; margin-bottom:15px; text-align:center;"></div>
-        <div style="display:flex; gap:5px; margin-bottom:15px;">
-            <button class="btn btn-tech" onclick="toggleTopTen()">🏆 الأوائل</button>
-            <button class="btn btn-tech" onclick="showScreen('termsPage')">📖 المصطلحات</button>
+        
+        <div id="missedCounterContainer" class="hidden" style="text-align: center;">
+            <div class="badge-missed" onclick="toggleMissedDetails()">
+                ⚠️ لديك <span id="missedCount">0</span> دروس لم تُسمع (انقر للتفاصيل)
+            </div>
+            <div id="missedDetails" class="hidden" style="background:rgba(255,82,82,0.1); padding:10px; border-radius:10px; margin-bottom:15px; font-size:12px;"></div>
         </div>
-        <div id="topTenList" class="hidden"></div>
+
+        <div style="display:flex; gap:5px; margin-bottom:15px;">
+            <button class="btn btn-tech" onclick="showTopTen()">🏆 الأوائل</button>
+            <button class="btn btn-tech" onclick="showTerms()">📖 المصطلحات</button>
+        </div>
+        
+        <div id="dynamicContent" class="hidden" style="background:rgba(0,0,0,0.02); padding:15px; border-radius:15px; margin-bottom:20px; border:1px dashed var(--g);"></div>
+
         <h4>سجلك الدراسي:</h4>
         <div id="recordsList"></div>
     </div>
@@ -79,18 +89,11 @@
         <button class="btn" style="background:#444; color:white; margin-top:15px;" onclick="showManageStudents()">⚙️ إدارة الطلاب والأكواد</button>
     </div>
 
-    <div id="adminDash" class="hidden card">
-        <button class="btn btn-back" onclick="logout()">خروج</button>
-        <div class="mustafa-tag">لوحة الإدارة - رقابة الحسابات</div>
-        <button class="btn btn-tech" onclick="showManageStudents()">➕ إضافة / تعديل الطلاب</button>
-        <div id="adminList" style="margin-top:20px;"></div>
-    </div>
-
     <div id="gradeScreen" class="hidden card">
         <button class="btn btn-back" onclick="showScreen('teacherDash')">رجوع</button>
         <h3 id="targetName"></h3>
         <div style="display:flex; align-items:center; gap:10px; background:rgba(0,0,0,0.05); padding:10px; border-radius:10px;">
-            <input type="checkbox" id="isLate" style="width:20px;"> <label>دَرس مُتأخر (لا يحسب في العداد الأسبوعي)</label>
+            <input type="checkbox" id="isLate" style="width:20px;"> <label>دَرس مُتأخر (يضاف للمتأخرات إذا لم يحفظ)</label>
         </div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
             <select id="gWeek"></select>
@@ -112,7 +115,6 @@
         <textarea id="gNote" placeholder="اكتب ملاحظة لولي الأمر..."></textarea>
         <button class="btn btn-tech" id="saveBtn" onclick="saveGrade()">رصد الدرجة الآن</button>
         <hr>
-        <h4>تعديل السجلات السابقة لهذا الطالب:</h4>
         <div id="editHistory"></div>
     </div>
 
@@ -128,7 +130,7 @@
 </div>
 
 <footer>
-    <b>الدعم الفني: 0599804296</b><br>تطوير المبرمج: مصطفى عبد الله
+    <b>الدعم الفني: 0599804296</b><br>برمجة: مصطفى عبد الله
 </footer>
 
 <script>
@@ -138,9 +140,8 @@
 
     let students = []; let currentSID = null; let userRole = '';
 
-    // تعبئة الأسابيع لغوياً
-    const weeks = ["الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر","الحادي عشر","الثاني عشر","الثالث عشر","الرابع عشر","الخامس عشر","السادس عشر","السابع عشر","الثامن عشر","التاسع عشر","العشرون","الحادي والعشرون","الثاني والعشرون","الثالث والعشرون","الرابع والعشرون","الخامس والعشرون","السادس والعشرون","السابع والعشرون","الثامن والعشرون","التاسع والعشرون","الثلاثون"];
-    document.getElementById('gWeek').innerHTML = weeks.map(w => `<option value="الأسبوع ${w}">الأسبوع ${w}</option>`).join('');
+    const weeksArr = ["الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر","الحادي عشر","الثاني عشر","الثالث عشر","الرابع عشر","الخامس عشر","السادس عشر","السابع عشر","الثامن عشر","التاسع عشر","العشرون","الحادي والعشرون","الثاني والعشرون","الثالث والعشرون","الرابع والعشرون","الخامس والعشرون","السادس والعشرون","السابع والعشرون","الثامن والعشرون","التاسع والعشرون","الثلاثون"];
+    document.getElementById('gWeek').innerHTML = weeksArr.map(w => `<option value="الأسبوع ${w}">الأسبوع ${w}</option>`).join('');
 
     function setTheme(t) { document.body.className = 'theme-' + t; localStorage.setItem('userTheme', t); }
     if(localStorage.getItem('userTheme')) setTheme(localStorage.getItem('userTheme'));
@@ -157,7 +158,6 @@
         db.ref('students').once('value', s => {
             students = s.exists() ? Object.values(s.val()) : [];
             if(key === 'saad' && pass === 'saad2026') { userRole = 'saad'; showScreen('teacherDash'); }
-            else if(key === 'admin' && pass === 'admin2026') { userRole = 'admin'; showScreen('adminDash'); renderAdminList(); }
             else {
                 const std = students.find(x => x.code === key);
                 if(std) { currentSID = std.id; userRole = 'student'; showScreen('studentPage'); renderStudentRecords(std); }
@@ -171,20 +171,68 @@
         document.getElementById('app').classList.remove('hidden');
         document.querySelectorAll('#app > div').forEach(d => d.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
-        document.getElementById('backFromManage').onclick = () => showScreen(userRole === 'saad' ? 'teacherDash' : 'adminDash');
+        if(id === 'studentPage') document.getElementById('dynamicContent').classList.add('hidden');
     }
 
     function renderStudentRecords(s) {
         document.getElementById('welcomeMsg').innerText = "مرحباً يا " + s.name;
         const recs = s.records || [];
+        
+        // حساب المتأخرات
+        const missed = recs.filter(r => r.status !== 'حافظ');
+        const counter = document.getElementById('missedCounterContainer');
+        if(missed.length > 0) {
+            counter.classList.remove('hidden');
+            document.getElementById('missedCount').innerText = missed.length;
+            document.getElementById('missedDetails').innerHTML = "<b>دروس تحتاج إعادة تسميع:</b><br>" + 
+                missed.map(m => `• ${m.week} (${m.day}) - الحالة: ${m.status}`).join('<br>');
+        } else {
+            counter.classList.add('hidden');
+        }
+
         document.getElementById('recordsList').innerHTML = recs.map(r => `
             <div class="history-item">
                 <div style="display:flex; justify-content:space-between"><b>${r.week} - ${r.day}</b> <span>الدرجة: ${r.mark || 0}/7</span></div>
                 <small>رقم الصفحة: ${r.page}</small> | <b>الحالة: ${r.status}</b>
-                ${r.prevStatus ? `<div style="color:orange; font-size:11px;">(أصل الحالة قبل الإعادة: ${r.prevStatus})</div>` : ''}
+                ${r.prevStatus ? `<div style="color:orange; font-size:11px;">(الحالة السابقة: ${r.prevStatus})</div>` : ''}
                 <div style="font-size:11px; color:#777;">${r.note || ''}</div>
             </div>
         `).reverse().join('');
+    }
+
+    function toggleMissedDetails() {
+        document.getElementById('missedDetails').classList.toggle('hidden');
+    }
+
+    // الأوائل
+    function showTopTen() {
+        const dyn = document.getElementById('dynamicContent');
+        dyn.classList.remove('hidden');
+        
+        // ترتيب الطلاب حسب مجموع الدرجات
+        const sorted = students.map(s => {
+            const total = (s.records || []).reduce((sum, r) => sum + (parseFloat(r.mark) || 0), 0);
+            return { name: s.name, score: total };
+        }).sort((a, b) => b.score - a.score).slice(0, 10);
+
+        dyn.innerHTML = "<h3>🏆 قائمة العشرة الأوائل</h3>" + 
+            sorted.map((s, i) => `<div>${i+1}. ${s.name} - المجموع: ${s.score}</div>`).join('') +
+            `<button class="btn" onclick="this.parentElement.classList.add('hidden')">إغلاق</button>`;
+    }
+
+    // المصطلحات
+    function showTerms() {
+        const dyn = document.getElementById('dynamicContent');
+        dyn.classList.remove('hidden');
+        dyn.innerHTML = `
+            <h3>📖 قاموس المصطلحات</h3>
+            <p><b>غائب:</b> الطالب لم يحضر الحلقة نهائياً.</p>
+            <p><b>لم يسمع:</b> الطالب حضر ولكنه لم يتقدم للاختبار.</p>
+            <p><b>غير حافظ:</b> الطالب سمع ولكن أخطاؤه كثيرة ولم يجتز.</p>
+            <p><b>محروم:</b> عقوبة إدارية لعدم الانضباط تمنع من التسميع.</p>
+            <p style="color:var(--g)">* يمكن للطالب تسميع أي درس حالته غير "حافظ" في أي وقت يحدده الأستاذ.</p>
+            <button class="btn" onclick="this.parentElement.classList.add('hidden')">إغلاق</button>
+        `;
     }
 
     function loadClass(cls) {
@@ -217,53 +265,25 @@
         s.records.push(newRec);
         db.ref('students/'+currentSID+'/records').set(s.records).then(() => {
             alert('تم الرصد بنجاح');
-            showScreen('teacherDash');
+            location.reload();
         });
     }
 
     function renderEditHistory(s) {
-        const h = document.getElementById('editHistory');
-        h.innerHTML = (s.records || []).map((r, i) => `
+        document.getElementById('editHistory').innerHTML = "<h4>السجلات:</h4>" + (s.records || []).map((r, i) => `
             <div style="font-size:12px; border-bottom:1px solid #ddd; padding:5px; display:flex; justify-content:space-between">
                 <span>${r.week} - ص${r.page} - ${r.status}</span>
-                <div>
-                    <button onclick="editGrade(${i})" style="color:blue; border:none; background:none; cursor:pointer">تعديل</button>
-                    <button onclick="delGrade(${i})" style="color:red; border:none; background:none; cursor:pointer">حذف</button>
-                </div>
+                <button onclick="delGrade(${i})" style="color:red; border:none; background:none;">حذف</button>
             </div>
         `).join('');
     }
 
-    function editGrade(i) {
-        const s = students.find(x => x.id == currentSID);
-        const r = s.records[i];
-        document.getElementById('gPage').value = r.page;
-        document.getElementById('gMark').value = r.mark;
-        document.getElementById('gStatus').value = r.status;
-        document.getElementById('gNote').value = r.note;
-        document.getElementById('saveBtn').onclick = () => saveGrade(i);
-        alert('تم تحميل البيانات، عدلها ثم اضغط حفظ');
-    }
-
     function delGrade(i) {
-        if(confirm('هل تريد حذف هذه الدرجة نهائياً؟')) {
+        if(confirm('حذف؟')) {
             const s = students.find(x => x.id == currentSID);
             s.records.splice(i, 1);
             db.ref('students/'+currentSID+'/records').set(s.records).then(() => renderEditHistory(s));
         }
-    }
-
-    function showManageStudents() {
-        showScreen('manageStudentsPage');
-        const list = document.getElementById('fullList');
-        list.innerHTML = students.map(s => `
-            <div class="history-item">
-                <b>${s.name}</b> (فصل: ${s.class} | رمز: ${s.code})
-                <div style="margin-top:5px;">
-                    <button onclick="deleteStudent('${s.id}')" style="background:red; color:white; border:none; border-radius:5px; padding:3px 8px;">حذف الطالب</button>
-                </div>
-            </div>
-        `).join('');
     }
 
     function addNewStudent() {
@@ -274,29 +294,15 @@
         if(n && c) db.ref('students/'+id).set({id, name: n, code: c, class: cl}).then(() => location.reload());
     }
 
-    function deleteStudent(id) { if(confirm('سيتم حذف الطالب وسجله نهائياً!')) db.ref('students/'+id).remove().then(() => location.reload()); }
-    function renderAdminList() {
-        const l = document.getElementById('adminList');
-        l.innerHTML = "<h4>كشوف الطلاب (رقابة):</h4>" + students.map(s => `
-            <div class="history-item">
-                <b>${s.name}</b> (الرمز: ${s.code})
-                <button onclick="adminView('${s.id}')" style="background:#eee; border:1px solid #ccc; float:left;">عرض السجل</button>
-            </div>
-        `).join('');
-    }
-    function adminView(id) {
-        const s = students.find(x => x.id == id);
-        currentSID = s.id;
-        showScreen('studentPage');
-        renderStudentRecords(s);
-        document.querySelector('#studentPage .btn-back').onclick = () => showScreen('adminDash');
-    }
     function logout() { location.reload(); }
     function filterGrid() {
         const q = document.getElementById('searchBox').value.toLowerCase();
         document.querySelectorAll('.grid-item').forEach(i => i.style.display = i.innerText.toLowerCase().includes(q) ? 'block' : 'none');
     }
+    function showManageStudents() {
+        showScreen('manageStudentsPage');
+        document.getElementById('fullList').innerHTML = students.map(s => `<div class="history-item">${s.name} - ${s.code} <button onclick="db.ref('students/${s.id}').remove().then(()=>location.reload())" style="color:red">حذف</button></div>`).join('');
+    }
 </script>
 </body>
 </html>
-
