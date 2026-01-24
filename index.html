@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> نظام مدرسه الامام ورش الذكي | تطوير مصطفى عبد الله احمد</title>
+    <title>نظام مدرسة الإمام ورش الذكي | تطوير مصطفى عبد الله أحمد</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="text/javascript">
-        (function() { emailjs.init("arHaHSMk0C-C01YHE"); })();
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script> (function() { emailjs.init("arHaHSMk0C-C01YHE"); })(); </script>
     <style>
         :root { --bg: #f4f7f6; --card: #ffffff; --p: #2c3e50; --g: #27ae60; --txt: #2c3e50; --red: #e74c3c; --orange: #f39c12; --blue: #3498db; }
         * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s; }
@@ -25,19 +23,10 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 15px; }
         .grid-item { background: var(--card); padding: 15px; border-radius: 12px; text-align: center; border: 2px solid var(--g); cursor: pointer; font-weight: bold; }
         .history-item { background: rgba(0,0,0,0.03); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-right: 5px solid var(--g); position: relative; text-align: right; }
-        .re-tag { font-size: 11px; background: var(--orange); color: white; padding: 3px 8px; border-radius: 5px; display: inline-block; margin-top: 5px; }
         .badge-missed { background: var(--red); color: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; font-weight: bold; text-align: center; cursor: pointer; }
-        .terms-box { background: #f9f9f9; padding: 15px; border-radius: 15px; font-size: 13px; margin-top: 20px; border: 1px dashed var(--g); }
         .top-rank { background: linear-gradient(135deg, #f1c40f, #f39c12); color: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; }
         footer { margin-top: auto; padding: 20px; font-size: 12px; color: #777; text-align: center; }
-        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:1000; }
         .broadcast-box { background: #ebf5ee; padding: 10px; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--g); }
-        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
-        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--g); }
-        input:checked + .slider:before { transform: translateX(20px); }
     </style>
 </head>
 <body>
@@ -45,7 +34,7 @@
 <div id="loginGate" class="card">
     <div class="mustafa-tag">| نظام مدرسة الإمام ورش الذكي |</div>
     <h2 style="text-align:center;">تسجيل الدخول 🛡️</h2>
-    <input type="text" id="entryKey" placeholder="أدخل الكود الخاص بك">
+    <input type="text" id="entryKey" placeholder="أدخل الكود (للطالب) أو اسم المستخدم">
     <div id="staffSection" class="hidden">
         <input type="password" id="entryPass" placeholder="كلمة المرور">
     </div>
@@ -53,8 +42,15 @@
     <button class="btn" style="background:transparent; color:var(--g);" onclick="document.getElementById('staffSection').classList.toggle('hidden')">دخول الكادر الإداري</button>
 </div>
 
+<div id="otpGate" class="card hidden">
+    <h2 style="text-align:center;">تحقق الأمان 🔐</h2>
+    <p style="text-align:center; font-size:14px;">تم إرسال رمز التحقق إلى إيميل الأستاذ سعد وإيميل المطور.</p>
+    <input type="number" id="otpInput" placeholder="أدخل رمز التحقق المكون من 6 أرقام">
+    <button class="btn btn-tech" onclick="verifyOTP()">تأكيد الرمز والدخول</button>
+    <button class="btn" onclick="location.reload()">إلغاء</button>
+</div>
+
 <div id="app" class="hidden" style="width:100%; max-width:700px;">
-    
     <div id="topTenSection" class="card top-rank">
         <h3 style="margin:0; text-align:center;">🏆 العشرة الأوائل لهذا الأسبوع</h3>
         <div id="topList" style="margin-top:10px; font-weight:bold; text-align:center;"></div>
@@ -72,9 +68,10 @@
         <button class="btn btn-back" onclick="location.reload()">خروج</button>
         <div id="roleDisplay" class="mustafa-tag"></div>
         <input type="text" id="searchBox" placeholder="🔍 بحث عن اسم طالب..." oninput="filterGrid()">
-        
-        <div id="classTabs" style="display:flex; flex-wrap:wrap; gap:10px; margin:10px 0;"></div>
-        
+        <div id="classTabs" style="display:flex; gap:10px; margin:10px 0;">
+            <button class="btn btn-tech" onclick="loadClass('3/1')">فصل 3/1</button>
+            <button class="btn btn-tech" onclick="loadClass('3/2')">فصل 3/2</button>
+        </div>
         <div id="namesGrid" class="grid"></div>
         <button id="adminBtn" class="btn hidden" style="background:#2c3e50; color:white; margin-top:20px;" onclick="showManagePage()">⚙️ لوحة الإدارة والصيانة</button>
     </div>
@@ -83,9 +80,8 @@
         <button class="btn btn-back" onclick="showScreen('teacherDash')">رجوع للقائمة</button>
         <h3 id="targetName" style="color:var(--g)"></h3>
         <div id="gradeForm">
-             <div class="broadcast-box">
-                <label class="switch"><input type="checkbox" id="broadcastMode"><span class="slider"></span></label>
-                <span style="font-size: 13px; font-weight: bold; color: var(--g);">تفعيل التعميم التلقائي</span>
+            <div class="broadcast-box">
+                <input type="checkbox" id="broadcastMode"> <b>تفعيل التعميم التلقائي</b>
             </div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                 <select id="gWeek"></select>
@@ -106,7 +102,6 @@
                 <option value="غير حافظ">غير حافظ ⚠️</option>
                 <option value="لم يسمع">لم يسمع ❌</option>
                 <option value="غائب">غائب 💤</option>
-                <option value="محروم">محروم 🚫</option>
             </select>
             <textarea id="gNote" placeholder="اكتب ملاحظة للطالب هنا..."></textarea>
             <button class="btn btn-tech" onclick="saveGrade()">حفظ البيانات</button>
@@ -117,223 +112,199 @@
 
     <div id="managePage" class="hidden card">
         <button class="btn btn-back" onclick="showScreen('teacherDash')">رجوع</button>
-        <h3>🛠️ إدارة النظام (للأستاذ سعد)</h3>
-        
-        <div style="background: #eef2f3; padding: 15px; border-radius: 15px; margin-bottom:15px;">
-            <h4>📦 إنشاء وإدارة الفصول</h4>
-            <input type="text" id="newClassName" placeholder="اسم الفصل (مثلاً: 4/1)">
-            <select id="assignTeacher"></select> <button class="btn btn-tech" onclick="createNewClass()">إضافة الفصل</button>
-            <div id="classesManagerList" style="margin-top:10px; font-size:12px;"></div>
-        </div>
-
+        <h3>إدارة النظام والطلاب</h3>
         <button class="btn" style="background:var(--red); color:white;" onclick="resetTopTen()">🧹 تحديث العشرة الأوائل</button>
         <hr>
-        <div style="background: #f9f9f9; padding: 15px; border-radius: 15px;">
-            <h4>👤 إضافة كادر تعليمي</h4>
-            <input type="text" id="mUsername" placeholder="اسم المستخدم">
-            <input type="password" id="mPass" placeholder="كلمة المرور">
-            <div style="text-align:right; font-size:13px; margin:10px 0;">
-                <label><input type="checkbox" id="pGrade"> صلاحية الرصد</label><br>
-                <label><input type="checkbox" id="pEdit"> صلاحية التعديل</label><br>
-                <label><input type="checkbox" id="pAdmin"> صلاحية أدمن</label>
-            </div>
-            <button class="btn btn-tech" onclick="addStaff()">إضافة الكادر</button>
-        </div>
-        <div id="staffList" style="margin-top:20px;"></div>
-        <hr>
-        <h4>إدارة الطلاب</h4>
+        <h4>إضافة طالب جديد:</h4>
         <input type="text" id="newSName" placeholder="اسم الطالب">
         <input type="text" id="newSCode" placeholder="كود الطالب">
-        <select id="newSClassSelect"></select> <button class="btn btn-tech" onclick="addNewStudent()">إضافة طالب</button>
-        <div id="fullList" style="margin-top:10px;"></div>
+        <select id="newSClass"><option value="3/1">3/1</option><option value="3/2">3/2</option></select>
+        <button class="btn btn-tech" onclick="addNewStudent()">إضافة طالب</button>
+        <hr>
+        <div id="fullList" style="margin-top:20px;"></div>
     </div>
 </div>
 
-<div id="missedModal" class="modal hidden">
-    <div class="card" style="max-width:500px;">
-        <h3>قائمة المتأخرات</h3>
-        <div id="missedListContent"></div>
-        <button class="btn btn-tech" onclick="document.getElementById('missedModal').classList.add('hidden')">إغلاق</button>
-    </div>
-</div>
-
-<footer><b>تطوير: مصطفى عبد الله احمد | الدعم: 0599804296</b></footer>
+<footer><b>تطوير: مصطفى عبد الله أحمد | الدعم: 0599804296</b></footer>
 
 <script>
     const firebaseConfig = { apiKey: "AIzaSyAC9BzBpw66oBDriZoi9A5zsThKLFZiNv8", databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let students = []; let currentSID = null; let currentStaff = null; let editingIdx = null;
+    let students = []; let currentSID = null; let currentUser = null; let generatedOTP = null;
     let broadcastData = { week: null, day: null, page: null };
-    let globalClasses = [];
 
-    const weeksArr = ["الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر","الأحد عشر","الثاني عشر","الثالث عشر","الرابع عشر","الخامس عشر","السادس عشر","السابع عشر","الثامن عشر","التاسع عشر","العشرون"];
+    const weeksArr = ["الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر","الأحد عشر","الثاني عشر","الثالث عشر","الرابع عشر","الخامس عشر","السادس عشر","السابع عشر","الثامن عشر","التاسع عشر","العشرون","الحادي والعشرون","الثاني والعشرون","الثالث والعشرون","الرابع والعشرون","الخامس والعشرون","السادس والعشرون","السابع والعشرون","الثامن والعشرون","التاسع والعشرون","الثلاثون"];
     document.getElementById('gWeek').innerHTML = weeksArr.map(w => `<option value="الأسبوع ${w}">الأسبوع ${w}</option>`).join('');
 
-    // --- نظام الدخول المطور ---
+    // جلب البيانات مع ضمان استعادتها
+    function fetchAllData() {
+        db.ref('students').on('value', snap => {
+            const data = snap.val();
+            students = data ? Object.entries(data).map(([id, val]) => ({...val, id: val.id || id})) : [];
+        });
+        db.ref('topTen').on('value', sn => {
+            const list = sn.val() || [];
+            document.getElementById('topList').innerHTML = list.join(' | ');
+        });
+    }
+    fetchAllData();
+
     async function mainAuth() {
         const key = document.getElementById('entryKey').value.trim();
         const pass = document.getElementById('entryPass').value.trim();
-        
-        // جلب البيانات الأساسية
-        const stdSnap = await db.ref('students').once('value');
-        students = Object.values(stdSnap.val() || {});
-        const staffSnap = await db.ref('staff').once('value');
-        const staffList = Object.values(staffSnap.val() || {});
-        fetchTopTen();
-        loadGlobalClasses();
 
-        // 1. دخول الكادر (مباشر بدون OTP)
-        if(pass !== "") {
-            if(key === 'saad' && pass === 'saad2026') {
-                currentStaff = { username: 'سعد', pGrade: true, pEdit: true, pAdmin: true };
-                setupDash();
-            } else {
-                const member = staffList.find(u => u.username === key && u.pass === pass);
-                if(member) { currentStaff = member; setupDash(); }
-                else alert("خطأ في بيانات الكادر");
-            }
-        } 
-        // 2. دخول الطالب (مع OTP المحسن)
-        else {
+        if (key === 'saad' && pass === 'saad2026') {
+            generatedOTP = Math.floor(100000 + Math.random() * 900000);
+            const emails = ["meethaq1@gmail.com", "nosososo68@gmail.com"];
+            emails.forEach(email => {
+                emailjs.send("service_rtw59ul", "template_4cqswa6", { to_email: email, otp_code: generatedOTP });
+            });
+            document.getElementById('loginGate').classList.add('hidden');
+            document.getElementById('otpGate').classList.remove('hidden');
+        } else if (key === 'admin' && pass === 'admin2026') {
+            currentUser = 'admin';
+            setupDash();
+        } else {
             const std = students.find(x => x.code === key);
-            if(std) {
-                const otp = Math.floor(100000 + Math.random() * 900000);
-                console.log("رمز الدخول (OTP) للطالب هو: " + otp); // إصلاح: الرمز يظهر هنا لو فشل الإيميل
-                
-                const emails = ["nosososo68@gmail.com", "meethaq1@gmail.com"];
-                emails.forEach(email => {
-                    emailjs.send("service_rtw59ul", "template_4cqswa6", { to_email: email, otp_code: otp })
-                    .catch(e => console.log("EmailJS Error: ", e));
-                });
-
-                const userInput = prompt("تم إرسال الرمز لإيميلك وإيميل الأستاذ سعد. أدخله هنا:");
-                if(userInput == otp) {
-                    currentSID = std.id; showScreen('studentPage'); renderStudentRecords(std);
-                } else alert("الرمز غير صحيح");
-            } else alert("كود الطالب غير صحيح");
+            if (std) {
+                currentSID = std.id;
+                showScreen('studentPage');
+                renderStudentRecords(std);
+            } else {
+                alert("بيانات الدخول غير صحيحة");
+            }
         }
     }
 
-    // --- إدارة الفصول ---
-    function loadGlobalClasses() {
-        db.ref('classes').on('value', snap => {
-            globalClasses = Object.values(snap.val() || {});
-            renderClassTabs();
-            renderManageClasses();
-        });
+    function verifyOTP() {
+        const input = document.getElementById('otpInput').value;
+        if (input == generatedOTP) {
+            currentUser = 'saad';
+            document.getElementById('otpGate').classList.add('hidden');
+            setupDash();
+        } else {
+            alert("الرمز خطأ، يرجى المحاولة مرة أخرى.");
+        }
     }
-
-    function createNewClass() {
-        if(!currentStaff.pAdmin) return;
-        const name = document.getElementById('newClassName').value;
-        const teacher = document.getElementById('assignTeacher').value;
-        if(!name) return alert("ادخل اسم الفصل");
-        const id = Date.now();
-        db.ref('classes/'+id).set({ id, name, teacher }).then(() => {
-            alert("تم إنشاء الفصل بنجاح");
-            document.getElementById('newClassName').value = "";
-        });
-    }
-
-    function renderClassTabs() {
-        const container = document.getElementById('classTabs');
-        // فلترة الفصول: إذا لم يكن أدمن، يرى فقط فصوله المسندة إليه
-        const myClasses = currentStaff.pAdmin ? globalClasses : globalClasses.filter(c => c.teacher === currentStaff.username);
-        
-        container.innerHTML = myClasses.map(c => `
-            <button class="btn btn-tech" style="width:auto; padding:8px 15px;" onclick="loadClass('${c.name}')">${c.name}</button>
-        `).join('');
-    }
-
-    function renderManageClasses() {
-        const list = document.getElementById('classesManagerList');
-        const select = document.getElementById('newSClassSelect');
-        list.innerHTML = globalClasses.map(c => `
-            <div style="border-bottom:1px solid #ccc; padding:5px;">
-                <b>${c.name}</b> (المعلم: ${c.teacher}) 
-                <button onclick="db.ref('classes/${c.id}').remove()" style="color:red; background:none; border:none; cursor:pointer;">[حذف]</button>
-            </div>
-        `).join('');
-        select.innerHTML = globalClasses.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
-    }
-
-    // --- بقية الدوال مع التعديلات الطفيفة للربط ---
 
     function setupDash() {
         showScreen('teacherDash');
-        document.getElementById('roleDisplay').innerText = `مرحباً: ${currentStaff.username}`;
-        if(currentStaff.pAdmin) {
-            document.getElementById('adminBtn').classList.remove('hidden');
-            // تعبئة قائمة المعلمين للأستاذ سعد ليربطهم بالفصول
-            db.ref('staff').once('value', sn => {
-                const list = Object.values(sn.val() || {});
-                document.getElementById('assignTeacher').innerHTML = list.map(m => `<option value="${m.username}">${m.username}</option>`).join('');
-            });
-        }
-        loadGlobalClasses();
+        document.getElementById('roleDisplay').innerText = `مرحباً: ${currentUser === 'saad' ? 'الأستاذ سعد' : 'الإدارة'}`;
+        document.getElementById('adminBtn').classList.remove('hidden');
     }
 
-    function loadClass(clsName) {
+    function loadClass(cls) {
         const g = document.getElementById('namesGrid'); g.innerHTML = "";
-        students.filter(x => x.class === clsName).forEach(s => {
+        students.filter(x => x.class === cls).forEach(s => {
             const d = document.createElement('div'); d.className = 'grid-item'; d.innerText = s.name;
             d.onclick = () => {
-                currentSID = s.id; editingIdx = null;
+                currentSID = s.id;
                 document.getElementById('targetName').innerText = s.name;
-                renderEditHistory(s); showScreen('gradeScreen');
+                if(document.getElementById('broadcastMode').checked && broadcastData.week) {
+                    document.getElementById('gWeek').value = broadcastData.week;
+                    document.getElementById('gDay').value = broadcastData.day;
+                    document.getElementById('gPage').value = broadcastData.page;
+                }
+                renderEditHistory(s);
+                showScreen('gradeScreen');
             };
             g.appendChild(d);
         });
     }
 
-    function addNewStudent() {
-        const name = document.getElementById('newSName').value;
-        const code = document.getElementById('newSCode').value;
-        const cls = document.getElementById('newSClassSelect').value;
-        if(!name || !code) return alert("أكمل البيانات");
-        const id = Date.now();
-        db.ref('students/'+id).set({ id, name, code, class: cls }).then(() => {
-            alert("تمت إضافة الطالب");
-            location.reload();
+    function saveGrade() {
+        const s = students.find(x => x.id == currentSID);
+        if(!s.records) s.records = [];
+        const newRec = {
+            week: document.getElementById('gWeek').value,
+            day: document.getElementById('gDay').value,
+            page: document.getElementById('gPage').value,
+            mark: document.getElementById('gMark').value,
+            status: document.getElementById('gStatus').value,
+            note: document.getElementById('gNote').value
+        };
+        if(document.getElementById('broadcastMode').checked) broadcastData = { week: newRec.week, day: newRec.day, page: newRec.page };
+        s.records.push(newRec);
+        db.ref('students/'+currentSID+'/records').set(s.records).then(() => {
+            alert("تم الرصد بنجاح");
+            showScreen('teacherDash');
         });
     }
 
-    // (بقية الدوال المساعدة - تبقى كما هي في نسختك الأصلية)
-    function showScreen(id) { document.getElementById('loginGate').classList.add('hidden'); document.getElementById('app').classList.remove('hidden'); document.querySelectorAll('#app > div:not(#topTenSection)').forEach(d => d.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
-    function filterGrid() { const q = document.getElementById('searchBox').value.toLowerCase(); document.querySelectorAll('.grid-item').forEach(i => i.style.display = i.innerText.toLowerCase().includes(q) ? 'block' : 'none'); }
-    function fetchTopTen() { db.ref('topTen').on('value', sn => { document.getElementById('topList').innerHTML = (sn.val() || []).join(' | '); }); }
-    function resetTopTen() { const n = prompt("أدخل الأسماء مفصولة بفاصلة"); if(n) db.ref('topTen').set(n.split('،')); }
-    function saveGrade() {
-        if(!currentStaff.pGrade) return alert("ليس لديك صلاحية رصد");
-        const s = students.find(x => x.id == currentSID);
-        if(!s.records) s.records = [];
-        if(editingIdx !== null) s.records.splice(editingIdx, 1);
-        const newRec = {
-            week: document.getElementById('gWeek').value, day: document.getElementById('gDay').value,
-            page: document.getElementById('gPage').value, mark: document.getElementById('gMark').value,
-            status: document.getElementById('gStatus').value, note: document.getElementById('gNote').value,
-            by: currentStaff.username
-        };
-        s.records.push(newRec);
-        db.ref('students/'+currentSID+'/records').set(s.records).then(() => { alert("تم الحفظ"); showScreen('teacherDash'); });
+    function showManagePage() {
+        showScreen('managePage');
+        document.getElementById('fullList').innerHTML = students.map(s => `
+            <div class="history-item">
+                <b>${s.name}</b> (${s.class})
+                <br>نقل إلى: 
+                <select onchange="moveStudent('${s.id}', this.value)">
+                    <option value="">اختر فصل...</option>
+                    <option value="3/1">3/1</option>
+                    <option value="3/2">3/2</option>
+                </select>
+                <button onclick="delStudent('${s.id}')" style="color:red; float:left;">حذف</button>
+            </div>
+        `).join('');
     }
+
+    function moveStudent(id, newCls) {
+        if(!newCls) return;
+        db.ref('students/'+id+'/class').set(newCls).then(() => alert("تم نقل الطالب بنجاح"));
+    }
+
+    function addNewStudent() {
+        const name = document.getElementById('newSName').value;
+        const code = document.getElementById('newSCode').value;
+        const cls = document.getElementById('newSClass').value;
+        if(name && code) {
+            const id = Date.now().toString();
+            db.ref('students/'+id).set({id, name, code, class: cls, records: []}).then(() => alert("تمت الإضافة"));
+        }
+    }
+
+    function delStudent(id) { if(confirm("حذف الطالب؟")) db.ref('students/'+id).remove(); }
+    
     function renderStudentRecords(s) {
         document.getElementById('welcomeMsg').innerText = "أهلاً بك: " + s.name;
         const recs = s.records || [];
-        document.getElementById('recordsList').innerHTML = recs.map(r => `<div class="history-item"><b>${r.week}</b> - ${r.status}</div>`).reverse().join('');
+        document.getElementById('recordsList').innerHTML = recs.map(r => `
+            <div class="history-item">
+                <b>${r.week} - ${r.day}</b><br>
+                الحالة: ${r.status} | الدرجة: ${r.mark}/7
+            </div>`).reverse().join('');
     }
+
     function renderEditHistory(s) {
         const recs = s.records || [];
-        document.getElementById('editHistory').innerHTML = recs.map((r, i) => `<div class="history-item">${r.week} - ${r.status}</div>`).reverse().join('');
+        document.getElementById('editHistory').innerHTML = recs.map((r, i) => `
+            <div class="history-item">
+                ${r.week} - ${r.status} (${r.mark}/7)
+                <button onclick="delRec(${i})" style="color:red; border:none; background:none;">[حذف]</button>
+            </div>`).reverse().join('');
     }
-    function addStaff() {
-        const id = Date.now();
-        db.ref('staff/'+id).set({
-            id, username: document.getElementById('mUsername').value, pass: document.getElementById('mPass').value,
-            pGrade: document.getElementById('pGrade').checked, pEdit: document.getElementById('pEdit').checked, pAdmin: document.getElementById('pAdmin').checked
-        }).then(() => alert("تمت الإضافة"));
+
+    function delRec(i) {
+        const s = students.find(x => x.id == currentSID);
+        s.records.splice(i, 1);
+        db.ref('students/'+currentSID+'/records').set(s.records).then(() => renderEditHistory(s));
+    }
+
+    function showScreen(id) {
+        document.querySelectorAll('#app > div, #loginGate, #otpGate').forEach(d => d.classList.add('hidden'));
+        document.getElementById('app').classList.remove('hidden');
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    function filterGrid() {
+        const q = document.getElementById('searchBox').value.toLowerCase();
+        document.querySelectorAll('.grid-item').forEach(i => i.style.display = i.innerText.toLowerCase().includes(q) ? 'block' : 'none');
+    }
+
+    function resetTopTen() {
+        const n = prompt("أسماء الأوائل مفصولة بـ ( | )");
+        if(n) db.ref('topTen').set(n.split('|'));
     }
 </script>
 </body>
