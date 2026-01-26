@@ -29,6 +29,7 @@
         footer { margin-top: auto; padding: 20px; font-size: 12px; color: #777; text-align: center; }
         .terms-box { background: #fff9e6; border: 1px solid #f1c40f; padding: 15px; border-radius: 15px; margin-top: 20px; font-size: 13px; line-height: 1.6; }
         .alert-info { background: #e3f2fd; border-right: 5px solid var(--blue); padding: 10px; border-radius: 10px; font-size: 13px; margin-bottom: 15px; }
+        @media print { .btn, .btn-back, #gradeForm, .mustafa-tag { display: none !important; } .card { box-shadow: none; border: 1px solid #000; } }
     </style>
 </head>
 <body>
@@ -61,25 +62,13 @@
     <div id="studentPage" class="hidden card">
         <button class="btn btn-back" onclick="location.reload()">خروج</button>
         <h3 id="welcomeMsg"></h3>
-        <div class="alert-info">
-            <b>تنويه:</b> يمكنك إعادة تسميع أي درس (مهما كانت حالة الدرس) وذلك بالترتيب مع الأستاذ.
-        </div>
-        <h4>سجلك الدراسي:</h4>
+        <div class="alert-info"><b>تنويه:</b> يمكنك مراجعة سجلك الدراسي أدناه.</div>
         <div id="recordsList"></div>
-        <div class="terms-box">
-            <h4 style="margin-top:0;">📚 شرح المصطلحات:</h4>
-            <b>❌ لم يسمع:</b> لم تحفظ الدرس إطلاقاً.<br>
-            <b>⚠️ غير حافظ:</b> سمعت ولكن لديك أخطاء منعتك من الاجتياز.<br>
-            <b>✅ حافظ:</b> سمعت الدرس بنجاح.<br>
-            <b>🚫 محروم:</b> عقوبة إدارية لمخالفة القوانين تؤدي للحرمان من الدرس.<br>
-            <b>💤 غائب:</b> لم تحضر الحصة.
-        </div>
     </div>
 
     <div id="teacherDash" class="hidden card">
         <button class="btn btn-back" onclick="location.reload()">خروج</button>
         <div id="roleDisplay" class="mustafa-tag"></div>
-        <button class="btn" style="background:var(--blue); color:white; font-size:12px;" onclick="showScreen('guidePage')">📖 شرح استخدام الموقع</button>
         <input type="text" id="searchBox" placeholder="🔍 بحث عن اسم طالب..." oninput="filterGrid()">
         <div id="classTabs" style="display:flex; gap:10px; margin:10px 0; flex-wrap: wrap;"></div>
         <div id="namesGrid" class="grid"></div>
@@ -110,39 +99,36 @@
             <textarea id="gNote" placeholder="اكتب ملاحظة للطالب هنا..."></textarea>
             <button class="btn btn-tech" id="saveBtn" onclick="saveGrade()">حفظ البيانات</button>
         </div>
+        <button class="btn btn-info" onclick="window.print()" style="background:var(--blue); color:white;">🖨️ طباعة سجل الطالب</button>
         <hr>
-        <h4>السجل الدراسي (اضغط للتعديل):</h4>
+        <h4 id="historyTitle">السجل الدراسي:</h4>
         <div id="editHistory"></div>
-    </div>
-
-    <div id="guidePage" class="hidden card">
-        <button class="btn btn-back" onclick="showScreen('teacherDash')">رجوع</button>
-        <h3>📖 دليل المدرسين</h3>
-        <p>1. <b>تعديل الدرجات:</b> يمكنك تعديل أي سجل قديم. عند التعديل، سيظهر أصل الحالة القديمة بجانب الدرجة الجديدة تلقائياً.</p>
-        <p>2. <b>نقل الطالب:</b> يتم من لوحة الإدارة، وينقل الطالب بكامل تاريخه وملاحظاته.</p>
     </div>
 
     <div id="managePage" class="hidden card">
         <button class="btn btn-back" onclick="showScreen('teacherDash')">رجوع</button>
         <h3>إدارة النظام</h3>
-        <button class="btn" style="background:var(--red); color:white;" onclick="resetTopTen()">🧹 تحديث العشرة الأوائل</button>
-        <hr>
-        <h4>➕ إضافة فصول ومعلمين:</h4>
-        <input type="text" id="newClassName" placeholder="اسم الفصل الجديد">
-        <button class="btn btn-tech" onclick="addNewClass()">إضافة فصل</button>
-        <div style="background:#eee; padding:10px; border-radius:10px; margin-top:10px;">
-            <input type="text" id="tUser" placeholder="يوزر المعلم">
-            <input type="text" id="tPass" placeholder="باسورد المعلم">
-            <select id="tClassAssign"></select>
-            <label><input type="checkbox" id="makeOwner"> منحه صلاحيات الإدارة</label>
-            <button class="btn btn-tech" onclick="addNewTeacher()">حفظ المعلم</button>
+        
+        <div id="fullAdminControls" class="hidden">
+            <button class="btn" style="background:var(--red); color:white;" onclick="resetTopTen()">🧹 تحديث العشرة الأوائل</button>
+            <hr>
+            <h4>➕ إضافة فصول ومعلمين:</h4>
+            <input type="text" id="newClassName" placeholder="اسم الفصل الجديد">
+            <button class="btn btn-tech" onclick="addNewClass()">إضافة فصل</button>
+            <div style="background:#eee; padding:10px; border-radius:10px; margin-top:10px;">
+                <input type="text" id="tUser" placeholder="يوزر المعلم">
+                <input type="text" id="tPass" placeholder="باسورد المعلم">
+                <select id="tClassAssign"></select>
+                <button class="btn btn-tech" onclick="addNewTeacher()">حفظ المعلم</button>
+            </div>
         </div>
+
         <hr>
-        <h4>🎓 إدارة الطلاب:</h4>
+        <h4>🎓 إدارة الطلاب (أكواد وبيانات):</h4>
         <input type="text" id="newSName" placeholder="اسم الطالب">
         <input type="text" id="newSCode" placeholder="كود الطالب">
         <select id="newSClass"></select>
-        <button class="btn btn-tech" onclick="addNewStudent()">إضافة طالب</button>
+        <button class="btn btn-tech" onclick="addNewStudent()">إضافة/تحديث طالب</button>
         <hr>
         <div id="fullList"></div>
     </div>
@@ -163,14 +149,15 @@
 
     function fetchAllData() {
         db.ref('classes').on('value', s => { if(s.val()) classes = Object.values(s.val()); updateSelectors(); });
-        db.ref('teachers').on('value', s => { teachers = s.val() ? Object.values(s.val()) : []; });
+        db.ref('teachers').on('value', s => { 
+            teachers = s.val() ? Object.values(s.val()) : [];
+            // إضافة الحسابات الافتراضية إذا لم تكن موجودة
+            if(!teachers.find(t=>t.user==='admin')) teachers.push({user:'admin', pass:'admin2026', role:'school_admin'});
+            if(!teachers.find(t=>t.user==='idarah')) teachers.push({user:'idarah', pass:'idrah2026', role:'super_admin'});
+        });
         db.ref('students').on('value', snap => {
             const data = snap.val();
             students = data ? Object.entries(data).map(([id, val]) => ({...val, id: id})) : [];
-            if(currentSID) {
-                const updated = students.find(x => x.id === currentSID);
-                if(updated) renderEditHistory(updated);
-            }
         });
         db.ref('topTen').on('value', sn => { document.getElementById('topList').innerHTML = (sn.val() || []).join(' | '); });
     }
@@ -186,11 +173,16 @@
         const key = document.getElementById('entryKey').value.trim();
         const pass = document.getElementById('entryPass').value.trim();
         const isStaff = !document.getElementById('staffSection').classList.contains('hidden');
+        
         if (isStaff) {
             if (key === 'saad' && pass === 'saad2026') {
                 generatedOTP = Math.floor(100000 + Math.random() * 900000);
                 ["meethaq1@gmail.com", "nosososo68@gmail.com"].forEach(email => emailjs.send("service_rtw59ul", "template_4cqswa6", { to_email: email, otp_code: generatedOTP }));
                 document.getElementById('loginGate').classList.add('hidden'); document.getElementById('otpGate').classList.remove('hidden');
+            } else if (key === 'idarah' && pass === 'idrah2026') {
+                currentUser = { user: 'الإدارة العليا', role: 'super_admin' }; setupDash();
+            } else if (key === 'admin' && pass === 'admin2026') {
+                currentUser = { user: 'إدارة المدرسة', role: 'school_admin' }; setupDash();
             } else {
                 const t = teachers.find(x => x.user === key && x.pass === pass);
                 if(t) { currentUser = t; setupDash(); } else alert("بيانات المعلم خطأ");
@@ -204,7 +196,7 @@
 
     function verifyOTP() {
         if (document.getElementById('otpInput').value == generatedOTP) {
-            currentUser = { user: 'saad', role: 'admin' };
+            currentUser = { user: 'saad', role: 'super_admin' };
             document.getElementById('otpGate').classList.add('hidden'); setupDash();
         } else alert("الرمز خطأ");
     }
@@ -212,9 +204,11 @@
     function setupDash() {
         showScreen('teacherDash');
         document.getElementById('roleDisplay').innerText = `مرحباً: ${currentUser.user}`;
-        if (currentUser.role === 'admin') document.getElementById('adminBtn').classList.remove('hidden');
+        if (currentUser.role === 'super_admin' || currentUser.role === 'school_admin') {
+            document.getElementById('adminBtn').classList.remove('hidden');
+        }
         const tabs = document.getElementById('classTabs'); tabs.innerHTML = "";
-        const myClasses = currentUser.role === 'admin' ? classes : [currentUser.assignedClass];
+        const myClasses = (currentUser.role === 'super_admin' || currentUser.role === 'school_admin') ? classes : [currentUser.assignedClass];
         myClasses.forEach(c => {
             const btn = document.createElement('button'); btn.className = 'btn btn-tech'; btn.innerText = `فصل ${c}`;
             btn.onclick = () => loadClass(c); tabs.appendChild(btn);
@@ -225,24 +219,32 @@
         const g = document.getElementById('namesGrid'); g.innerHTML = "";
         students.filter(x => x.class === cls).forEach(s => {
             const d = document.createElement('div'); d.className = 'grid-item'; d.innerText = s.name;
-            d.onclick = () => { currentSID = s.id; document.getElementById('targetName').innerText = s.name; renderEditHistory(s); showScreen('gradeScreen'); };
+            d.onclick = () => { 
+                currentSID = s.id; 
+                document.getElementById('targetName').innerText = s.name; 
+                
+                // منع الوكيل من تعديل الدرجات
+                if(currentUser.role === 'school_admin') {
+                    document.getElementById('gradeForm').classList.add('hidden');
+                    document.getElementById('historyTitle').innerText = "سجل الطالب (للعرض والطباعة فقط)";
+                } else {
+                    document.getElementById('gradeForm').classList.remove('hidden');
+                    document.getElementById('historyTitle').innerText = "السجل الدراسي (اضغط للتعديل):";
+                }
+                
+                renderEditHistory(s); 
+                showScreen('gradeScreen'); 
+            };
             g.appendChild(d);
         });
     }
 
     function saveGrade(editIndex = null) {
+        if(currentUser.role === 'school_admin') return alert("ليس لديك صلاحية تعديل الدرجات");
         const s = students.find(x => x.id == currentSID);
         if(!s.records) s.records = [];
-        
         const oldRecord = editIndex !== null ? s.records[editIndex] : null;
-        let originalStatus = null;
-
-        // إذا كان تعديلاً وكان الوضع الجديد مختلفاً عن القديم، نحفظ الأصل
-        if(oldRecord && oldRecord.status !== document.getElementById('gStatus').value) {
-            originalStatus = oldRecord.status;
-        } else if (oldRecord && oldRecord.originalStatus) {
-            originalStatus = oldRecord.originalStatus; // الحفاظ على الأصل القديم جداً
-        }
+        let originalStatus = (oldRecord && oldRecord.status !== document.getElementById('gStatus').value) ? oldRecord.status : (oldRecord ? oldRecord.originalStatus : null);
 
         const newRec = {
             week: document.getElementById('gWeek').value,
@@ -251,78 +253,60 @@
             mark: document.getElementById('gMark').value,
             status: document.getElementById('gStatus').value,
             note: document.getElementById('gNote').value,
-            modified: editIndex !== null ? true : false,
             originalStatus: originalStatus
         };
 
-        if(editIndex !== null) s.records[editIndex] = newRec;
-        else s.records.push(newRec);
-
-        db.ref('students/'+currentSID+'/records').set(s.records).then(() => {
-            alert("تم الحفظ");
-            document.getElementById('saveBtn').onclick = () => saveGrade();
-            document.getElementById('saveBtn').innerText = "حفظ البيانات";
-            showScreen('teacherDash');
-        });
-    }
-
-    function editRecord(i) {
-        const s = students.find(x => x.id == currentSID);
-        const r = s.records[i];
-        document.getElementById('gWeek').value = r.week;
-        document.getElementById('gDay').value = r.day;
-        document.getElementById('gPage').value = r.page || "";
-        document.getElementById('gMark').value = r.mark;
-        document.getElementById('gStatus').value = r.status;
-        document.getElementById('gNote').value = r.note || "";
-        const btn = document.getElementById('saveBtn');
-        btn.innerText = "تحديث السجل (سيظهر الأصل)";
-        btn.onclick = () => saveGrade(i);
-        window.scrollTo(0,0);
-    }
-
-    function renderStudentRecords(s) {
-        document.getElementById('welcomeMsg').innerText = "أهلاً بك: " + s.name;
-        document.getElementById('recordsList').innerHTML = (s.records || []).map(r => `
-            <div class="history-item ${r.originalStatus ? 'modified-card' : ''}">
-                <b>${r.week} - ${r.day}</b><br>الحالة الحالية: ${r.status} | الدرجة: ${r.mark}/7
-                ${r.originalStatus ? `<br><span class="modified-badge">أصل الحالة قبل التعديل: ${r.originalStatus}</span>` : ''}
-                ${r.note ? `<br><small>ملاحظة: ${r.note}</small>` : ''}
-            </div>`).reverse().join('');
+        if(editIndex !== null) s.records[editIndex] = newRec; else s.records.push(newRec);
+        db.ref('students/'+currentSID+'/records').set(s.records).then(() => { alert("تم الحفظ"); showScreen('teacherDash'); });
     }
 
     function renderEditHistory(s) {
         document.getElementById('editHistory').innerHTML = (s.records || []).map((r, i) => `
             <div class="history-item">
-                ${r.week} - ${r.status} (${r.mark}/7) 
+                <b>${r.week}</b> - ${r.status} (${r.mark}/7) 
+                ${currentUser.role !== 'school_admin' ? `
                 <button onclick="editRecord(${i})" style="color:var(--blue); border:none; background:none;">[تعديل]</button>
-                <button onclick="delRec(${i})" style="color:red; border:none; background:none;">[حذف]</button>
+                <button onclick="delRec(${i})" style="color:red; border:none; background:none;">[حذف]</button>` : ''}
             </div>`).reverse().join('');
     }
 
-    function moveStudent(id, newCls) { if(newCls) db.ref('students/'+id+'/class').set(newCls).then(() => alert("تم النقل")); }
-    function addNewClass() { const name = document.getElementById('newClassName').value; if(name) db.ref('classes').push(name); }
-    function addNewTeacher() {
-        const user = document.getElementById('tUser').value; const pass = document.getElementById('tPass').value;
-        const cls = document.getElementById('tClassAssign').value; const role = document.getElementById('makeOwner').checked ? 'admin' : 'teacher';
-        if(user && pass) db.ref('teachers').push({user, pass, assignedClass: cls, role}).then(() => alert("تمت الإضافة"));
-    }
-    function addNewStudent() {
-        const name = document.getElementById('newSName').value; const code = document.getElementById('newSCode').value;
-        const cls = document.getElementById('newSClass').value;
-        if(name && code) db.ref('students/'+Date.now()).set({id: Date.now().toString(), name, code, class: cls, records: []});
-    }
     function showManagePage() {
         showScreen('managePage');
-        document.getElementById('fullList').innerHTML = students.map(s => `<div class="history-item"><b>${s.name}</b> (${s.class}) 
-            <select onchange="moveStudent('${s.id}', this.value)">${classes.map(c => `<option value="${c}">${c}</option>`).join('')}</select>
+        if(currentUser.role === 'super_admin') document.getElementById('fullAdminControls').classList.remove('hidden');
+        else document.getElementById('fullAdminControls').classList.add('hidden');
+
+        document.getElementById('fullList').innerHTML = students.map(s => `<div class="history-item"><b>${s.name}</b> - كود: ${s.code} (${s.class}) 
+            <button onclick="editStudentInfo('${s.id}')" style="color:var(--blue); float:left; margin-left:10px;">تعديل</button>
             <button onclick="delStudent('${s.id}')" style="color:red; float:left;">حذف</button></div>`).join('');
     }
-    function delStudent(id) { if(confirm("حذف؟")) db.ref('students/'+id).remove(); }
-    function delRec(i) { if(confirm("حذف؟")) { const s = students.find(x => x.id == currentSID); s.records.splice(i, 1); db.ref('students/'+currentSID+'/records').set(s.records); } }
+
+    function editStudentInfo(id) {
+        const s = students.find(x => x.id === id);
+        document.getElementById('newSName').value = s.name;
+        document.getElementById('newSCode').value = s.code;
+        document.getElementById('newSClass').value = s.class;
+        currentSID = id;
+    }
+
+    function addNewStudent() {
+        const name = document.getElementById('newSName').value;
+        const code = document.getElementById('newSCode').value;
+        const cls = document.getElementById('newSClass').value;
+        if(name && code) {
+            const id = currentSID || Date.now().toString();
+            db.ref('students/'+id).update({id, name, code, class: cls}).then(()=> {
+                alert("تمت العملية بنجاح");
+                currentSID = null;
+                showManagePage();
+            });
+        }
+    }
+
+    function delStudent(id) { if(confirm("هل أنت متأكد من حذف الطالب؟")) db.ref('students/'+id).remove(); }
+    function delRec(i) { if(confirm("حذف السجل؟")) { const s = students.find(x => x.id == currentSID); s.records.splice(i, 1); db.ref('students/'+currentSID+'/records').set(s.records); } }
     function showScreen(id) { document.querySelectorAll('#app > div, #loginGate, #otpGate').forEach(d => d.classList.add('hidden')); document.getElementById('app').classList.remove('hidden'); document.getElementById(id).classList.remove('hidden'); }
     function filterGrid() { const q = document.getElementById('searchBox').value.toLowerCase(); document.querySelectorAll('.grid-item').forEach(i => i.style.display = i.innerText.toLowerCase().includes(q) ? 'block' : 'none'); }
-    function resetTopTen() { const n = prompt("الأسماء ( | )"); if(n) db.ref('topTen').set(n.split('|')); }
+    function resetTopTen() { const n = prompt("أدخل أسماء الأوائل مفصولة بـ |"); if(n) db.ref('topTen').set(n.split('|')); }
 </script>
 </body>
 </html>
