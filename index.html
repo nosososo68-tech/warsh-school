@@ -3,82 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام مدرسة الإمام ورش الذكي | لوحة الإدارة</title>
+    <title>نظام مدرسة الإمام ورش الذكي | Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <style>
-        /* نظام الثيمات المتعددة */
-        :root { --bg: #f4f7f6; --card: #ffffff; --g: #27ae60; --txt: #2c3e50; --btn: #27ae60; }
-        [data-theme="dark"] { --bg: #1a1a1a; --card: #2d2d2d; --g: #2ecc71; --txt: #eeeeee; --btn: #27ae60; }
-        [data-theme="elegant"] { --bg: #f0f2f5; --card: #ffffff; --g: #34495e; --txt: #2c3e50; --btn: #34495e; }
-        [data-theme="gold"] { --bg: #fdfaf0; --card: #ffffff; --g: #d4af37; --txt: #4a4a4a; --btn: #d4af37; }
+        :root { --bg: #f0f2f5; --card: #ffffff; --g: #27ae60; --r: #e74c3c; --txt: #2c3e50; --btn: #27ae60; --accent: #3498db; }
+        [data-theme="dark"] { --bg: #1a1a1a; --card: #2d2d2d; --g: #2ecc71; --r: #ff5252; --txt: #eeeeee; --btn: #27ae60; --accent: #bb86fc; }
+        [data-theme="gold"] { --bg: #fdfaf0; --card: #ffffff; --g: #d4af37; --r: #a94442; --txt: #4a4a4a; --btn: #d4af37; --accent: #8a6d3b; }
 
-        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s; }
+        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: 0.3s ease; }
         body { background: var(--bg); color: var(--txt); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .card { background: var(--card); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 700px; margin: 10px 0; position: relative; border: 1px solid rgba(0,0,0,0.05); }
-        .mustafa-tag { color: var(--g); font-weight: bold; font-size: 13px; text-align: center; display: block; margin: 10px 0; }
-        .btn { padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; margin: 5px 0; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-tech { background: var(--btn); color: white; }
-        .btn-back { background: rgba(0,0,0,0.1); color: var(--txt); width: auto; padding: 5px 15px; font-size: 12px; position: absolute; top: 10px; right: 10px; z-index: 100; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; background: white; font-size: 14px; color: #333; }
+        .card { background: var(--card); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 700px; margin: 10px 0; position: relative; border-bottom: 5px solid var(--g); }
+        
+        /* أزرار احترافية */
+        .btn { padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; margin: 5px 0; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-tech { background: var(--btn); color: white; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3); }
+        .btn-tech:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-back { background: rgba(0,0,0,0.05); color: var(--txt); width: auto; padding: 6px 15px; position: absolute; top: 15px; right: 15px; font-size: 13px; }
+
+        /* حالة الرصد الملونة */
+        .done-status { font-size: 11px; display: block; margin-top: 5px; padding: 3px; border-radius: 6px; font-weight: bold; }
+        .status-green { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status-red { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid rgba(0,0,0,0.1); background: var(--card); color: var(--txt); font-size: 14px; }
         .hidden { display: none !important; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 15px; }
-        .grid-item { background: var(--card); padding: 15px; border-radius: 12px; text-align: center; border: 2px solid var(--g); cursor: pointer; font-weight: bold; position: relative; }
-        .done-mark { color: var(--g); font-size: 11px; display: block; margin-top: 5px; font-weight: normal; }
-        .history-item { background: rgba(0,0,0,0.03); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-right: 5px solid var(--g); position: relative; text-align: right; }
-        .admin-sec { border: 2px dashed var(--g); padding: 15px; border-radius: 15px; margin: 15px 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 15px; }
+        .grid-item { background: var(--card); padding: 15px; border-radius: 15px; text-align: center; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.04); cursor: pointer; }
+        .grid-item:hover { border-color: var(--accent); transform: scale(1.02); }
+        
+        .history-item { background: rgba(0,0,0,0.02); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-right: 5px solid var(--accent); position: relative; }
+        .admin-sec { background: rgba(0,0,0,0.03); padding: 15px; border-radius: 15px; margin: 15px 0; border: 1px solid rgba(0,0,0,0.05); }
+        
+        .report-box { background: #fff3cd; color: #856404; padding: 15px; border-radius: 12px; border: 1px solid #ffeeba; margin: 10px 0; }
         footer { margin-top: auto; padding: 20px; font-size: 12px; color: #777; text-align: center; }
-        @media print { .btn, .btn-back, #gradeForm, #passChangeSec, .mustafa-tag { display: none !important; } .card { box-shadow: none; border: 1px solid #000; } }
     </style>
 </head>
 <body>
 
 <div id="loginGate" class="card">
-    <div class="mustafa-tag">| نظام مدرسة الإمام ورش الذكي |</div>
-    <h2 style="text-align:center;">تسجيل الدخول 🛡️</h2>
-    <input type="text" id="entryKey" placeholder="أدخل الكود (للطالب) أو اسم المستخدم">
+    <div style="text-align:center; margin-bottom:15px;">
+        <span style="background:var(--g); color:white; padding:5px 15px; border-radius:20px; font-size:12px;">المدرسة الذكية v2026</span>
+    </div>
+    <h2 style="text-align:center; margin-top:0;">تسجيل الدخول 🛡️</h2>
+    <input type="text" id="entryKey" placeholder="كود الطالب أو اسم المستخدم">
     <div id="staffSection" class="hidden">
         <input type="password" id="entryPass" placeholder="كلمة المرور">
     </div>
     <button class="btn btn-tech" onclick="mainAuth()">دخول النظام</button>
-    <button class="btn" style="background:transparent; color:var(--g);" onclick="document.getElementById('staffSection').classList.toggle('hidden')">دخول الكادر الإداري</button>
+    <button class="btn" style="background:transparent; color:var(--accent);" onclick="document.getElementById('staffSection').classList.toggle('hidden')">دخول الكادر الإداري</button>
 </div>
 
 <div id="app" class="hidden" style="width:100%; max-width:700px;">
     
-    <div id="studentPage" class="hidden card">
-        <button class="btn btn-back" onclick="location.reload()">خروج</button>
-        <h3 id="welcomeMsg"></h3>
-        <div id="recordsList"></div>
-    </div>
-
     <div id="teacherDash" class="hidden card">
         <button class="btn btn-back" onclick="location.reload()">خروج</button>
-        <div id="roleDisplay" class="mustafa-tag"></div>
+        <div id="roleDisplay" style="font-size:14px; font-weight:bold; color:var(--accent); margin-bottom:10px;"></div>
         
-        <div id="themeSwitcher" style="display: flex; gap: 5px; margin-bottom: 10px;">
-            <button class="btn" onclick="setTheme('default')" style="background:#eee; font-size:10px; padding:5px;">افتراضي</button>
-            <button class="btn" onclick="setTheme('dark')" style="background:#333; color:white; font-size:10px; padding:5px;">ليلي</button>
-            <button class="btn" onclick="setTheme('elegant')" style="background:#34495e; color:white; font-size:10px; padding:5px;">أنيق</button>
-            <button class="btn" onclick="setTheme('gold')" style="background:#d4af37; color:white; font-size:10px; padding:5px;">ذهبي</button>
+        <div id="themeSwitcher" style="display: flex; gap: 8px; margin-bottom: 15px;">
+            <button onclick="setTheme('default')" style="background:#eee; width:25px; height:25px; border-radius:50%; border:none; cursor:pointer;"></button>
+            <button onclick="setTheme('dark')" style="background:#333; width:25px; height:25px; border-radius:50%; border:none; cursor:pointer;"></button>
+            <button onclick="setTheme('gold')" style="background:#d4af37; width:25px; height:25px; border-radius:50%; border:none; cursor:pointer;"></button>
         </div>
 
-        <input type="text" id="searchBox" placeholder="🔍 بحث عن اسم طالب..." oninput="filterGrid()">
-        <div id="classTabs" style="display:flex; gap:10px; margin:10px 0; flex-wrap: wrap;"></div>
+        <input type="text" id="searchBox" placeholder="🔍 ابحث عن طالب..." oninput="filterGrid()">
+        <div id="classTabs" style="display:flex; gap:10px; margin:10px 0; overflow-x:auto; padding-bottom:5px;"></div>
         <div id="namesGrid" class="grid"></div>
-        <button id="adminBtn" class="btn hidden" style="background:#2c3e50; color:white; margin-top:20px;" onclick="showManagePage()">⚙️ الإدارة الشاملة (idarah)</button>
+        
+        <hr>
+        <button class="btn" style="background:var(--accent); color:white;" onclick="showSettings()">🔐 تغيير كلمة المرور</button>
+        <button id="adminBtn" class="btn hidden" style="background:#2c3e50; color:white;" onclick="showManagePage()">⚙️ لوحة الإدارة الشاملة</button>
     </div>
 
     <div id="gradeScreen" class="hidden card">
-        <button class="btn btn-back" onclick="showScreen('teacherDash')">رجوع</button>
+        <button class="btn btn-back" onclick="showScreen('teacherDash')">إغلاق</button>
         <h3 id="targetName" style="color:var(--g)"></h3>
-        <div id="gradeForm">
-            <select id="gWeek"></select>
-            <select id="gDay">
-                <option>يوم الأحد</option><option>يوم الاثنين</option><option>يوم الثلاثاء</option><option>يوم الأربعاء</option><option>يوم الخميس</option>
-            </select>
-            
+        
+        <div id="gradeForm" class="admin-sec">
+            <div style="display:flex; gap:10px;">
+                <select id="gWeek"></select>
+                <select id="gDay">
+                    <option>يوم الأحد</option><option>يوم الاثنين</option><option>يوم الثلاثاء</option><option>يوم الأربعاء</option><option>يوم الخميس</option>
+                </select>
+            </div>
             <div id="ayatSection" class="hidden">
                 <input type="text" id="gAyatFrom" placeholder="الآيات من">
                 <input type="text" id="gAyatTo" placeholder="إلى">
@@ -86,87 +94,97 @@
             <div id="pageSection">
                 <input type="number" id="gPage" placeholder="رقم الصفحة">
             </div>
-
             <input type="number" id="gMark" placeholder="الدرجة / 7">
             <select id="gStatus">
                 <option value="" selected disabled>-- اختر الحالة --</option>
-                <option value="حافظ">حافظ ✅</option><option value="غير حافظ">غير حافظ ⚠️</option>
-                <option value="لم يسمع">لم يسمع ❌</option><option value="محروم">محروم 🚫</option><option value="غائب">غائب 💤</option>
+                <option value="حافظ">حافظ ✅</option>
+                <option value="غير حافظ">غير حافظ ⚠️</option>
+                <option value="لم يسمع">لم يسمع ❌</option>
+                <option value="غائب">غائب 💤</option>
+                <option value="محروم">محروم 🚫</option>
             </select>
-            <textarea id="gNote" placeholder="ملاحظة للطالب..."></textarea>
-            <button class="btn btn-tech" onclick="saveGrade()">حفظ ورصد الدرجة</button>
+            <textarea id="gNote" placeholder="ملاحظة خاصة..."></textarea>
+            <button id="saveBtn" class="btn btn-tech" onclick="saveGrade()">رصد وحفظ</button>
         </div>
-        <hr>
-        <h4>السجل الدراسي:</h4>
+        
+        <h4>السجل الأكاديمي (اضغط للتعديل):</h4>
         <div id="editHistory"></div>
+    </div>
+
+    <div id="studentPage" class="hidden card">
+        <button class="btn btn-back" onclick="location.reload()">خروج</button>
+        <h3 id="welcomeMsg"></h3>
+        <button class="btn" style="background:#f39c12; color:white;" onclick="toggleLates()">📊 عرض تقرير المتأخرات</button>
+        <div id="latesBox" class="hidden report-box"></div>
+        <div id="recordsList"></div>
     </div>
 
     <div id="managePage" class="hidden card">
         <button class="btn btn-back" onclick="showScreen('teacherDash')">رجوع</button>
-        <h3 id="manageTitle">لوحة التحكم</h3>
+        <h3 id="manageTitle">الإدارة المتقدمة</h3>
         
-        <div id="idarahControls" class="admin-sec hidden">
-            <p>🛠️ <b>إدارة النظام (خاص بـ idarah)</b></p>
-            <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px;">
-                <input type="text" id="tUser" placeholder="يوزر المعلم الجديد">
-                <input type="text" id="tPass" placeholder="الباسورد">
-                <select id="tRole">
-                    <option value="teacher">معلم عادي</option>
-                    <option value="teacher_lead">رئيس (مثل سعد)</option>
-                    <option value="school_admin">إداري</option>
-                </select>
-                <small>حدد الفصول:</small>
-                <select id="tClassAssign" multiple style="height: 60px;"></select>
-                <button class="btn btn-tech" onclick="addNewTeacher()">إضافة معلم جديد</button>
-            </div>
-            <hr>
-            <div id="teachersListMaster"></div>
+        <div id="idarahOnly" class="admin-sec hidden">
+            <p style="color:red; font-weight:bold;">🛠️ صلاحيات المالك (idarah)</p>
+            <input type="text" id="tUser" placeholder="يوزر المعلم">
+            <input type="text" id="tPass" placeholder="باسورد المعلم">
+            <select id="tRole">
+                <option value="teacher">معلم</option>
+                <option value="teacher_lead">رئيس قسم (سعد)</option>
+                <option value="school_admin">إداري</option>
+            </select>
+            <select id="tClassAssign" multiple style="height:80px;"></select>
+            <button class="btn btn-tech" onclick="addNewTeacher()">إضافة معلم جديد</button>
+            <div id="teachersMasterList" style="margin-top:15px;"></div>
         </div>
 
         <div class="admin-sec">
-            <p>🎓 <b>إدارة الطلاب</b></p>
+            <p>🎓 إدارة قاعدة بيانات الطلاب</p>
             <input type="text" id="newSName" placeholder="اسم الطالب">
             <input type="text" id="newSCode" placeholder="كود الطالب">
             <select id="newSClass"></select>
-            <button class="btn btn-tech" onclick="addNewStudent()">إضافة/تحديث طالب</button>
-            <hr>
-            <div id="fullListMaster"></div>
+            <button class="btn btn-tech" onclick="addNewStudent()">إضافة / تحديث طالب</button>
+            <div id="studentsMasterList" style="margin-top:15px;"></div>
         </div>
     </div>
+
+    <div id="settingsPage" class="hidden card">
+        <button class="btn btn-back" onclick="showScreen('teacherDash')">رجوع</button>
+        <h3>🔐 إعدادات الحساب</h3>
+        <input type="password" id="oldPass" placeholder="كلمة المرور الحالية">
+        <input type="password" id="newPass" placeholder="كلمة المرور الجديدة">
+        <button class="btn btn-tech" onclick="changeMyPass()">تحديث كلمة المرور</button>
+    </div>
+
 </div>
 
-<footer><b>تطوير: مصطفى عبد الله أحمد | 0599804296</b></footer>
+<footer><b>تطوير المهندس: مصطفى عبد الله أحمد | 0599804296</b></footer>
 
 <script>
     const firebaseConfig = { apiKey: "AIzaSyAC9BzBpw66oBDriZoi9A5zsThKLFZiNv8", databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let students = [], classes = ["3/1", "3/2", "3/3", "3/4", "3/5"], teachers = [];
-    let currentSID = null, currentUser = null, currentTID = null;
-    let autoData = { week: "", day: "", page: "", ayatFrom: "", ayatTo: "" };
+    let students = [], teachers = [], classes = ["3/1", "3/2", "3/3", "3/4", "3/5"];
+    let currentUser = null, currentSID = null, currentTID = null, editingRecIdx = null;
+    let autoData = { week: "", day: "", page: "", ayatFrom: "", ayatTo: "", currentClass: "" };
 
     const weeksArr = ["الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر","الأحد عشر","الثاني عشر","الثالث عشر","الرابع عشر","الخامس عشر"];
     document.getElementById('gWeek').innerHTML = weeksArr.map(w => `<option value="الأسبوع ${w}">الأسبوع ${w}</option>`).join('');
+    document.getElementById('tClassAssign').innerHTML = classes.map(c => `<option value="${c}">${c}</option>`).join('');
+    document.getElementById('newSClass').innerHTML = classes.map(c => `<option value="${c}">${c}</option>`).join('');
 
     function setTheme(t) { document.documentElement.setAttribute('data-theme', t); }
 
     function init() {
         db.ref('teachers').on('value', s => {
-            const data = s.val();
-            teachers = data ? Object.entries(data).map(([id, val]) => ({...val, tid: id})) : [];
-            // الحسابات الأساسية في حال مسح الداتابيز
-            if(!teachers.find(t=>t.user==='idarah')) db.ref('teachers').push({user:'idarah', pass:'idrah2026', role:'super_admin'});
-            if(!teachers.find(t=>t.user==='saad')) db.ref('teachers').push({user:'saad', pass:'saad2026', role:'teacher_lead', assignedClass: classes});
-            if(!teachers.find(t=>t.user==='ibrahim')) db.ref('teachers').push({user:'ibrahim', pass:'ibrahim2026', role:'teacher', assignedClass: ['3/1']});
+            teachers = s.val() ? Object.entries(s.val()).map(([id, val]) => ({...val, tid: id})) : [];
+            // إنشاء حساب الإدارة إذا لم يوجد
+            if(!teachers.find(t=>t.user==='idarah')) db.ref('teachers').push({user:'idarah', pass:'2026', role:'super_admin'});
         });
-        db.ref('students').on('value', snap => {
-            students = snap.val() ? Object.entries(snap.val()).map(([id, val]) => ({...val, id: id})) : [];
-            if(currentUser) setupDash();
+        db.ref('students').on('value', s => {
+            students = s.val() ? Object.entries(s.val()).map(([id, val]) => ({...val, id: id})) : [];
+            if(currentUser) refreshUI();
         });
-        const options = classes.map(c => `<option value="${c}">${c}</option>`).join('');
-        document.getElementById('tClassAssign').innerHTML = options;
-        document.getElementById('newSClass').innerHTML = options;
     }
     init();
 
@@ -175,81 +193,72 @@
         const pass = document.getElementById('entryPass').value.trim();
         const isStaff = !document.getElementById('staffSection').classList.contains('hidden');
 
-        if (isStaff) {
+        if(isStaff) {
             const t = teachers.find(x => x.user === user && x.pass === pass);
-            if(t) { currentUser = t; currentTID = t.tid; setupDash(); } else alert("بيانات خاطئة");
+            if(t) { currentUser = t; setupDash(); } else alert("خطأ في بيانات الدخول");
         } else {
             const std = students.find(x => x.code === user);
-            if (std) { currentSID = std.id; showScreen('studentPage'); renderStudentRecords(std); } else alert("الكود غير صحيح");
+            if(std) { currentSID = std.id; showScreen('studentPage'); renderStudentRecords(std); } else alert("الكود غير موجود");
         }
     }
 
     function setupDash() {
         showScreen('teacherDash');
-        document.getElementById('roleDisplay').innerText = `المستخدم الحالي: ${currentUser.user}`;
-        if (currentUser.role === 'super_admin' || currentUser.role === 'school_admin' || currentUser.user === 'saad') {
-            document.getElementById('adminBtn').classList.remove('hidden');
-        }
+        document.getElementById('roleDisplay').innerText = `أهلاً بك: ${currentUser.user} (${currentUser.role})`;
+        if(['super_admin', 'teacher_lead', 'school_admin'].includes(currentUser.role)) document.getElementById('adminBtn').classList.remove('hidden');
         
+        const myClasses = (currentUser.role === 'super_admin' || currentUser.user === 'saad') ? classes : (Array.isArray(currentUser.assignedClass) ? currentUser.assignedClass : [currentUser.assignedClass]);
         const tabs = document.getElementById('classTabs'); tabs.innerHTML = "";
-        let myClasses = (currentUser.role === 'super_admin' || currentUser.user === 'saad') ? classes : (Array.isArray(currentUser.assignedClass) ? currentUser.assignedClass : [currentUser.assignedClass]);
-
         myClasses.forEach(c => {
-            const btn = document.createElement('button'); btn.className = 'btn btn-tech'; btn.innerText = `فصل ${c}`;
-            btn.style.width = "auto";
-            btn.onclick = () => loadClass(c); tabs.appendChild(btn);
+            const b = document.createElement('button'); b.className = 'btn'; b.style.width='auto'; b.style.background='white'; b.style.color='#333';
+            b.innerText = `فصل ${c}`; b.onclick = () => { autoData.currentClass = c; loadClass(c); };
+            tabs.appendChild(b);
         });
     }
 
     function loadClass(cls) {
-        const g = document.getElementById('namesGrid'); g.innerHTML = "";
+        const grid = document.getElementById('namesGrid'); grid.innerHTML = "";
         const curW = autoData.week || document.getElementById('gWeek').value;
         const curD = autoData.day || document.getElementById('gDay').value;
 
-        students.filter(x => x.class === cls).forEach(s => {
-            const isDone = (s.records || []).some(r => r.week === curW && r.day === curD);
+        students.filter(s => s.class === cls).forEach(s => {
+            const rec = (s.records || []).find(r => r.week === curW && r.day === curD);
             const d = document.createElement('div'); d.className = 'grid-item';
-            d.innerHTML = `${s.name} ${isDone ? '<span class="done-mark">تم الرصد ✅</span>' : ''}`;
-            d.onclick = () => openGradeScreen(s);
-            g.appendChild(d);
+            let statusTag = "";
+            if(rec) {
+                const style = rec.status === 'حافظ' ? 'status-green' : 'status-red';
+                statusTag = `<span class="done-status ${style}">تم الرصد: ${rec.status}</span>`;
+            }
+            d.innerHTML = `<b>${s.name}</b>${statusTag}`;
+            d.onclick = () => openGrade(s);
+            grid.appendChild(d);
         });
     }
 
-    function openGradeScreen(s) {
-        currentSID = s.id;
-        document.getElementById('targetName').innerText = s.name;
+    function openGrade(s) {
+        currentSID = s.id; editingRecIdx = null;
+        document.getElementById('targetName').innerText = "رصد للطالب: " + s.name;
+        document.getElementById('saveBtn').innerText = "رصد وحفظ";
         
         if(autoData.week) document.getElementById('gWeek').value = autoData.week;
         if(autoData.day) document.getElementById('gDay').value = autoData.day;
         
-        // تخصيص الأستاذ إبراهيم (آيات) مقابل البقية (صفحات)
         if(currentUser.user === 'ibrahim') {
             document.getElementById('ayatSection').classList.remove('hidden');
             document.getElementById('pageSection').classList.add('hidden');
-            document.getElementById('gAyatFrom').value = autoData.ayatFrom;
-            document.getElementById('gAyatTo').value = autoData.ayatTo;
-        } else {
-            document.getElementById('ayatSection').classList.add('hidden');
-            document.getElementById('pageSection').classList.remove('hidden');
-            document.getElementById('gPage').value = autoData.page;
         }
-
-        document.getElementById('gMark').value = "";
-        document.getElementById('gStatus').value = "";
-        document.getElementById('gNote').value = "";
-
-        renderEditHistory(s);
+        
+        renderHistory(s);
         showScreen('gradeScreen');
     }
 
     function saveGrade() {
-        const s = students.find(x => x.id == currentSID);
+        const s = students.find(x => x.id === currentSID);
         const mark = document.getElementById('gMark').value;
         const status = document.getElementById('gStatus').value;
+        if(!status || !mark) return alert("أكمل البيانات");
 
-        if(!status || !mark) return alert("يرجى إكمال الدرجة والحالة");
-
-        // تعميم القيم للطلاب القادمين
+        // تعميم القيم
         autoData.week = document.getElementById('gWeek').value;
         autoData.day = document.getElementById('gDay').value;
         autoData.page = document.getElementById('gPage').value;
@@ -257,89 +266,103 @@
         autoData.ayatTo = document.getElementById('gAyatTo').value;
 
         const rec = {
-            week: autoData.week,
-            day: autoData.day,
-            page: currentUser.user === 'ibrahim' ? `من ${autoData.ayatFrom} إلى ${autoData.ayatTo}` : autoData.page,
-            mark: mark,
-            status: status,
-            note: document.getElementById('gNote').value
+            week: autoData.week, day: autoData.day,
+            page: currentUser.user === 'ibrahim' ? `آيات ${autoData.ayatFrom}-${autoData.ayatTo}` : `صفحة ${autoData.page}`,
+            mark: mark, status: status, note: document.getElementById('gNote').value,
+            teacher: currentUser.user, timestamp: new Date().toLocaleString()
         };
 
         if(!s.records) s.records = [];
-        s.records.push(rec);
-        db.ref('students/'+currentSID+'/records').set(s.records).then(() => { 
-            alert("تم الحفظ"); 
+        if(editingRecIdx !== null) s.records[editingRecIdx] = rec; else s.records.push(rec);
+
+        db.ref('students/'+currentSID+'/records').set(s.records).then(() => {
+            alert("تم الحفظ بنجاح");
             showScreen('teacherDash');
+            loadClass(autoData.currentClass);
         });
     }
 
-    function renderEditHistory(s) {
-        const canDelete = (currentUser.role === 'super_admin' || currentUser.user === 'saad');
+    function renderHistory(s) {
         document.getElementById('editHistory').innerHTML = (s.records || []).map((r, i) => `
-            <div class="history-item">
-                <b>${r.week}</b> - ${r.status} (${r.mark}/7)
-                ${canDelete ? `<button onclick="delRec(${i})" style="color:red; border:none; background:none; cursor:pointer;">[حذف السجل]</button>` : ''}
+            <div class="history-item" onclick="prepareEdit(${i})">
+                <b>${r.week} - ${r.day}</b> | الحالة: ${r.status} (${r.mark}/7)
+                <br><small>المصحح: ${r.teacher} | ${r.timestamp}</small>
             </div>`).reverse().join('');
+    }
+
+    function prepareEdit(i) {
+        const r = students.find(s=>s.id===currentSID).records[i];
+        editingRecIdx = i;
+        document.getElementById('gWeek').value = r.week;
+        document.getElementById('gDay').value = r.day;
+        document.getElementById('gMark').value = r.mark;
+        document.getElementById('gStatus').value = r.status;
+        document.getElementById('gNote').value = r.note;
+        document.getElementById('saveBtn').innerText = `تعديل (الحالة السابقة: ${r.status})`;
+        window.scrollTo(0,0);
+    }
+
+    function toggleLates() {
+        const s = students.find(x => x.id === currentSID);
+        const box = document.getElementById('latesBox'); box.classList.toggle('hidden');
+        if(s.records) {
+            const absent = s.records.filter(r => r.status === 'غائب').length;
+            const notSaved = s.records.filter(r => r.status === 'لم يسمع').length;
+            const weak = s.records.filter(r => parseInt(r.mark) < 5).length;
+            box.innerHTML = `🛑 غياب: ${absent} | ❌ لم يسمع: ${notSaved} | 📉 درجات ضعيفة: ${weak}`;
+        }
     }
 
     function showManagePage() {
         showScreen('managePage');
-        if(currentUser.role === 'super_admin') {
-            document.getElementById('idarahControls').classList.remove('hidden');
-            renderTeachersMaster();
-        } else {
-            document.getElementById('idarahControls').classList.add('hidden');
+        if(currentUser.user === 'idarah') {
+            document.getElementById('idarahOnly').classList.remove('hidden');
+            renderTeachers();
         }
-
-        renderStudentsMaster();
+        renderStudents();
     }
 
-    function renderTeachersMaster() {
-        document.getElementById('teachersListMaster').innerHTML = teachers.map(t => `
-            <div class="history-item" style="border-right-color: #3498db">
-                👤 ${t.user} (${t.role}) 
-                <button onclick="delTeacher('${t.tid}')" style="color:red; float:left">حذف</button>
-            </div>`).join('');
-    }
-
-    function renderStudentsMaster() {
-        document.getElementById('fullListMaster').innerHTML = students.map(s => `
+    function renderTeachers() {
+        document.getElementById('teachersMasterList').innerHTML = teachers.map(t => `
             <div class="history-item">
-                🎓 <b>${s.name}</b> (كود: ${s.code}) - فصل: ${s.class}
-                <button onclick="delStudent('${s.id}')" style="color:red; float:left; margin-right:5px">حذف</button>
-                <button onclick="editStudentInfo('${s.id}')" style="color:blue; float:left">تعديل</button>
+                👤 ${t.user} | رمز المرور: <b>${t.pass}</b> | رتبة: ${t.role}
+                <button onclick="delTeacher('${t.tid}')" style="color:red; float:left; border:none; background:none; cursor:pointer;">[حذف]</button>
             </div>`).join('');
     }
 
+    function renderStudents() {
+        document.getElementById('studentsMasterList').innerHTML = students.map(s => `
+            <div class="history-item">
+                🎓 ${s.name} (كود: ${s.code}) - فصل: ${s.class}
+                <button onclick="delStudent('${s.id}')" style="color:red; float:left; border:none; background:none; cursor:pointer; margin-right:10px;">[حذف]</button>
+                <button onclick="editS('${s.id}')" style="color:blue; float:left; border:none; background:none; cursor:pointer;">[تعديل]</button>
+            </div>`).join('');
+    }
+
+    function changeMyPass() {
+        const oldP = document.getElementById('oldPass').value;
+        const newP = document.getElementById('newPass').value;
+        if(oldP === currentUser.pass) {
+            db.ref('teachers/'+currentUser.tid+'/pass').set(newP).then(()=> { alert("تم تغيير الباسورد"); location.reload(); });
+        } else alert("كلمة المرور الحالية خاطئة");
+    }
+
+    // وظائف الحذف والإضافة (مختصرة)
     function addNewTeacher() {
         const user = document.getElementById('tUser').value, pass = document.getElementById('tPass').value, role = document.getElementById('tRole').value;
         const cls = Array.from(document.getElementById('tClassAssign').selectedOptions).map(o => o.value);
-        if(user && pass) {
-            db.ref('teachers').push({user, pass, assignedClass: cls, role}).then(()=> { alert("تمت الإضافة"); renderTeachersMaster(); });
-        }
+        if(user && pass) db.ref('teachers').push({user, pass, role, assignedClass: cls}).then(()=>renderTeachers());
     }
-
     function addNewStudent() {
         const name = document.getElementById('newSName').value, code = document.getElementById('newSCode').value, cls = document.getElementById('newSClass').value;
-        if(name && code) {
-            const id = currentSID || Date.now().toString();
-            db.ref('students/'+id).update({id, name, code, class: cls}).then(()=> { 
-                alert("تم التحديث"); currentSID = null; renderStudentsMaster(); 
-            });
-        }
+        if(name && code) db.ref('students/'+(currentSID || Date.now())).update({id: currentSID||Date.now().toString(), name, code, class: cls}).then(()=>{currentSID=null; renderStudents();});
     }
-
-    function delTeacher(tid) { if(confirm("حذف المعلم نهائياً؟")) db.ref('teachers/'+tid).remove(); }
-    function delStudent(id) { if(confirm("حذف الطالب وسجله؟")) db.ref('students/'+id).remove(); }
-    function delRec(i) { if(confirm("حذف هذه الدرجة؟")) { const s = students.find(x => x.id == currentSID); s.records.splice(i,1); db.ref('students/'+currentSID+'/records').set(s.records); } }
-    
-    function renderStudentRecords(s) {
-        document.getElementById('welcomeMsg').innerText = "سجل الطالب: " + s.name;
-        document.getElementById('recordsList').innerHTML = (s.records || []).map(r => `
-            <div class="history-item"><b>${r.week} - ${r.day}</b><br>الموضع: ${r.page}<br>الحالة: ${r.status} | الدرجة: ${r.mark}/7<br><small>${r.note || ''}</small></div>`).reverse().join('');
-    }
-
+    function delTeacher(id) { if(confirm("حذف؟")) db.ref('teachers/'+id).remove(); }
+    function delStudent(id) { if(confirm("حذف؟")) db.ref('students/'+id).remove(); }
+    function editS(id) { const s = students.find(x=>x.id===id); currentSID=s.id; document.getElementById('newSName').value=s.name; document.getElementById('newSCode').value=s.code; document.getElementById('newSClass').value=s.class; }
     function showScreen(id) { document.querySelectorAll('#app > div, #loginGate').forEach(d => d.classList.add('hidden')); document.getElementById('app').classList.remove('hidden'); document.getElementById(id).classList.remove('hidden'); }
+    function showSettings() { showScreen('settingsPage'); }
+    function renderStudentRecords(s) { document.getElementById('welcomeMsg').innerText = "سجل الطالب: " + s.name; document.getElementById('recordsList').innerHTML = (s.records || []).map(r => `<div class="history-item"><b>${r.week} - ${r.day}</b><br>الموضع: ${r.page}<br>الحالة: ${r.status} | الدرجة: ${r.mark}/7</div>`).reverse().join(''); }
     function filterGrid() { const q = document.getElementById('searchBox').value.toLowerCase(); document.querySelectorAll('.grid-item').forEach(i => i.style.display = i.innerText.toLowerCase().includes(q) ? 'block' : 'none'); }
 </script>
 </body>
