@@ -2,211 +2,300 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>WebFlow PRO | خدمات البرمجة</title>
-
-    <script src="https://www.paypal.com/sdk/js?client-id=AefFtX4OIBRZdwmbksuAu5vSL39NbDJicfqvDL5CxI1mvBe6XPo44ajtWgY3ipiv7Ssztj6gQegHjzOq&currency=USD&components=buttons&enable-funding=card" defer></script>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getDatabase, ref, set, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAC9BzBpw66oBDriZoi9A5zsThKLFZiNv8",
-            authDomain: "imam-warsh.firebaseapp.com",
-            databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app",
-            storageBucket: "imam-warsh.appspot.com"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        
-        // Expose to window for global access
-        window._db = db;
-        window._ref = ref;
-        window._onValue = onValue;
-        window._push = push;
-        window._set = set;
-        window._remove = remove;
-
-        // Load Services
-        onValue(ref(db, 'services'), snap => {
-            const data = snap.val();
-            window._services = data ? Object.entries(data).map(([id, v]) => ({ id, ...v })) : window._defaultServices;
-            renderServices();
-        });
-
-        window._saveOrder = async (order) => {
-            const r = push(ref(db, 'orders'));
-            await set(r, order);
-            return r.key;
-        };
-    </script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebFlow PRO | لوحة التحكم المتكاملة</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
-    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js" defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://www.paypal.com/sdk/js?client-id=AefFtX4OIBRZdwmbksuAu5vSL39NbDJicfqvDL5CxI1mvBe6XPo44ajtWgY3ipiv7Ssztj6gQegHjzOq&currency=USD"></script>
 
     <style>
-        :root {
-            --bg: #060c1a;
-            --blue: #3b82f6;
-            --cyan: #06b6d4;
-            --text: #e2e8f0;
-            --surface: rgba(255, 255, 255, 0.03);
-        }
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Tajawal', sans-serif;
-            overflow-x: hidden;
-        }
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.05); }
-        .glow-text { text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
-        .btn-grad { background: linear-gradient(135deg, var(--blue), #8b5cf6); transition: 0.3s; }
-        .btn-grad:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4); }
-        
-        /* Modals */
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+        body { background: #050a15; color: #e2e8f0; font-family: 'Tajawal', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+        .admin-card { background: linear-gradient(145deg, #0f172a, #1e293b); border: 1px border-blue-500/20; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; display: none; align-items: center; justify-content: center; overflow-y: auto; padding: 20px; }
         .overlay.open { display: flex; }
-        .modal { background: #0b1628; border: 1px solid rgba(59,130,246,0.2); border-radius: 24px; width: 100%; max-width: 500px; padding: 30px; position: relative; }
-        
-        /* Grid Background */
-        .bg-grid { position: fixed; inset: 0; background-image: linear-gradient(rgba(59,130,246,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.02) 1px, transparent 1px); background-size: 50px 50px; z-index: -1; }
     </style>
 </head>
-<body onload="AOS.init()">
+<body>
 
-    <div class="bg-grid"></div>
-
-    <nav class="fixed top-0 w-full z-50 glass p-4 border-b border-white/5">
-        <div class="container mx-auto flex justify-between items-center px-4">
-            <div class="text-xl font-black glow-text text-blue-400">WebFlow <span class="text-white">PRO</span></div>
-            <button onclick="openOverlay('adminLoginOverlay')" class="text-xs bg-white/5 px-4 py-2 rounded-lg hover:bg-white/10">⚙ الإدارة</button>
+    <nav class="glass fixed top-0 w-full z-50 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-black text-blue-500">WebFlow <span class="text-white">PRO</span></div>
+            <div class="flex gap-4">
+                <button onclick="openAdmin()" class="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full text-sm font-bold transition">لوحة التحكم ⚙️</button>
+            </div>
         </div>
     </nav>
 
-    <section class="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20">
-        <div class="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-xs mb-6 border border-blue-500/20" data-aos="fade-down">وكالة البرمجة رقم #1</div>
-        <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight" data-aos="fade-up">نصنع <span class="text-blue-500">مواقعك</span><br>المستقبلية</h1>
-        <p class="text-gray-400 max-w-xl mb-10" data-aos="fade-up" data-aos-delay="100">فريق متخصص في بناء تجارب رقمية استثنائية بأنيميشن سينمائي وأمان مطلق.</p>
-        <div class="flex gap-4" data-aos="fade-up" data-aos-delay="200">
-            <button onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})" class="btn-grad px-8 py-4 rounded-xl font-bold">استعرض الخدمات</button>
-        </div>
-    </section>
+    <header class="pt-40 pb-20 text-center px-6">
+        <h1 class="text-5xl md:text-7xl font-black mb-6" data-aos="zoom-in">حلول برمجية <span class="text-blue-500">ذكية</span></h1>
+        <p class="text-gray-400 max-w-2xl mx-auto mb-10">منصة احترافية لطلب المواقع والتطبيقات مع أنظمة دفع آمنة وسريعة.</p>
+    </header>
 
-    <section id="services" class="container mx-auto px-6 py-24">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl font-black mb-2">حلول برمجية <span class="text-blue-500">متكاملة</span></h2>
-            <div class="h-1 w-20 bg-blue-500 mx-auto rounded-full"></div>
-        </div>
-        <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section class="container mx-auto px-6 py-10">
+        <div id="services-display" class="grid grid-cols-1 md:grid-cols-3 gap-8">
             </div>
     </section>
 
-    <div class="overlay" id="buyOverlay">
-        <div class="modal">
-            <button onclick="closeOverlay('buyOverlay')" class="absolute top-4 left-4 text-gray-500">✕</button>
-            <h3 class="text-xl font-bold mb-2 text-center">إتمام الطلب</h3>
-            <p id="mSvcName" class="text-blue-400 text-center font-bold mb-6"></p>
+    <div id="adminPanel" class="overlay">
+        <div class="bg-[#0f172a] w-full max-w-6xl rounded-3xl p-8 border border-white/10 relative">
+            <button onclick="closeAdmin()" class="absolute top-6 left-6 text-2xl">✕</button>
             
-            <div class="space-y-4 mb-6">
-                <div>
-                    <label class="text-xs text-gray-500 block mb-1">رقم الواتساب</label>
-                    <input id="waInput" type="tel" placeholder="9665xxxxxxxx" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-right">
+            <h2 class="text-3xl font-black mb-8 text-blue-500">لوحة الإدارة الشاملة</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
+                <div class="glass p-6 rounded-2xl text-center">
+                    <div class="text-gray-400 text-sm mb-2">إجمالي المبيعات</div>
+                    <div id="stat-total" class="text-2xl font-bold text-green-400">0 ر.س</div>
                 </div>
-                <div>
-                    <label class="text-xs text-gray-500 block mb-1">وصف المشروع</label>
-                    <textarea id="descInput" placeholder="ما هي ميزات موقعك المطلوبة؟" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-right h-24"></textarea>
+                <div class="glass p-6 rounded-2xl text-center">
+                    <div class="text-gray-400 text-sm mb-2">عدد الطلبات</div>
+                    <div id="stat-orders" class="text-2xl font-bold">0</div>
+                </div>
+                <div class="glass p-6 rounded-2xl text-center">
+                    <div class="text-gray-400 text-sm mb-2">طلبات بانتظار التأكيد</div>
+                    <div id="stat-pending" class="text-2xl font-bold text-yellow-500">0</div>
                 </div>
             </div>
 
-            <div id="paypal-btn-container"></div>
-            <button onclick="showBankTransfer()" class="w-full mt-4 border border-white/10 py-3 rounded-xl text-sm hover:bg-white/5">🏛 تحويل بنكي</button>
+            <div class="flex gap-4 border-b border-white/10 mb-8 pb-4">
+                <button onclick="switchTab('orders-tab')" class="font-bold hover:text-blue-400">📋 الطلبات الواردة</button>
+                <button onclick="switchTab('edit-services-tab')" class="font-bold hover:text-blue-400">📦 تعديل الباقات والأسعار</button>
+            </div>
+
+            <div id="orders-tab" class="tab-content active">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right">
+                        <thead>
+                            <tr class="text-gray-500 border-b border-white/5">
+                                <th class="p-4">الطلب</th>
+                                <th class="p-4">العميل (واتساب)</th>
+                                <th class="p-4">وسيلة الدفع</th>
+                                <th class="p-4">الإيصال</th>
+                                <th class="p-4">الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-list"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="edit-services-tab" class="tab-content">
+                <button onclick="addNewService()" class="bg-green-600 px-4 py-2 rounded-lg mb-6 text-sm">+ إضافة باقة جديدة</button>
+                <div id="admin-services-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </div>
         </div>
     </div>
 
-    <div class="overlay" id="adminLoginOverlay">
-        <div class="modal max-w-sm">
-            <h3 class="text-center font-bold mb-4">دخول الإدارة</h3>
-            <input id="adminPassInput" type="password" placeholder="رمز الدخول" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl mb-4 text-center">
-            <button onclick="checkAdmin()" class="w-full btn-grad py-3 rounded-xl font-bold">دخول</button>
+    <div id="checkoutModal" class="overlay">
+        <div class="modal max-w-lg w-full bg-[#111827] p-8 rounded-3xl">
+            <h3 class="text-xl font-bold mb-4 text-center">إتمام عملية الشراء</h3>
+            <div id="checkout-details" class="mb-6 bg-white/5 p-4 rounded-2xl"></div>
+            
+            <div class="space-y-4">
+                <input id="cust-wa" type="tel" placeholder="رقم الواتساب (مثال: 9665...)" class="w-full bg-white/5 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500">
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="payMethod('paypal')" class="bg-blue-600 p-3 rounded-xl text-xs font-bold">PayPal / Card</button>
+                    <button onclick="payMethod('bank')" class="bg-gray-700 p-3 rounded-xl text-xs font-bold">تحويل بنكي</button>
+                </div>
+
+                <div id="bank-info" class="hidden bg-blue-500/10 p-4 rounded-2xl border border-blue-500/20 text-sm">
+                    <p class="mb-2 text-blue-400">بنك الراجحي</p>
+                    <p class="font-bold">سعاد مصطفي بن محمد اعبود</p>
+                    <p class="font-mono my-2 select-all">SA6330100991100459559361</p>
+                    <div class="mt-4">
+                        <label class="block text-xs text-gray-400 mb-1">ارفاق إيصال التحويل:</label>
+                        <input type="file" id="receipt-upload" accept="image/*" class="w-full text-xs">
+                    </div>
+                    <button onclick="confirmBankOrder()" class="w-full mt-4 bg-blue-600 py-3 rounded-xl font-bold">تأكيد إرسال الطلب</button>
+                </div>
+
+                <div id="paypal-button-container" class="mt-4"></div>
+            </div>
+            <button onclick="closeOverlay('checkoutModal')" class="mt-6 w-full text-gray-500 text-sm">إلغاء</button>
         </div>
     </div>
 
     <script>
-        const ADMIN_CODE = "65324677";
-        window._defaultServices = [
-            {id:'s1', icon:'🌐', title:'موقع تجاري', desc:'موقع تعريفي احترافي للشركات', price:1500},
-            {id:'s2', icon:'🛒', title:'متجر إلكتروني', desc:'متجر متكامل مع سلة شراء', price:2500},
-            {id:'s3', icon:'⚡', title:'صفحة هبوط', desc:'صفحة تسويقية سريعة جداً', price:800}
+        // البيانات الأساسية
+        let services = [
+            { id: 1, title: 'الموقع البرونزي', price: 999, desc: 'موقع صفحة واحدة احترافي', icon: '🌐' },
+            { id: 2, title: 'الموقع الذهبي', price: 2500, desc: 'موقع متكامل مع نظام إدارة', icon: '💎' }
         ];
+        let orders = [];
 
-        function renderServices() {
-            const grid = document.getElementById('services-grid');
-            const svcs = window._services || window._defaultServices;
-            grid.innerHTML = svcs.map(s => `
-                <div class="glass p-8 rounded-3xl group" data-aos="fade-up">
-                    <div class="text-4xl mb-4">${s.icon}</div>
-                    <h3 class="text-xl font-bold mb-2">${s.title}</h3>
-                    <p class="text-gray-400 text-sm mb-6">${s.desc}</p>
-                    <div class="text-2xl font-black text-blue-400 mb-6">${s.price} <span class="text-xs text-white">ر.س</span></div>
-                    <button onclick="openBuy('${s.id}')" class="w-full py-3 rounded-xl border border-blue-500/30 group-hover:bg-blue-500 transition-all font-bold">اطلب الآن</button>
+        // إدارة لوحة التحكم
+        function openAdmin() {
+            const pass = prompt("أدخل رمز الإدارة:");
+            if (pass === "65324677") {
+                document.getElementById('adminPanel').classList.add('open');
+                renderAdmin();
+            } else { alert("الرمز غير صحيح!"); }
+        }
+
+        function closeAdmin() { document.getElementById('adminPanel').classList.remove('open'); }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // رندرة الخدمات للمستخدم
+        function renderUserServices() {
+            const container = document.getElementById('services-display');
+            container.innerHTML = services.map(s => `
+                <div class="glass p-8 rounded-3xl text-center transition hover:scale-105 border border-white/5">
+                    <div class="text-5xl mb-4">${s.icon}</div>
+                    <h3 class="text-2xl font-bold mb-2">${s.title}</h3>
+                    <p class="text-gray-400 mb-6 text-sm">${s.desc}</p>
+                    <div class="text-3xl font-black text-blue-500 mb-6">${s.price} <span class="text-sm text-white">ر.س</span></div>
+                    <button onclick="openCheckout(${s.id})" class="w-full bg-blue-600 py-4 rounded-2xl font-bold hover:bg-blue-700 transition">اطلب الآن</button>
                 </div>
             `).join('');
         }
 
-        function openBuy(id) {
-            const svc = window._services.find(s => s.id === id);
-            window._selectedSvc = svc;
-            document.getElementById('mSvcName').innerText = svc.title;
-            document.getElementById('paypal-btn-container').innerHTML = '';
-            openOverlay('buyOverlay');
-            initPaypal(svc);
+        // رندرة لوحة التحكم
+        function renderAdmin() {
+            // تحديث الإحصائيات
+            const total = orders.reduce((acc, o) => acc + (o.price || 0), 0);
+            document.getElementById('stat-total').innerText = total + " ر.س";
+            document.getElementById('stat-orders').innerText = orders.length;
+            document.getElementById('stat-pending').innerText = orders.filter(o => o.status === 'بانتظار التأكيد').length;
+
+            // تحديث قائمة الخدمات للإدارة
+            const adminSvcList = document.getElementById('admin-services-list');
+            adminSvcList.innerHTML = services.map(s => `
+                <div class="glass p-4 rounded-xl flex flex-col gap-2">
+                    <input type="text" value="${s.title}" onchange="updateSvc(${s.id}, 'title', this.value)" class="bg-transparent border-b border-white/10 font-bold outline-none">
+                    <input type="number" value="${s.price}" onchange="updateSvc(${s.id}, 'price', this.value)" class="bg-transparent border-b border-white/10 text-blue-400 outline-none">
+                    <button onclick="deleteSvc(${s.id})" class="text-red-500 text-xs text-right mt-2">حذف الباقة 🗑</button>
+                </div>
+            `).join('');
+
+            // تحديث الطلبات
+            const ordersList = document.getElementById('orders-list');
+            ordersList.innerHTML = orders.map(o => `
+                <tr class="border-b border-white/5 text-sm">
+                    <td class="p-4">${o.svcTitle}</td>
+                    <td class="p-4 text-blue-400">${o.customerWA}</td>
+                    <td class="p-4">${o.method}</td>
+                    <td class="p-4">
+                        ${o.receipt ? `<button onclick="viewReceipt('${o.receipt}')" class="bg-blue-500 px-2 py-1 rounded text-[10px]">مشاهدة</button>` : 'لا يوجد'}
+                    </td>
+                    <td class="p-4 ${o.status === 'مدفوع' ? 'text-green-400' : 'text-yellow-500'}">${o.status}</td>
+                </tr>
+            `).join('');
         }
 
-        function initPaypal(svc) {
-            paypal.Buttons({
-                style: { layout: 'vertical', color: 'blue', shape: 'rect' },
-                createOrder: (data, actions) => {
-                    const wa = document.getElementById('waInput').value;
-                    if(!wa) { alert("يرجى إدخال رقم الواتساب أولاً"); return actions.reject(); }
-                    return actions.order.create({
-                        purchase_units: [{ amount: { value: (svc.price / 3.75).toFixed(2), currency_code: 'USD' } }]
-                    });
-                },
-                onApprove: (data, actions) => actions.order.capture().then(details => {
-                    const order = {
-                        id: details.id,
-                        svc: svc.title,
-                        wa: document.getElementById('waInput').value,
-                        desc: document.getElementById('descInput').value,
-                        status: 'Paid'
-                    };
-                    window._saveOrder(order);
-                    alert("تم الدفع بنجاح! سنتواصل معك قريباً.");
-                    closeOverlay('buyOverlay');
-                })
-            }).render('#paypal-btn-container');
+        // وظائف التحكم في الخدمات
+        function updateSvc(id, field, value) {
+            const svc = services.find(s => s.id === id);
+            if (field === 'price') value = parseInt(value);
+            svc[field] = value;
+            renderUserServices();
+            renderAdmin();
         }
 
-        function checkAdmin() {
-            if(document.getElementById('adminPassInput').value === ADMIN_CODE) {
-                alert("أهلاً بك يا مدير! يمكنك الآن التحكم بالFirebase.");
-                closeOverlay('adminLoginOverlay');
-            } else {
-                alert("الرمز خطأ!");
+        function addNewService() {
+            const newId = Date.now();
+            services.push({ id: newId, title: 'باقة جديدة', price: 1000, desc: 'وصف الخدمة هنا', icon: '📦' });
+            renderAdmin();
+            renderUserServices();
+        }
+
+        function deleteSvc(id) {
+            services = services.filter(s => s.id !== id);
+            renderAdmin();
+            renderUserServices();
+        }
+
+        // Checkout Logic
+        let currentSvc = null;
+        function openCheckout(id) {
+            currentSvc = services.find(s => s.id === id);
+            document.getElementById('checkout-details').innerHTML = `
+                <div class="flex justify-between font-bold">
+                    <span>${currentSvc.title}</span>
+                    <span class="text-blue-500">${currentSvc.price} ر.س</span>
+                </div>
+            `;
+            document.getElementById('checkoutModal').classList.add('open');
+        }
+
+        function payMethod(method) {
+            document.getElementById('bank-info').classList.toggle('hidden', method !== 'bank');
+            document.getElementById('paypal-button-container').innerHTML = '';
+            if (method === 'paypal') {
+                initPaypal();
             }
         }
 
-        function openOverlay(id) { document.getElementById(id).classList.add('open'); }
+        function initPaypal() {
+            paypal.Buttons({
+                createOrder: (data, actions) => {
+                    return actions.order.create({
+                        purchase_units: [{ amount: { value: (currentSvc.price / 3.75).toFixed(2) } }]
+                    });
+                },
+                onApprove: (data, actions) => actions.order.capture().then(details => {
+                    saveOrder('PayPal', 'مدفوع');
+                })
+            }).render('#paypal-button-container');
+        }
+
+        async function confirmBankOrder() {
+            const fileInput = document.getElementById('receipt-upload');
+            let receiptBase64 = null;
+            
+            if (fileInput.files[0]) {
+                receiptBase64 = await toBase64(fileInput.files[0]);
+            }
+            
+            saveOrder('تحويل بنكي', 'بانتظار التأكيد', receiptBase64);
+        }
+
+        function saveOrder(method, status, receipt = null) {
+            const wa = document.getElementById('cust-wa').value;
+            if(!wa) return alert("يرجى إدخال رقم الواتساب");
+            
+            orders.push({
+                svcTitle: currentSvc.title,
+                price: currentSvc.price,
+                customerWA: wa,
+                method: method,
+                status: status,
+                receipt: receipt,
+                date: new Date().toLocaleString()
+            });
+            
+            alert("تم إرسال طلبك بنجاح!");
+            document.getElementById('checkoutModal').classList.remove('open');
+            renderAdmin();
+        }
+
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
+        function viewReceipt(src) {
+            const win = window.open();
+            win.document.write(`<img src="${src}" style="max-width:100%">`);
+        }
+
         function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
-        
-        // Initial Render
-        renderServices();
+
+        // Initial Start
+        renderUserServices();
+        AOS.init();
     </script>
 </body>
 </html>
