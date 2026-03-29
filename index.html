@@ -1,3 +1,142 @@
-<h1>
-    الموقع مغلق حاليا
-</h1>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebFlow PRO | المنصة الاحترافية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AefFtX4OIBRZdwmbksuAu5vSL39NbDJicfqvDL5CxI1mvBe6XPo44ajtWgY3ipiv7Ssztj6gQegHjzOq&currency=USD&components=buttons,applepay,card"></script>
+    <style>
+        .admin-panel { display: none; }
+        .discount-badge { background: linear-gradient(45deg, #ef4444, #f87171); }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="bg-[#0b1120] text-white font-sans">
+
+    <nav class="p-6 flex justify-between items-center border-b border-white/10">
+        <h1 class="text-2xl font-black text-blue-500">WEBFLOW <span class="text-white">PRO</span></h1>
+        <button onclick="toggleAdmin()" class="text-xs opacity-20 hover:opacity-100">إدارة النظام</button>
+    </nav>
+
+    <main id="store-view" class="container mx-auto px-6 py-12">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold mb-4">خدمات البرمجيات المخصصة</h2>
+            <p class="text-slate-400">ادفع بآمان عبر Apple Pay، مدى، فيزا، أو PayPal</p>
+        </div>
+
+        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            </div>
+    </main>
+
+    <main id="admin-view" class="admin-panel container mx-auto px-6 py-12">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-3xl font-bold text-blue-400">لوحة التحكم المركزية 🔐</h2>
+            <button onclick="toggleAdmin()" class="bg-red-500/20 text-red-400 px-4 py-2 rounded-xl">إغلاق</button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="glass p-8 rounded-3xl">
+                <h3 class="text-xl mb-6 font-bold underline">تحديث المنتجات والأسعار</h3>
+                <div class="space-y-4">
+                    <input type="text" id="p-name" placeholder="اسم الباقة" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10">
+                    <input type="number" id="p-price" placeholder="السعر الأساسي (ريال)" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10">
+                    <div class="flex gap-4">
+                        <input type="number" id="p-discount" placeholder="قيمة التخفيض (ريال)" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10">
+                        <input type="date" id="p-expiry" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10">
+                    </div>
+                    <textarea id="p-desc" placeholder="وصف الخدمة" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10"></textarea>
+                    <button onclick="updateProduct()" class="w-full bg-blue-600 py-4 rounded-xl font-bold hover:bg-blue-500 transition">حفظ التغييرات ونشرها ✅</button>
+                </div>
+            </div>
+
+            <div class="glass p-8 rounded-3xl overflow-y-auto max-h-[500px]">
+                <h3 class="text-xl mb-6 font-bold underline">سجل الفواتير والعمليات</h3>
+                <div id="orders-log" class="space-y-4 text-sm">
+                    <p class="text-slate-500">لا توجد عمليات دفع حالية..</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // نظام المنتجات (يُخزن في الـ LocalStorage حالياً للسرعة، ويمكن ربطه بـ Firebase)
+        let products = JSON.parse(localStorage.getItem('webflow_products')) || [
+            { id: 1, name: 'باقة البروفايل', price: 299, discount: 50, expiry: '2026-12-31', desc: 'موقع تعريفي بأنميشن خرافي' },
+            { id: 2, name: 'متجر المنتجات', price: 599, discount: 0, expiry: '', desc: 'منصة بيع متكاملة مع لوحة تحكم' }
+        ];
+
+        function renderStore() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+            products.forEach(p => {
+                const finalPrice = p.price - p.discount;
+                const isDiscounted = p.discount > 0 && (new Date(p.expiry) > new Date() || !p.expiry);
+                
+                grid.innerHTML += `
+                    <div class="glass p-8 rounded-3xl relative overflow-hidden group">
+                        ${isDiscounted ? `<span class="discount-badge absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold">خصم ${p.discount} ريال</span>` : ''}
+                        <h3 class="text-2xl font-bold mb-2">${p.name}</h3>
+                        <p class="text-slate-400 text-sm mb-6">${p.desc}</p>
+                        <div class="mb-8">
+                            <span class="text-3xl font-black text-blue-400">${finalPrice} ريال</span>
+                            ${isDiscounted ? `<span class="text-slate-500 line-through ml-2 text-sm">${p.price}</span>` : ''}
+                        </div>
+                        <div id="paypal-button-${p.id}"></div>
+                    </div>
+                `;
+                setTimeout(() => initPaypal(p.id, finalPrice), 100);
+            });
+        }
+
+        function initPaypal(id, price) {
+            if (document.getElementById(`paypal-button-${id}`).children.length > 0) return;
+            paypal.Buttons({
+                style: { shape: 'pill', color: 'blue', layout: 'vertical' },
+                createOrder: (data, actions) => {
+                    return actions.order.create({ purchase_units: [{ amount: { value: (price / 3.75).toFixed(2) } }] });
+                },
+                onApprove: (data, actions) => {
+                    return actions.order.capture().then(details => {
+                        alert('تم الدفع بنجاح! شكراً لك.');
+                        logOrder(details, id);
+                    });
+                }
+            }).render(`#paypal-button-${id}`);
+        }
+
+        function updateProduct() {
+            const newP = {
+                id: Date.now(),
+                name: document.getElementById('p-name').value,
+                price: Number(document.getElementById('p-price').value),
+                discount: Number(document.getElementById('p-discount').value),
+                expiry: document.getElementById('p-expiry').value,
+                desc: document.getElementById('p-desc').value
+            };
+            products.push(newP);
+            localStorage.setItem('webflow_products', JSON.stringify(products));
+            alert('تم التحديث بنجاح!');
+            renderStore();
+        }
+
+        function toggleAdmin() {
+            const pass = prompt("أدخل كلمة المرور السرية للنظام:");
+            if(pass === "6868") {
+                document.getElementById('store-view').classList.toggle('hidden');
+                document.getElementById('admin-view').classList.toggle('admin-panel');
+            }
+        }
+
+        function logOrder(details, pId) {
+            const log = document.getElementById('orders-log');
+            const entry = `<div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">
+                💰 طلب جديد بقيمة $${details.purchase_units[0].amount.value} - رقم العملية: ${details.id}
+            </div>`;
+            log.innerHTML = entry + log.innerHTML;
+        }
+
+        renderStore();
+    </script>
+</body>
+</html>
