@@ -1,301 +1,990 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebFlow PRO | لوحة التحكم المتكاملة</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
-    <script src="https://www.paypal.com/sdk/js?client-id=AefFtX4OIBRZdwmbksuAu5vSL39NbDJicfqvDL5CxI1mvBe6XPo44ajtWgY3ipiv7Ssztj6gQegHjzOq&currency=USD"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebFlow PRO — خدمات رقمية احترافية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #020818;
+  --bg2: #040d22;
+  --card: rgba(10,20,50,0.7);
+  --blue: #0ea5e9;
+  --blue2: #38bdf8;
+  --gold: #f59e0b;
+  --gold2: #fbbf24;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --border: rgba(14,165,233,0.18);
+  --glass: rgba(14,165,233,0.06);
+  --success: #10b981;
+  --danger: #ef4444;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Cairo',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+/* BACKGROUND */
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3s) infinite alternate}
+@keyframes twinkle{0%{opacity:.1;transform:scale(1)}100%{opacity:.8;transform:scale(1.4)}}
+.nebula{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 30%, rgba(14,165,233,.07) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 70%, rgba(245,158,11,.05) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 80% at 50% 50%, rgba(4,13,34,.9) 0%, transparent 100%);
+}
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
-        body { background: #050a15; color: #e2e8f0; font-family: 'Tajawal', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
-        .admin-card { background: linear-gradient(145deg, #0f172a, #1e293b); border: 1px border-blue-500/20; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; display: none; align-items: center; justify-content: center; overflow-y: auto; padding: 20px; }
-        .overlay.open { display: flex; }
-    </style>
+/* HEADER */
+header{
+position:fixed;top:0;right:0;left:0;z-index:100;
+display:flex;align-items:center;justify-content:space-between;
+padding:1rem 2rem;
+background:rgba(2,8,24,0.85);
+backdrop-filter:blur(20px);
+border-bottom:1px solid var(–border);
+}
+.logo{
+font-size:1.4rem;font-weight:900;
+background:linear-gradient(135deg,var(–blue2),var(–gold2));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+letter-spacing:-.5px;
+}
+nav a{
+color:var(–muted);text-decoration:none;margin-right:1.5rem;
+font-size:.9rem;font-weight:600;transition:.2s;
+}
+nav a:hover{color:var(–blue2)}
+.btn-admin{
+background:rgba(14,165,233,.12);border:1px solid var(–border);
+color:var(–blue2);padding:.4rem 1rem;border-radius:8px;
+cursor:pointer;font-family:‘Cairo’,sans-serif;font-size:.85rem;font-weight:600;
+transition:.2s;
+}
+.btn-admin:hover{background:rgba(14,165,233,.22)}
+
+/* HERO */
+.hero{
+position:relative;z-index:1;
+min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+text-align:center;padding:6rem 2rem 4rem;
+}
+.hero-badge{
+display:inline-flex;align-items:center;gap:.5rem;
+background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);
+color:var(–gold2);padding:.35rem 1rem;border-radius:999px;
+font-size:.8rem;font-weight:700;margin-bottom:1.5rem;
+animation:pulseBadge 2s infinite;
+}
+@keyframes pulseBadge{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.3)}50%{box-shadow:0 0 0 8px rgba(245,158,11,0)}}
+h1.hero-title{
+font-size:clamp(2.2rem,6vw,4.5rem);font-weight:900;line-height:1.1;
+margin-bottom:1rem;
+}
+.gradient-text{
+background:linear-gradient(135deg,var(–blue2) 0%,#a78bfa 50%,var(–gold2) 100%);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-sub{color:var(–muted);font-size:1.1rem;max-width:600px;margin:0 auto 2.5rem;line-height:1.8}
+
+/* GUARANTEE BANNER */
+.guarantee{
+position:relative;z-index:1;
+margin:0 auto 4rem;max-width:900px;padding:0 1.5rem;
+}
+.guarantee-inner{
+background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(251,191,36,.04));
+border:1px solid rgba(245,158,11,.35);
+border-radius:16px;padding:1.5rem 2rem;
+display:flex;align-items:center;gap:1.5rem;
+box-shadow:0 0 40px rgba(245,158,11,.1);
+animation:glowGold 3s infinite alternate;
+}
+@keyframes glowGold{0%{box-shadow:0 0 20px rgba(245,158,11,.1)}100%{box-shadow:0 0 50px rgba(245,158,11,.22)}}
+.guarantee-icon{font-size:2.5rem;flex-shrink:0}
+.guarantee-text strong{color:var(–gold2);font-size:1rem}
+.guarantee-text p{color:var(–text);font-size:.9rem;line-height:1.7;margin-top:.3rem}
+
+/* SERVICES SECTION */
+.section{position:relative;z-index:1;padding:4rem 2rem;max-width:1200px;margin:0 auto}
+.section-title{text-align:center;margin-bottom:3rem}
+.section-title h2{font-size:2rem;font-weight:900;margin-bottom:.5rem}
+.section-title p{color:var(–muted);font-size:.95rem}
+.divider{width:60px;height:3px;background:linear-gradient(90deg,var(–blue),var(–gold));border-radius:2px;margin:.8rem auto 0}
+
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem}
+.service-card{
+background:var(–card);border:1px solid var(–border);border-radius:16px;
+padding:1.8rem;position:relative;overflow:hidden;
+transition:transform .3s,box-shadow .3s,border-color .3s;
+cursor:default;
+}
+.service-card::before{
+content:’’;position:absolute;inset:0;
+background:radial-gradient(circle at 70% 20%,rgba(14,165,233,.07),transparent 60%);
+opacity:0;transition:.3s;
+}
+.service-card:hover{
+transform:translateY(-6px);
+box-shadow:0 20px 60px rgba(14,165,233,.15),0 0 0 1px rgba(14,165,233,.3);
+border-color:rgba(14,165,233,.4);
+}
+.service-card:hover::before{opacity:1}
+.card-icon{font-size:2.2rem;margin-bottom:1rem}
+.card-title{font-size:1.1rem;font-weight:800;margin-bottom:.5rem}
+.card-desc{color:var(–muted);font-size:.88rem;line-height:1.7;margin-bottom:1.2rem}
+.card-features{list-style:none;margin-bottom:1.5rem}
+.card-features li{color:var(–text);font-size:.83rem;padding:.25rem 0;display:flex;align-items:center;gap:.5rem}
+.card-features li::before{content:‘✓’;color:var(–blue2);font-weight:900;font-size:.75rem}
+.card-price{
+display:flex;align-items:baseline;gap:.3rem;margin-bottom:1.2rem;
+}
+.price-val{font-size:2rem;font-weight:900;color:var(–blue2)}
+.price-cur{font-size:.9rem;color:var(–muted)}
+.price-old{font-size:.85rem;color:var(–muted);text-decoration:line-through}
+.btn-buy{
+width:100%;padding:.7rem;border-radius:10px;border:none;
+background:linear-gradient(135deg,var(–blue),#0284c7);
+color:#fff;font-family:‘Cairo’,sans-serif;font-size:.95rem;font-weight:700;
+cursor:pointer;transition:.2s;letter-spacing:.3px;
+}
+.btn-buy:hover{background:linear-gradient(135deg,var(–blue2),var(–blue));transform:scale(1.02)}
+.badge-popular{
+position:absolute;top:1rem;left:1rem;
+background:linear-gradient(135deg,var(–gold),var(–gold2));
+color:#000;font-size:.7rem;font-weight:800;
+padding:.25rem .6rem;border-radius:999px;
+}
+
+/* MODAL */
+.modal-overlay{
+display:none;position:fixed;inset:0;z-index:1000;
+background:rgba(2,8,24,.9);backdrop-filter:blur(8px);
+align-items:center;justify-content:center;padding:1rem;
+}
+.modal-overlay.show{display:flex}
+.modal{
+background:linear-gradient(135deg,rgba(4,13,34,.98),rgba(2,8,24,.99));
+border:1px solid var(–border);border-radius:20px;
+width:100%;max-width:540px;max-height:90vh;overflow-y:auto;
+padding:2rem;position:relative;
+}
+.modal-close{
+position:absolute;top:1rem;left:1rem;
+background:rgba(255,255,255,.05);border:none;color:var(–text);
+width:32px;height:32px;border-radius:8px;cursor:pointer;
+font-size:1.1rem;display:flex;align-items:center;justify-content:center;
+}
+.modal-title{font-size:1.2rem;font-weight:800;margin-bottom:.3rem;text-align:center}
+.modal-sub{color:var(–muted);font-size:.85rem;text-align:center;margin-bottom:1.5rem}
+.summary-box{
+background:rgba(14,165,233,.06);border:1px solid var(–border);
+border-radius:12px;padding:1rem;margin-bottom:1.5rem;
+}
+.summary-row{display:flex;justify-content:space-between;font-size:.88rem;padding:.2rem 0}
+.summary-row span:last-child{font-weight:700;color:var(–blue2)}
+.section-label{font-size:.78rem;font-weight:700;color:var(–muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:.6rem}
+.payment-methods{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.2rem}
+.pm-btn{
+background:rgba(255,255,255,.03);border:1px solid var(–border);
+border-radius:10px;padding:.7rem .5rem;cursor:pointer;transition:.2s;
+display:flex;flex-direction:column;align-items:center;gap:.3rem;
+font-family:‘Cairo’,sans-serif;font-size:.78rem;color:var(–text);
+}
+.pm-btn:hover,.pm-btn.active{border-color:var(–blue2);background:rgba(14,165,233,.1);color:var(–blue2)}
+.pm-icon{font-size:1.4rem}
+.pm-form{display:none;margin-top:1rem}
+.pm-form.show{display:block}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:.82rem;color:var(–muted);margin-bottom:.4rem;font-weight:600}
+.form-group input,.form-group select,.form-group textarea{
+width:100%;background:rgba(255,255,255,.04);border:1px solid var(–border);
+border-radius:9px;padding:.65rem .9rem;color:var(–text);
+font-family:‘Cairo’,sans-serif;font-size:.88rem;outline:none;transition:.2s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(–blue2)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.upload-area{
+border:2px dashed var(–border);border-radius:10px;padding:1.2rem;
+text-align:center;cursor:pointer;transition:.2s;
+}
+.upload-area:hover{border-color:var(–blue2)}
+.upload-area input{display:none}
+.bank-info{
+background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);
+border-radius:10px;padding:1rem;margin-bottom:1rem;font-size:.82rem;
+}
+.bank-row{display:flex;justify-content:space-between;padding:.2rem 0;color:var(–muted)}
+.bank-row span:last-child{color:var(–gold2);font-weight:700;direction:ltr;text-align:left}
+.btn-confirm{
+width:100%;padding:.8rem;border:none;border-radius:12px;
+background:linear-gradient(135deg,var(–blue),#0284c7);
+color:#fff;font-family:‘Cairo’,sans-serif;font-size:1rem;font-weight:700;
+cursor:pointer;transition:.2s;margin-top:.5rem;
+}
+.btn-confirm:hover{filter:brightness(1.1);transform:scale(1.01)}
+.paypal-container{text-align:center;padding:1rem 0}
+#paypal-button-container{margin-top:.5rem}
+
+/* SUCCESS */
+.success-modal{
+text-align:center;padding:1rem 0;
+}
+.success-icon{font-size:4rem;margin-bottom:1rem;animation:popIn .5s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
+.order-id{
+background:rgba(14,165,233,.1);border:1px solid var(–border);
+border-radius:10px;padding:.8rem 1.2rem;
+font-size:1.3rem;font-weight:900;color:var(–blue2);
+letter-spacing:2px;margin:1rem 0;display:inline-block;
+}
+.btn-whatsapp{
+display:inline-flex;align-items:center;gap:.5rem;
+background:#25D366;border:none;color:#fff;
+padding:.7rem 1.5rem;border-radius:12px;
+font-family:‘Cairo’,sans-serif;font-size:.95rem;font-weight:700;
+cursor:pointer;margin-top:.5rem;text-decoration:none;
+}
+
+/* ADMIN */
+#admin-overlay{
+display:none;position:fixed;inset:0;z-index:2000;
+background:rgba(2,8,24,.97);backdrop-filter:blur(10px);
+flex-direction:column;
+}
+#admin-overlay.show{display:flex}
+.admin-header{
+display:flex;align-items:center;justify-content:space-between;
+padding:1rem 2rem;border-bottom:1px solid var(–border);
+background:rgba(4,13,34,.8);
+}
+.admin-title{font-size:1.1rem;font-weight:800;color:var(–blue2)}
+.btn-close-admin{
+background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);
+color:#ef4444;padding:.4rem .9rem;border-radius:8px;cursor:pointer;
+font-family:‘Cairo’,sans-serif;font-size:.85rem;font-weight:700;
+}
+.admin-body{flex:1;overflow-y:auto;padding:2rem;max-width:1200px;margin:0 auto;width:100%}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{
+background:var(–card);border:1px solid var(–border);border-radius:12px;padding:1.2rem;
+}
+.stat-label{font-size:.78rem;color:var(–muted);font-weight:600;margin-bottom:.3rem}
+.stat-value{font-size:1.8rem;font-weight:900;color:var(–blue2)}
+.admin-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab-btn{
+background:rgba(255,255,255,.03);border:1px solid var(–border);
+color:var(–muted);padding:.45rem 1rem;border-radius:8px;cursor:pointer;
+font-family:‘Cairo’,sans-serif;font-size:.85rem;font-weight:600;transition:.2s;
+}
+.tab-btn.active{background:rgba(14,165,233,.15);border-color:var(–blue2);color:var(–blue2)}
+.tab-content{display:none}
+.tab-content.show{display:block}
+.admin-table{width:100%;border-collapse:collapse;font-size:.83rem}
+.admin-table th{
+background:rgba(14,165,233,.08);color:var(–blue2);font-weight:700;
+padding:.7rem .9rem;text-align:right;border-bottom:1px solid var(–border);
+}
+.admin-table td{padding:.7rem .9rem;border-bottom:1px solid rgba(255,255,255,.04);color:var(–text)}
+.admin-table tr:hover td{background:rgba(14,165,233,.03)}
+.status-badge{
+display:inline-block;padding:.2rem .6rem;border-radius:999px;font-size:.72rem;font-weight:700;
+}
+.status-pending{background:rgba(245,158,11,.15);color:var(–gold2)}
+.status-done{background:rgba(16,185,129,.15);color:var(–success)}
+.btn-small{
+background:rgba(14,165,233,.1);border:1px solid var(–border);
+color:var(–blue2);padding:.25rem .6rem;border-radius:6px;cursor:pointer;
+font-family:‘Cairo’,sans-serif;font-size:.75rem;font-weight:600;
+}
+.btn-danger-small{
+background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);
+color:#ef4444;padding:.25rem .6rem;border-radius:6px;cursor:pointer;
+font-family:‘Cairo’,sans-serif;font-size:.75rem;font-weight:600;
+}
+.edit-form{
+background:var(–card);border:1px solid var(–border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;
+}
+.edit-form h3{font-size:.95rem;font-weight:800;margin-bottom:1rem;color:var(–blue2)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem}
+.btn-add{
+background:linear-gradient(135deg,var(–blue),#0284c7);border:none;
+color:#fff;padding:.6rem 1.4rem;border-radius:9px;cursor:pointer;
+font-family:‘Cairo’,sans-serif;font-size:.88rem;font-weight:700;transition:.2s;
+}
+.service-admin-card{
+background:rgba(255,255,255,.02);border:1px solid var(–border);
+border-radius:10px;padding:1rem;display:flex;align-items:center;justify-content:space-between;
+margin-bottom:.6rem;flex-wrap:wrap;gap:.5rem;
+}
+.sac-info{flex:1}
+.sac-title{font-weight:700;font-size:.9rem}
+.sac-price{color:var(–blue2);font-size:.85rem;margin-top:.2rem}
+.sac-actions{display:flex;gap:.4rem}
+
+/* PIN */
+.pin-overlay{
+position:fixed;inset:0;z-index:3000;
+background:rgba(2,8,24,.97);backdrop-filter:blur(10px);
+display:flex;align-items:center;justify-content:center;
+}
+.pin-box{
+background:var(–card);border:1px solid var(–border);border-radius:20px;
+padding:2.5rem;text-align:center;max-width:360px;width:100%;
+}
+.pin-icon{font-size:3rem;margin-bottom:1rem}
+.pin-title{font-size:1.2rem;font-weight:800;margin-bottom:.4rem}
+.pin-sub{color:var(–muted);font-size:.85rem;margin-bottom:1.5rem}
+.pin-input{
+width:100%;background:rgba(255,255,255,.05);border:1px solid var(–border);
+border-radius:10px;padding:.8rem;color:var(–text);text-align:center;
+font-family:‘Cairo’,sans-serif;font-size:1.2rem;letter-spacing:.3rem;
+outline:none;margin-bottom:1rem;
+}
+.pin-input:focus{border-color:var(–blue2)}
+.pin-error{color:var(–danger);font-size:.82rem;margin-top:.3rem;display:none}
+
+/* WHATSAPP FLOAT */
+.wa-float{
+position:fixed;bottom:2rem;left:2rem;z-index:500;
+background:#25D366;border-radius:50%;width:56px;height:56px;
+display:flex;align-items:center;justify-content:center;
+box-shadow:0 8px 30px rgba(37,211,102,.4);
+cursor:pointer;text-decoration:none;font-size:1.5rem;
+animation:waPulse 2s infinite;
+}
+@keyframes waPulse{0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,.5)}50%{box-shadow:0 0 0 12px rgba(37,211,102,0)}}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+.payment-methods{grid-template-columns:1fr 1fr}
+.grid-2,.grid-3{grid-template-columns:1fr}
+nav{display:none}
+.guarantee-inner{flex-direction:column;text-align:center}
+}
+</style>
+
 </head>
 <body>
 
-    <nav class="glass fixed top-0 w-full z-50 p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-black text-blue-500">WebFlow <span class="text-white">PRO</span></div>
-            <div class="flex gap-4">
-                <button onclick="openAdmin()" class="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full text-sm font-bold transition">لوحة التحكم ⚙️</button>
-            </div>
-        </div>
-    </nav>
+<!-- Background -->
 
-    <header class="pt-40 pb-20 text-center px-6">
-        <h1 class="text-5xl md:text-7xl font-black mb-6" data-aos="zoom-in">حلول برمجية <span class="text-blue-500">ذكية</span></h1>
-        <p class="text-gray-400 max-w-2xl mx-auto mb-10">منصة احترافية لطلب المواقع والتطبيقات مع أنظمة دفع آمنة وسريعة.</p>
-    </header>
+<div class="stars" id="stars"></div>
+<div class="nebula"></div>
 
-    <section class="container mx-auto px-6 py-10">
-        <div id="services-display" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            </div>
-    </section>
+<!-- Header -->
 
-    <div id="adminPanel" class="overlay">
-        <div class="bg-[#0f172a] w-full max-w-6xl rounded-3xl p-8 border border-white/10 relative">
-            <button onclick="closeAdmin()" class="absolute top-6 left-6 text-2xl">✕</button>
-            
-            <h2 class="text-3xl font-black mb-8 text-blue-500">لوحة الإدارة الشاملة</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
-                <div class="glass p-6 rounded-2xl text-center">
-                    <div class="text-gray-400 text-sm mb-2">إجمالي المبيعات</div>
-                    <div id="stat-total" class="text-2xl font-bold text-green-400">0 ر.س</div>
-                </div>
-                <div class="glass p-6 rounded-2xl text-center">
-                    <div class="text-gray-400 text-sm mb-2">عدد الطلبات</div>
-                    <div id="stat-orders" class="text-2xl font-bold">0</div>
-                </div>
-                <div class="glass p-6 rounded-2xl text-center">
-                    <div class="text-gray-400 text-sm mb-2">طلبات بانتظار التأكيد</div>
-                    <div id="stat-pending" class="text-2xl font-bold text-yellow-500">0</div>
-                </div>
-            </div>
+<header>
+  <div class="logo">⚡ WebFlow PRO</div>
+  <nav>
+    <a href="#services">الخدمات</a>
+    <a href="#payment">الدفع</a>
+    <a href="#contact">تواصل</a>
+  </nav>
+  <button class="btn-admin" onclick="openAdmin()">🔐 لوحة التحكم</button>
+</header>
 
-            <div class="flex gap-4 border-b border-white/10 mb-8 pb-4">
-                <button onclick="switchTab('orders-tab')" class="font-bold hover:text-blue-400">📋 الطلبات الواردة</button>
-                <button onclick="switchTab('edit-services-tab')" class="font-bold hover:text-blue-400">📦 تعديل الباقات والأسعار</button>
-            </div>
+<!-- Hero -->
 
-            <div id="orders-tab" class="tab-content active">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-right">
-                        <thead>
-                            <tr class="text-gray-500 border-b border-white/5">
-                                <th class="p-4">الطلب</th>
-                                <th class="p-4">العميل (واتساب)</th>
-                                <th class="p-4">وسيلة الدفع</th>
-                                <th class="p-4">الإيصال</th>
-                                <th class="p-4">الحالة</th>
-                            </tr>
-                        </thead>
-                        <tbody id="orders-list"></tbody>
-                    </table>
-                </div>
-            </div>
+<section class="hero">
+  <div class="hero-badge">⚡ خدمات رقمية احترافية · متاح 24/7</div>
+  <h1 class="hero-title">
+    حلول رقمية<br>
+    <span class="gradient-text">تصنع الفارق</span>
+  </h1>
+  <p class="hero-sub">نقدم خدمات رقمية عالية الجودة بضمان كامل وتسليم في الوقت المحدد — احترافية بلا حدود</p>
+  <a href="#services" style="text-decoration:none">
+    <button class="btn-buy" style="width:auto;padding:.8rem 2.5rem;font-size:1rem">استعرض الخدمات ↓</button>
+  </a>
+</section>
 
-            <div id="edit-services-tab" class="tab-content">
-                <button onclick="addNewService()" class="bg-green-600 px-4 py-2 rounded-lg mb-6 text-sm">+ إضافة باقة جديدة</button>
-                <div id="admin-services-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-            </div>
-        </div>
+<!-- Guarantee Banner -->
+
+<div class="guarantee" id="payment">
+  <div class="guarantee-inner">
+    <div class="guarantee-icon">🥇</div>
+    <div class="guarantee-text">
+      <strong>الضمان الذهبي — حمايتك مضمونة 100%</strong>
+      <p>في حال عدم تسليم طلبك في الوقت المتفق عليه، يتم تسليم الطلب مجاناً بالكامل + تعويض مالي فوري بقيمة <strong style="color:var(--gold2)">5,000 ريال سعودي</strong> — التزامنا تجاهك لا يتزعزع.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Services -->
+
+<section class="section" id="services">
+  <div class="section-title">
+    <h2>🚀 باقاتنا وخدماتنا</h2>
+    <p>اختر الباقة المناسبة لاحتياجاتك</p>
+    <div class="divider"></div>
+  </div>
+  <div class="services-grid" id="servicesGrid"></div>
+</section>
+
+<!-- Footer -->
+
+<footer style="text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.83rem;position:relative;z-index:1;border-top:1px solid var(--border)">
+  <p style="margin-bottom:.5rem;font-weight:700;color:var(--text)">⚡ WebFlow PRO</p>
+  <p>جميع الحقوق محفوظة © 2026 | ضمان الجودة والتسليم في الوقت المحدد</p>
+</footer>
+
+<!-- WhatsApp Float -->
+
+<a href="https://wa.me/966599804296" class="wa-float" target="_blank">💬</a>
+
+<!-- Purchase Modal -->
+
+<div class="modal-overlay" id="purchaseModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('purchaseModal')">✕</button>
+    <div class="modal-title">🛒 إتمام الطلب</div>
+    <div class="modal-sub">اختر طريقة الدفع المناسبة لك</div>
+
+```
+<div class="summary-box" id="orderSummary">
+  <div class="summary-row"><span>الخدمة</span><span id="sumService">—</span></div>
+  <div class="summary-row"><span>المبلغ</span><span id="sumPrice">—</span></div>
+</div>
+
+<div class="section-label">طريقة الدفع</div>
+<div class="payment-methods">
+  <button class="pm-btn" onclick="selectPM('card')"><span class="pm-icon">💳</span>بطاقة ائتمانية</button>
+  <button class="pm-btn" onclick="selectPM('mada')"><span class="pm-icon">🏦</span>مدى</button>
+  <button class="pm-btn" onclick="selectPM('apple')"><span class="pm-icon"></span>Apple Pay</button>
+  <button class="pm-btn" onclick="selectPM('paypal')"><span class="pm-icon">🅿️</span>PayPal</button>
+  <button class="pm-btn" onclick="selectPM('bank')" style="grid-column:span 2"><span class="pm-icon">🏛️</span>تحويل بنكي</button>
+</div>
+
+<!-- Card / Mada Form -->
+<div class="pm-form" id="form-card">
+  <div class="form-group">
+    <label>رقم البطاقة</label>
+    <input type="text" placeholder="1234 5678 9012 3456" maxlength="19" id="cardNum" oninput="formatCard(this)">
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label>تاريخ الانتهاء</label>
+      <input type="text" placeholder="MM/YY" maxlength="5" id="cardExp">
+    </div>
+    <div class="form-group">
+      <label>CVV</label>
+      <input type="text" placeholder="123" maxlength="4" id="cardCvv">
+    </div>
+  </div>
+  <div class="form-group">
+    <label>اسم حامل البطاقة</label>
+    <input type="text" placeholder="الاسم كما يظهر على البطاقة" id="cardName">
+  </div>
+  <div class="form-group">
+    <label>رقم واتساب للتواصل</label>
+    <input type="text" placeholder="05XXXXXXXX" id="cardWA">
+  </div>
+  <button class="btn-confirm" onclick="confirmOrder('card')">✅ تأكيد الدفع</button>
+</div>
+
+<!-- Mada Form -->
+<div class="pm-form" id="form-mada">
+  <div class="form-group">
+    <label>رقم بطاقة مدى</label>
+    <input type="text" placeholder="4149 XXXX XXXX XXXX" maxlength="19" id="madaNum" oninput="formatCard(this)">
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>تاريخ الانتهاء</label><input type="text" placeholder="MM/YY" maxlength="5" id="madaExp"></div>
+    <div class="form-group"><label>CVV</label><input type="text" placeholder="123" maxlength="4" id="madaCvv"></div>
+  </div>
+  <div class="form-group"><label>رقم واتساب</label><input type="text" placeholder="05XXXXXXXX" id="madaWA"></div>
+  <button class="btn-confirm" onclick="confirmOrder('mada')">✅ الدفع بمدى</button>
+</div>
+
+<!-- Apple Pay -->
+<div class="pm-form" id="form-apple">
+  <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:2rem;text-align:center;margin-bottom:1rem;">
+    <div style="font-size:3rem;margin-bottom:.8rem"></div>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">سيتم فتح نافذة Apple Pay لإتمام الدفع بأمان</p>
+    <div class="form-group" style="text-align:right"><label>رقم واتساب</label><input type="text" placeholder="05XXXXXXXX" id="appleWA"></div>
+  </div>
+  <button class="btn-confirm" style="background:linear-gradient(135deg,#000,#222)" onclick="confirmOrder('apple')"> ادفع الآن</button>
+</div>
+
+<!-- PayPal -->
+<div class="pm-form" id="form-paypal">
+  <div class="form-group"><label>رقم واتساب</label><input type="text" placeholder="05XXXXXXXX" id="paypalWA"></div>
+  <div class="paypal-container">
+    <p style="color:var(--muted);font-size:.82rem;margin-bottom:.8rem">الدفع بالدولار الأمريكي (USD) عبر PayPal</p>
+    <div id="paypal-button-container"></div>
+  </div>
+</div>
+
+<!-- Bank Transfer -->
+<div class="pm-form" id="form-bank">
+  <div class="bank-info">
+    <div style="font-weight:700;color:var(--gold2);margin-bottom:.5rem">📋 بيانات التحويل البنكي</div>
+    <div class="bank-row"><span>اسم المستفيد</span><span>سعاد مصطفي بن محمد اعبود</span></div>
+    <div class="bank-row"><span>رقم الآيبان</span><span>SA6330100991100459559361</span></div>
+    <div class="bank-row"><span>البنك</span><span>الراجحي</span></div>
+  </div>
+  <div class="form-group"><label>رقم واتساب للتواصل</label><input type="text" placeholder="05XXXXXXXX" id="bankWA"></div>
+  <div class="form-group">
+    <label>رفع صورة الإيصال *</label>
+    <div class="upload-area" onclick="document.getElementById('receiptFile').click()">
+      <input type="file" id="receiptFile" accept="image/*" onchange="handleReceipt(this)">
+      <div id="uploadText">📎 اضغط لرفع صورة الإيصال</div>
+    </div>
+  </div>
+  <button class="btn-confirm" onclick="confirmOrder('bank')">✅ تأكيد التحويل</button>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- Success Modal -->
+
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="success-modal">
+      <div class="success-icon">🎉</div>
+      <h2 style="font-size:1.3rem;font-weight:900;margin-bottom:.5rem">تم تأكيد طلبك!</h2>
+      <p style="color:var(--muted);font-size:.88rem;margin-bottom:1rem">رقم طلبك الفريد:</p>
+      <div class="order-id" id="orderIdDisplay"></div>
+      <p style="color:var(--text);font-size:.88rem;margin:1rem 0;line-height:1.7">
+        تواصل معنا عبر واتساب برقم طلبك لتأكيد البدء في الخدمة
+      </p>
+      <a id="waLink" href="#" class="btn-whatsapp" target="_blank">💬 تواصل عبر واتساب</a>
+      <br><br>
+      <button onclick="closeModal('successModal')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-family:'Cairo',sans-serif">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- PIN Overlay -->
+
+<div class="pin-overlay" id="pinOverlay" style="display:none">
+  <div class="pin-box">
+    <div class="pin-icon">🔐</div>
+    <div class="pin-title">لوحة التحكم</div>
+    <div class="pin-sub">أدخل رمز PIN للدخول</div>
+    <input type="password" class="pin-input" id="pinInput" placeholder="••••••••" maxlength="8" onkeydown="if(event.key==='Enter')checkPin()">
+    <button class="btn-confirm" onclick="checkPin()">دخول</button>
+    <div class="pin-error" id="pinError">❌ رمز PIN غير صحيح</div>
+    <button onclick="document.getElementById('pinOverlay').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-family:'Cairo',sans-serif;margin-top:.8rem;font-size:.82rem">إلغاء</button>
+  </div>
+</div>
+
+<!-- Admin Dashboard -->
+
+<div id="admin-overlay">
+  <div class="admin-header">
+    <div class="admin-title">🛠️ لوحة التحكم — WebFlow PRO</div>
+    <button class="btn-close-admin" onclick="closeAdmin()">✕ خروج</button>
+  </div>
+  <div class="admin-body">
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">إجمالي المبيعات</div><div class="stat-value" id="statSales">0 ر.س</div></div>
+      <div class="stat-card"><div class="stat-label">عدد الطلبات</div><div class="stat-value" id="statOrders">0</div></div>
+      <div class="stat-card"><div class="stat-label">طلبات معلقة</div><div class="stat-value" id="statPending" style="color:var(--gold2)">0</div></div>
+      <div class="stat-card"><div class="stat-label">طلبات مكتملة</div><div class="stat-value" id="statDone" style="color:var(--success)">0</div></div>
     </div>
 
-    <div id="checkoutModal" class="overlay">
-        <div class="modal max-w-lg w-full bg-[#111827] p-8 rounded-3xl">
-            <h3 class="text-xl font-bold mb-4 text-center">إتمام عملية الشراء</h3>
-            <div id="checkout-details" class="mb-6 bg-white/5 p-4 rounded-2xl"></div>
-            
-            <div class="space-y-4">
-                <input id="cust-wa" type="tel" placeholder="رقم الواتساب (مثال: 9665...)" class="w-full bg-white/5 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500">
-                
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="payMethod('paypal')" class="bg-blue-600 p-3 rounded-xl text-xs font-bold">PayPal / Card</button>
-                    <button onclick="payMethod('bank')" class="bg-gray-700 p-3 rounded-xl text-xs font-bold">تحويل بنكي</button>
-                </div>
+```
+<!-- Tabs -->
+<div class="admin-tabs">
+  <button class="tab-btn active" onclick="switchTab('orders')">📋 الطلبات</button>
+  <button class="tab-btn" onclick="switchTab('services')">🚀 الخدمات</button>
+  <button class="tab-btn" onclick="switchTab('add')">➕ إضافة خدمة</button>
+  <button class="tab-btn" onclick="switchTab('prices')">💰 تعديل الأسعار</button>
+</div>
 
-                <div id="bank-info" class="hidden bg-blue-500/10 p-4 rounded-2xl border border-blue-500/20 text-sm">
-                    <p class="mb-2 text-blue-400">بنك الراجحي</p>
-                    <p class="font-bold">سعاد مصطفي بن محمد اعبود</p>
-                    <p class="font-mono my-2 select-all">SA6330100991100459559361</p>
-                    <div class="mt-4">
-                        <label class="block text-xs text-gray-400 mb-1">ارفاق إيصال التحويل:</label>
-                        <input type="file" id="receipt-upload" accept="image/*" class="w-full text-xs">
-                    </div>
-                    <button onclick="confirmBankOrder()" class="w-full mt-4 bg-blue-600 py-3 rounded-xl font-bold">تأكيد إرسال الطلب</button>
-                </div>
+<!-- Orders Tab -->
+<div class="tab-content show" id="tab-orders">
+  <div style="overflow-x:auto">
+    <table class="admin-table">
+      <thead><tr>
+        <th>رقم الطلب</th><th>الخدمة</th><th>المبلغ</th>
+        <th>واتساب</th><th>طريقة الدفع</th><th>الحالة</th><th>إجراء</th>
+      </tr></thead>
+      <tbody id="ordersTable"></tbody>
+    </table>
+  </div>
+</div>
 
-                <div id="paypal-button-container" class="mt-4"></div>
-            </div>
-            <button onclick="closeOverlay('checkoutModal')" class="mt-6 w-full text-gray-500 text-sm">إلغاء</button>
-        </div>
+<!-- Services Tab -->
+<div class="tab-content" id="tab-services">
+  <div id="adminServicesList"></div>
+</div>
+
+<!-- Add Service Tab -->
+<div class="tab-content" id="tab-add">
+  <div class="edit-form">
+    <h3>➕ إضافة خدمة جديدة</h3>
+    <div class="grid-2">
+      <div class="form-group"><label>أيقونة (إيموجي)</label><input type="text" id="newIcon" placeholder="🚀"></div>
+      <div class="form-group"><label>اسم الخدمة</label><input type="text" id="newTitle" placeholder="اسم الباقة"></div>
     </div>
+    <div class="form-group"><label>الوصف</label><textarea id="newDesc" rows="2" placeholder="وصف مختصر للخدمة"></textarea></div>
+    <div class="grid-3">
+      <div class="form-group"><label>السعر (ر.س)</label><input type="number" id="newPrice" placeholder="499"></div>
+      <div class="form-group"><label>السعر القديم (اختياري)</label><input type="number" id="newOldPrice" placeholder="799"></div>
+      <div class="form-group"><label>الوسم (مميز/الأكثر طلباً)</label><input type="text" id="newBadge" placeholder="الأكثر طلباً"></div>
+    </div>
+    <div class="form-group"><label>المميزات (سطر لكل ميزة)</label><textarea id="newFeatures" rows="4" placeholder="تصميم احترافي&#10;تسليم خلال 24 ساعة&#10;مراجعات غير محدودة"></textarea></div>
+    <button class="btn-add" onclick="addService()">➕ إضافة الخدمة</button>
+  </div>
+</div>
 
-    <script>
-        // البيانات الأساسية
-        let services = [
-            { id: 1, title: 'الموقع البرونزي', price: 999, desc: 'موقع صفحة واحدة احترافي', icon: '🌐' },
-            { id: 2, title: 'الموقع الذهبي', price: 2500, desc: 'موقع متكامل مع نظام إدارة', icon: '💎' }
-        ];
-        let orders = [];
+<!-- Prices Tab -->
+<div class="tab-content" id="tab-prices">
+  <div class="edit-form" style="margin-bottom:1rem">
+    <h3>📊 تعديل سريع لجميع الأسعار</h3>
+    <div class="grid-2">
+      <div class="form-group"><label>نسبة الخصم % (تطبق على الكل)</label><input type="number" id="globalDiscount" placeholder="20"></div>
+      <div class="form-group" style="display:flex;align-items:flex-end">
+        <button class="btn-add" onclick="applyGlobalDiscount()">تطبيق الخصم</button>
+      </div>
+    </div>
+  </div>
+  <div id="priceEditorList"></div>
+</div>
+```
 
-        // إدارة لوحة التحكم
-        function openAdmin() {
-            const pass = prompt("أدخل رمز الإدارة:");
-            if (pass === "65324677") {
-                document.getElementById('adminPanel').classList.add('open');
-                renderAdmin();
-            } else { alert("الرمز غير صحيح!"); }
-        }
+  </div>
+</div>
 
-        function closeAdmin() { document.getElementById('adminPanel').classList.remove('open'); }
+<!-- PayPal SDK -->
 
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-        }
+<script src="https://www.paypal.com/sdk/js?client-id=AefFtX4OIBRZdwmbksuAu5vSL39NbDJicfqvDL5CxI1mvBe6XPo44ajtWgY3ipiv7Ssztj6gQegHjzOq&currency=USD"></script>
 
-        // رندرة الخدمات للمستخدم
-        function renderUserServices() {
-            const container = document.getElementById('services-display');
-            container.innerHTML = services.map(s => `
-                <div class="glass p-8 rounded-3xl text-center transition hover:scale-105 border border-white/5">
-                    <div class="text-5xl mb-4">${s.icon}</div>
-                    <h3 class="text-2xl font-bold mb-2">${s.title}</h3>
-                    <p class="text-gray-400 mb-6 text-sm">${s.desc}</p>
-                    <div class="text-3xl font-black text-blue-500 mb-6">${s.price} <span class="text-sm text-white">ر.س</span></div>
-                    <button onclick="openCheckout(${s.id})" class="w-full bg-blue-600 py-4 rounded-2xl font-bold hover:bg-blue-700 transition">اطلب الآن</button>
-                </div>
-            `).join('');
-        }
+<script>
+// ==================== DATA ====================
+let currentService = null;
+let receiptBase64 = null;
 
-        // رندرة لوحة التحكم
-        function renderAdmin() {
-            // تحديث الإحصائيات
-            const total = orders.reduce((acc, o) => acc + (o.price || 0), 0);
-            document.getElementById('stat-total').innerText = total + " ر.س";
-            document.getElementById('stat-orders').innerText = orders.length;
-            document.getElementById('stat-pending').innerText = orders.filter(o => o.status === 'بانتظار التأكيد').length;
+// Load from localStorage or use defaults
+function loadServices(){
+  const saved = localStorage.getItem('wf_services');
+  if(saved) return JSON.parse(saved);
+  return [
+    {id:1,icon:'🌐',title:'موقع احترافي',desc:'تصميم وتطوير موقع ويب احترافي متجاوب مع جميع الأجهزة',price:1499,oldPrice:2499,badge:'الأكثر طلباً',features:['تصميم عصري فريد','متجاوب مع الجوال','سرعة تحميل عالية','شهادة SSL مجانية','دعم فني لمدة شهر']},
+    {id:2,icon:'🛒',title:'متجر إلكتروني',desc:'متجر متكامل مع نظام دفع ولوحة تحكم وإدارة مخزون',price:2999,oldPrice:4999,badge:'مميز',features:['لوحة تحكم كاملة','بوابة دفع إلكترونية','إدارة المنتجات','تقارير المبيعات','تطبيق موبايل']},
+    {id:3,icon:'📱',title:'هوية بصرية',desc:'تصميم هوية بصرية متكاملة تعكس قيم علامتك التجارية',price:799,oldPrice:null,badge:null,features:['شعار احترافي','دليل الهوية البصرية','كرت أعمال','قوالب السوشيال ميديا','3 مراجعات مجانية']},
+    {id:4,icon:'📊',title:'إدارة السوشيال ميديا',desc:'إدارة حسابات التواصل الاجتماعي بمحتوى إبداعي واستراتيجي',price:1299,oldPrice:null,badge:null,features:['12 منشور شهرياً','تصاميم احترافية','جدولة المحتوى','تقرير أداء شهري','رد على التعليقات']},
+    {id:5,icon:'🎯',title:'حملة إعلانية',desc:'حملة إعلانية مستهدفة على منصات التواصل الاجتماعي',price:1999,oldPrice:2999,badge:'توفير 33%',features:['إعداد الحملة','استهداف دقيق','متابعة يومية','تقرير أسبوعي','ضمان النتائج']},
+    {id:6,icon:'✍️',title:'كتابة محتوى',desc:'كتابة محتوى احترافي وجذاب لموقعك ومنصاتك',price:499,oldPrice:null,badge:null,features:['10 مقالات شهرياً','محتوى SEO محسّن','بحث متعمق','تسليم خلال 48 ساعة','مراجعة مجانية']},
+  ];
+}
 
-            // تحديث قائمة الخدمات للإدارة
-            const adminSvcList = document.getElementById('admin-services-list');
-            adminSvcList.innerHTML = services.map(s => `
-                <div class="glass p-4 rounded-xl flex flex-col gap-2">
-                    <input type="text" value="${s.title}" onchange="updateSvc(${s.id}, 'title', this.value)" class="bg-transparent border-b border-white/10 font-bold outline-none">
-                    <input type="number" value="${s.price}" onchange="updateSvc(${s.id}, 'price', this.value)" class="bg-transparent border-b border-white/10 text-blue-400 outline-none">
-                    <button onclick="deleteSvc(${s.id})" class="text-red-500 text-xs text-right mt-2">حذف الباقة 🗑</button>
-                </div>
-            `).join('');
+function loadOrders(){
+  const saved = localStorage.getItem('wf_orders');
+  return saved ? JSON.parse(saved) : [];
+}
 
-            // تحديث الطلبات
-            const ordersList = document.getElementById('orders-list');
-            ordersList.innerHTML = orders.map(o => `
-                <tr class="border-b border-white/5 text-sm">
-                    <td class="p-4">${o.svcTitle}</td>
-                    <td class="p-4 text-blue-400">${o.customerWA}</td>
-                    <td class="p-4">${o.method}</td>
-                    <td class="p-4">
-                        ${o.receipt ? `<button onclick="viewReceipt('${o.receipt}')" class="bg-blue-500 px-2 py-1 rounded text-[10px]">مشاهدة</button>` : 'لا يوجد'}
-                    </td>
-                    <td class="p-4 ${o.status === 'مدفوع' ? 'text-green-400' : 'text-yellow-500'}">${o.status}</td>
-                </tr>
-            `).join('');
-        }
+function saveServices(s){ localStorage.setItem('wf_services',JSON.stringify(s)); }
+function saveOrders(o){ localStorage.setItem('wf_orders',JSON.stringify(o)); }
 
-        // وظائف التحكم في الخدمات
-        function updateSvc(id, field, value) {
-            const svc = services.find(s => s.id === id);
-            if (field === 'price') value = parseInt(value);
-            svc[field] = value;
-            renderUserServices();
-            renderAdmin();
-        }
+let services = loadServices();
+let orders = loadOrders();
 
-        function addNewService() {
-            const newId = Date.now();
-            services.push({ id: newId, title: 'باقة جديدة', price: 1000, desc: 'وصف الخدمة هنا', icon: '📦' });
-            renderAdmin();
-            renderUserServices();
-        }
+// ==================== STARS ====================
+(function(){
+  const c = document.getElementById('stars');
+  for(let i=0;i<120;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const sz=Math.random()*2+.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;right:${Math.random()*100}%;--d:${Math.random()*4+2}s;animation-delay:${Math.random()*5}s`;
+    c.appendChild(s);
+  }
+})();
 
-        function deleteSvc(id) {
-            services = services.filter(s => s.id !== id);
-            renderAdmin();
-            renderUserServices();
-        }
+// ==================== RENDER SERVICES ====================
+function renderServices(){
+  const grid = document.getElementById('servicesGrid');
+  grid.innerHTML = services.map(s => `
+    <div class="service-card">
+      ${s.badge?`<div class="badge-popular">${s.badge}</div>`:''}
+      <div class="card-icon">${s.icon}</div>
+      <div class="card-title">${s.title}</div>
+      <div class="card-desc">${s.desc}</div>
+      <ul class="card-features">${(s.features||[]).map(f=>`<li>${f}</li>`).join('')}</ul>
+      <div class="card-price">
+        <span class="price-val">${s.price.toLocaleString()}</span>
+        <span class="price-cur">ر.س</span>
+        ${s.oldPrice?`<span class="price-old">${s.oldPrice.toLocaleString()} ر.س</span>`:''}
+      </div>
+      <button class="btn-buy" onclick="openPurchase(${s.id})">اشتري الآن 🚀</button>
+    </div>
+  `).join('');
+}
+renderServices();
 
-        // Checkout Logic
-        let currentSvc = null;
-        function openCheckout(id) {
-            currentSvc = services.find(s => s.id === id);
-            document.getElementById('checkout-details').innerHTML = `
-                <div class="flex justify-between font-bold">
-                    <span>${currentSvc.title}</span>
-                    <span class="text-blue-500">${currentSvc.price} ر.س</span>
-                </div>
-            `;
-            document.getElementById('checkoutModal').classList.add('open');
-        }
+// ==================== PURCHASE MODAL ====================
+function openPurchase(id){
+  currentService = services.find(s=>s.id===id);
+  if(!currentService) return;
+  document.getElementById('sumService').textContent = currentService.title;
+  document.getElementById('sumPrice').textContent = currentService.price.toLocaleString()+' ر.س';
+  // Reset payment forms
+  document.querySelectorAll('.pm-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.pm-form').forEach(f=>f.classList.remove('show'));
+  document.getElementById('purchaseModal').classList.add('show');
+}
 
-        function payMethod(method) {
-            document.getElementById('bank-info').classList.toggle('hidden', method !== 'bank');
-            document.getElementById('paypal-button-container').innerHTML = '';
-            if (method === 'paypal') {
-                initPaypal();
-            }
-        }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
 
-        function initPaypal() {
-            paypal.Buttons({
-                createOrder: (data, actions) => {
-                    return actions.order.create({
-                        purchase_units: [{ amount: { value: (currentSvc.price / 3.75).toFixed(2) } }]
-                    });
-                },
-                onApprove: (data, actions) => actions.order.capture().then(details => {
-                    saveOrder('PayPal', 'مدفوع');
-                })
-            }).render('#paypal-button-container');
-        }
+function selectPM(type){
+  document.querySelectorAll('.pm-btn').forEach(b=>b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.querySelectorAll('.pm-form').forEach(f=>f.classList.remove('show'));
+  const form = document.getElementById('form-'+type);
+  if(form) form.classList.add('show');
+  // Init PayPal
+  if(type==='paypal') initPayPal();
+}
 
-        async function confirmBankOrder() {
-            const fileInput = document.getElementById('receipt-upload');
-            let receiptBase64 = null;
-            
-            if (fileInput.files[0]) {
-                receiptBase64 = await toBase64(fileInput.files[0]);
-            }
-            
-            saveOrder('تحويل بنكي', 'بانتظار التأكيد', receiptBase64);
-        }
+let paypalInited = false;
+function initPayPal(){
+  if(paypalInited) return;
+  paypalInited = true;
+  const container = document.getElementById('paypal-button-container');
+  container.innerHTML = '';
+  if(!currentService) return;
+  const usdAmount = (currentService.price / 3.75).toFixed(2);
+  paypal.Buttons({
+    createOrder:(data,actions)=>actions.order.create({
+      purchase_units:[{amount:{value:usdAmount,currency_code:'USD'},description:currentService.title}]
+    }),
+    onApprove:(data,actions)=>actions.order.capture().then(()=>{
+      const waNum = document.getElementById('paypalWA').value.trim();
+      placeOrder('PayPal', waNum, null);
+    }),
+    onError:(err)=>{alert('حدث خطأ في PayPal. حاول مرة أخرى.');}
+  }).render('#paypal-button-container');
+}
 
-        function saveOrder(method, status, receipt = null) {
-            const wa = document.getElementById('cust-wa').value;
-            if(!wa) return alert("يرجى إدخال رقم الواتساب");
-            
-            orders.push({
-                svcTitle: currentSvc.title,
-                price: currentSvc.price,
-                customerWA: wa,
-                method: method,
-                status: status,
-                receipt: receipt,
-                date: new Date().toLocaleString()
-            });
-            
-            alert("تم إرسال طلبك بنجاح!");
-            document.getElementById('checkoutModal').classList.remove('open');
-            renderAdmin();
-        }
+function formatCard(el){
+  let v=el.value.replace(/\D/g,'').substring(0,16);
+  el.value=v.match(/.{1,4}/g)?.join(' ')||v;
+}
 
-        const toBase64 = file => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
+function handleReceipt(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    receiptBase64 = e.target.result;
+    document.getElementById('uploadText').textContent = '✅ '+file.name;
+  };
+  reader.readAsDataURL(file);
+}
 
-        function viewReceipt(src) {
-            const win = window.open();
-            win.document.write(`<img src="${src}" style="max-width:100%">`);
-        }
+function confirmOrder(method){
+  if(!currentService) return;
+  let waNum = '';
+  if(method==='card') waNum=document.getElementById('cardWA').value;
+  else if(method==='mada') waNum=document.getElementById('madaWA').value;
+  else if(method==='apple') waNum=document.getElementById('appleWA').value;
+  else if(method==='bank'){
+    if(!receiptBase64){ alert('الرجاء رفع صورة الإيصال أولاً'); return; }
+    waNum=document.getElementById('bankWA').value;
+  }
+  const pmLabels={'card':'بطاقة ائتمانية','mada':'مدى','apple':'Apple Pay','bank':'تحويل بنكي','paypal':'PayPal'};
+  placeOrder(pmLabels[method]||method, waNum.trim(), method==='bank'?receiptBase64:null);
+}
 
-        function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
+function placeOrder(method, waNum, receipt){
+  const orderId = 'WF-2026-'+Math.floor(1000+Math.random()*9000);
+  const order = {
+    id:orderId,
+    service:currentService.title,
+    price:currentService.price,
+    method,
+    wa:waNum||'—',
+    receipt:receipt||null,
+    status:'pending',
+    date:new Date().toLocaleDateString('ar-SA')
+  };
+  orders.unshift(order);
+  saveOrders(orders);
+  closeModal('purchaseModal');
+  receiptBase64=null;paypalInited=false;
+  // Show success
+  document.getElementById('orderIdDisplay').textContent='#'+orderId;
+  const waMsg = encodeURIComponent('مرحباً، لديّ طلب جديد رقمه: #'+orderId+' — الخدمة: '+currentService.title);
+  document.getElementById('waLink').href='https://wa.me/966599804296?text='+waMsg;
+  document.getElementById('successModal').classList.add('show');
+}
 
-        // Initial Start
-        renderUserServices();
-        AOS.init();
-    </script>
+// ==================== ADMIN ====================
+function openAdmin(){
+  document.getElementById('pinOverlay').style.display='flex';
+  document.getElementById('pinInput').value='';
+  document.getElementById('pinError').style.display='none';
+  setTimeout(()=>document.getElementById('pinInput').focus(),100);
+}
+
+function checkPin(){
+  const pin = document.getElementById('pinInput').value;
+  if(pin==='20112409'){
+    document.getElementById('pinOverlay').style.display='none';
+    document.getElementById('admin-overlay').classList.add('show');
+    renderAdmin();
+  } else {
+    document.getElementById('pinError').style.display='block';
+    document.getElementById('pinInput').value='';
+  }
+}
+
+function closeAdmin(){
+  document.getElementById('admin-overlay').classList.remove('show');
+}
+
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    const tabs=['orders','services','add','prices'];
+    b.classList.toggle('active', tabs[i]===name);
+  });
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('show'));
+  document.getElementById('tab-'+name).classList.add('show');
+  if(name==='services') renderAdminServices();
+  if(name==='prices') renderPriceEditor();
+}
+
+function renderAdmin(){
+  // Stats
+  const total = orders.reduce((a,o)=>a+o.price,0);
+  const pending = orders.filter(o=>o.status==='pending').length;
+  const done = orders.filter(o=>o.status==='done').length;
+  document.getElementById('statSales').textContent = total.toLocaleString()+' ر.س';
+  document.getElementById('statOrders').textContent = orders.length;
+  document.getElementById('statPending').textContent = pending;
+  document.getElementById('statDone').textContent = done;
+  // Orders table
+  const tbody = document.getElementById('ordersTable');
+  tbody.innerHTML = orders.map(o=>`
+    <tr>
+      <td style="color:var(--blue2);font-weight:700">#${o.id}</td>
+      <td>${o.service}</td>
+      <td style="color:var(--gold2)">${o.price.toLocaleString()} ر.س</td>
+      <td><a href="https://wa.me/966${o.wa.replace(/^0/,'')}" style="color:var(--success)" target="_blank">${o.wa}</a></td>
+      <td>${o.method}</td>
+      <td><span class="status-badge ${o.status==='done'?'status-done':'status-pending'}">${o.status==='done'?'مكتمل':'معلق'}</span></td>
+      <td style="display:flex;gap:.4rem;flex-wrap:wrap">
+        ${o.receipt?`<button class="btn-small" onclick="viewReceipt('${o.id}')">🧾 إيصال</button>`:''}
+        ${o.status==='pending'?`<button class="btn-small" onclick="markDone('${o.id}')">✅ مكتمل</button>`:''}
+        <button class="btn-danger-small" onclick="deleteOrder('${o.id}')">🗑️</button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">لا توجد طلبات بعد</td></tr>';
+}
+
+function markDone(id){
+  const o=orders.find(o=>o.id===id);
+  if(o){ o.status='done'; saveOrders(orders); renderAdmin(); }
+}
+function deleteOrder(id){
+  if(!confirm('هل أنت متأكد من حذف الطلب؟')) return;
+  orders=orders.filter(o=>o.id!==id); saveOrders(orders); renderAdmin();
+}
+function viewReceipt(id){
+  const o=orders.find(o=>o.id===id);
+  if(o&&o.receipt){
+    const w=window.open('','_blank');
+    w.document.write(`<html><body style="background:#000;margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh"><img src="${o.receipt}" style="max-width:100%;max-height:100vh"></body></html>`);
+  }
+}
+
+function renderAdminServices(){
+  const list=document.getElementById('adminServicesList');
+  list.innerHTML=services.map(s=>`
+    <div class="service-admin-card">
+      <div class="sac-info">
+        <div class="sac-title">${s.icon} ${s.title}</div>
+        <div class="sac-price">${s.price.toLocaleString()} ر.س ${s.oldPrice?'(كان '+s.oldPrice.toLocaleString()+')':''}</div>
+      </div>
+      <div class="sac-actions">
+        <button class="btn-small" onclick="editService(${s.id})">✏️ تعديل</button>
+        <button class="btn-danger-small" onclick="deleteService(${s.id})">🗑️ حذف</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function editService(id){
+  const s=services.find(x=>x.id===id);
+  if(!s) return;
+  const newTitle=prompt('اسم الخدمة:',s.title)||s.title;
+  const newPrice=parseFloat(prompt('السعر (ر.س):',s.price))||s.price;
+  const newDesc=prompt('الوصف:',s.desc)||s.desc;
+  s.title=newTitle; s.price=newPrice; s.desc=newDesc;
+  saveServices(services); renderServices(); renderAdminServices();
+}
+
+function deleteService(id){
+  if(!confirm('هل أنت متأكد من حذف هذه الخدمة؟')) return;
+  services=services.filter(s=>s.id!==id); saveServices(services); renderServices(); renderAdminServices();
+}
+
+function addService(){
+  const icon=document.getElementById('newIcon').value.trim()||'⭐';
+  const title=document.getElementById('newTitle').value.trim();
+  const desc=document.getElementById('newDesc').value.trim();
+  const price=parseFloat(document.getElementById('newPrice').value);
+  const oldPrice=parseFloat(document.getElementById('newOldPrice').value)||null;
+  const badge=document.getElementById('newBadge').value.trim()||null;
+  const features=document.getElementById('newFeatures').value.trim().split('\n').filter(Boolean);
+  if(!title||!price){ alert('الرجاء إدخال الاسم والسعر'); return; }
+  const id=Date.now();
+  services.push({id,icon,title,desc,price,oldPrice,badge,features});
+  saveServices(services); renderServices();
+  ['newIcon','newTitle','newDesc','newPrice','newOldPrice','newBadge','newFeatures'].forEach(id=>document.getElementById(id).value='');
+  alert('✅ تمت إضافة الخدمة بنجاح!');
+}
+
+function renderPriceEditor(){
+  const list=document.getElementById('priceEditorList');
+  list.innerHTML=services.map(s=>`
+    <div class="service-admin-card">
+      <div class="sac-info">
+        <div class="sac-title">${s.icon} ${s.title}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <input type="number" value="${s.price}" id="pe_${s.id}"
+          style="width:90px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:.4rem .6rem;color:var(--text);font-family:'Cairo',sans-serif;font-size:.85rem">
+        <span style="font-size:.8rem;color:var(--muted)">ر.س</span>
+        <button class="btn-small" onclick="saveSinglePrice(${s.id})">حفظ</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function saveSinglePrice(id){
+  const s=services.find(x=>x.id===id);
+  const val=parseFloat(document.getElementById('pe_'+id).value);
+  if(s&&val>0){ s.price=val; saveServices(services); renderServices(); alert('✅ تم تحديث السعر'); }
+}
+
+function applyGlobalDiscount(){
+  const pct=parseFloat(document.getElementById('globalDiscount').value);
+  if(!pct||pct<=0||pct>=100){ alert('أدخل نسبة صحيحة بين 1-99'); return; }
+  services.forEach(s=>{
+    s.oldPrice=s.price;
+    s.price=Math.round(s.price*(1-pct/100));
+  });
+  saveServices(services); renderServices(); renderPriceEditor();
+  alert(`✅ تم تطبيق خصم ${pct}% على جميع الخدمات`);
+}
+</script>
+
 </body>
 </html>
