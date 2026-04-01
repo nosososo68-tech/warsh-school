@@ -1,280 +1,2272 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>نظام الإمام ورش</title>
-
-<!-- Font -->
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --main: #059669;
-  --bg: #f3f4f6;
-  --card: #ffffff;
-  --text: #111827;
-}
+  :root {
+    --primary: #059669;
+    --primary-dark: #047857;
+    --primary-light: #d1fae5;
+    --primary-lighter: #ecfdf5;
+    --accent: #f59e0b;
+    --accent-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --info: #2563eb;
+    --info-light: #dbeafe;
+    --warning: #d97706;
+    --bg: #f0fdf4;
+    --bg-card: #ffffff;
+    --bg-sidebar: #022c22;
+    --text-primary: #064e3b;
+    --text-secondary: #6b7280;
+    --text-light: #9ca3af;
+    --border: #d1fae5;
+    --border-dark: #a7f3d0;
+    --shadow-sm: 0 1px 3px rgba(5,150,105,0.08);
+    --shadow: 0 4px 16px rgba(5,150,105,0.12);
+    --shadow-lg: 0 8px 32px rgba(5,150,105,0.18);
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-lg: 20px;
+    --font: 'Tajawal', sans-serif;
+  }
 
-* {
-  font-family: 'Tajawal', sans-serif;
-  box-sizing: border-box;
-}
+- { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  margin: 0;
-  background: var(--bg);
+font-family: var(–font);
+background: var(–bg);
+color: var(–text-primary);
+min-height: 100vh;
+direction: rtl;
 }
 
-.container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 20px;
+/* ===== LOGIN PAGE ===== */
+#loginPage {
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+background: linear-gradient(135deg, #022c22 0%, #064e3b 40%, #065f46 70%, #059669 100%);
+position: relative;
+overflow: hidden;
 }
 
+#loginPage::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: url(“data:image/svg+xml,%3Csvg width=‘60’ height=‘60’ viewBox=‘0 0 60 60’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cg fill=‘none’ fill-rule=‘evenodd’%3E%3Cg fill=’%23ffffff’ fill-opacity=‘0.03’%3E%3Cpath d=‘M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z’/%3E%3C/g%3E%3C/g%3E%3C/svg%3E”);
+}
+
+.login-card {
+background: white;
+border-radius: var(–radius-lg);
+padding: 48px 40px;
+width: 100%;
+max-width: 440px;
+box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+position: relative;
+z-index: 1;
+animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+from { opacity: 0; transform: translateY(30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.login-logo {
+text-align: center;
+margin-bottom: 32px;
+}
+
+.login-logo .icon {
+width: 72px; height: 72px;
+background: linear-gradient(135deg, var(–primary), var(–primary-dark));
+border-radius: 50%;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+margin-bottom: 16px;
+box-shadow: 0 8px 24px rgba(5,150,105,0.35);
+}
+
+.login-logo .icon svg { width: 36px; height: 36px; fill: white; }
+
+.login-logo h1 {
+font-size: 1.6rem;
+font-weight: 800;
+color: var(–text-primary);
+margin-bottom: 4px;
+}
+
+.login-logo p {
+font-size: 0.85rem;
+color: var(–text-secondary);
+}
+
+.form-group {
+margin-bottom: 18px;
+}
+
+.form-group label {
+display: block;
+font-size: 0.85rem;
+font-weight: 600;
+color: var(–text-primary);
+margin-bottom: 8px;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+width: 100%;
+padding: 12px 16px;
+border: 2px solid var(–border-dark);
+border-radius: var(–radius-sm);
+font-family: var(–font);
+font-size: 0.95rem;
+color: var(–text-primary);
+background: var(–bg);
+transition: all 0.2s;
+outline: none;
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+border-color: var(–primary);
+background: white;
+box-shadow: 0 0 0 4px rgba(5,150,105,0.1);
+}
+
+.btn {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+padding: 12px 24px;
+border-radius: var(–radius-sm);
+font-family: var(–font);
+font-size: 0.9rem;
+font-weight: 700;
+border: none;
+cursor: pointer;
+transition: all 0.2s;
+text-decoration: none;
+white-space: nowrap;
+}
+
+.btn-primary {
+background: linear-gradient(135deg, var(–primary), var(–primary-dark));
+color: white;
+box-shadow: 0 4px 12px rgba(5,150,105,0.3);
+}
+
+.btn-primary:hover {
+transform: translateY(-1px);
+box-shadow: 0 6px 20px rgba(5,150,105,0.4);
+}
+
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+background: var(–primary-lighter);
+color: var(–primary-dark);
+border: 2px solid var(–border-dark);
+}
+
+.btn-secondary:hover { background: var(–primary-light); }
+
+.btn-danger {
+background: var(–danger-light);
+color: var(–danger);
+border: 2px solid #fca5a5;
+}
+
+.btn-danger:hover { background: #fecaca; }
+
+.btn-warning {
+background: var(–accent-light);
+color: var(–warning);
+border: 2px solid #fcd34d;
+}
+
+.btn-warning:hover { background: #fde68a; }
+
+.btn-info {
+background: var(–info-light);
+color: var(–info);
+border: 2px solid #93c5fd;
+}
+
+.btn-sm { padding: 7px 14px; font-size: 0.8rem; }
+.btn-xs { padding: 4px 10px; font-size: 0.75rem; }
+.btn-block { width: 100%; justify-content: center; }
+
+.btn-login {
+width: 100%;
+justify-content: center;
+padding: 14px;
+font-size: 1rem;
+margin-top: 8px;
+border-radius: var(–radius-sm);
+}
+
+.error-msg {
+background: var(–danger-light);
+border: 1.5px solid #fca5a5;
+color: var(–danger);
+padding: 10px 14px;
+border-radius: var(–radius-sm);
+font-size: 0.85rem;
+font-weight: 500;
+margin-top: 12px;
+display: none;
+align-items: center;
+gap: 8px;
+}
+
+.divider {
+text-align: center;
+color: var(–text-light);
+font-size: 0.8rem;
+margin: 20px 0;
+position: relative;
+}
+
+.divider::before, .divider::after {
+content: ‘’;
+position: absolute;
+top: 50%;
+width: 40%;
+height: 1px;
+background: var(–border-dark);
+}
+
+.divider::before { right: 0; }
+.divider::after { left: 0; }
+
+/* ===== MAIN APP ===== */
+#app { display: none; }
+
+.layout {
+display: flex;
+min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+width: 260px;
+background: var(–bg-sidebar);
+display: flex;
+flex-direction: column;
+position: fixed;
+height: 100vh;
+right: 0;
+top: 0;
+z-index: 100;
+transition: transform 0.3s ease;
+overflow-y: auto;
+}
+
+.sidebar-header {
+padding: 24px 20px 20px;
+border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.sidebar-logo {
+display: flex;
+align-items: center;
+gap: 12px;
+margin-bottom: 12px;
+}
+
+.sidebar-logo .icon {
+width: 44px; height: 44px;
+background: linear-gradient(135deg, var(–primary), #34d399);
+border-radius: 12px;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+}
+
+.sidebar-logo .icon svg { width: 24px; height: 24px; fill: white; }
+
+.sidebar-logo-text h2 {
+font-size: 1rem;
+font-weight: 800;
+color: white;
+}
+
+.sidebar-logo-text p {
+font-size: 0.7rem;
+color: rgba(255,255,255,0.5);
+}
+
+.user-badge {
+display: flex;
+align-items: center;
+gap: 8px;
+background: rgba(255,255,255,0.06);
+padding: 10px 12px;
+border-radius: var(–radius-sm);
+}
+
+.user-badge .avatar {
+width: 34px; height: 34px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 0.8rem;
+font-weight: 700;
+flex-shrink: 0;
+}
+
+.user-badge .info { flex: 1; min-width: 0; }
+
+.user-badge .name {
+font-size: 0.82rem;
+font-weight: 700;
+color: white;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.user-badge .role {
+font-size: 0.7rem;
+color: rgba(255,255,255,0.5);
+}
+
+.sidebar-nav {
+flex: 1;
+padding: 12px 12px;
+}
+
+.nav-section {
+margin-bottom: 8px;
+}
+
+.nav-section-label {
+font-size: 0.65rem;
+font-weight: 700;
+color: rgba(255,255,255,0.3);
+text-transform: uppercase;
+letter-spacing: 0.1em;
+padding: 0 10px;
+margin-bottom: 4px;
+margin-top: 12px;
+}
+
+.nav-item {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 10px 12px;
+border-radius: var(–radius-sm);
+cursor: pointer;
+transition: all 0.15s;
+color: rgba(255,255,255,0.6);
+font-size: 0.88rem;
+font-weight: 500;
+margin-bottom: 2px;
+}
+
+.nav-item:hover {
+background: rgba(255,255,255,0.07);
+color: rgba(255,255,255,0.9);
+}
+
+.nav-item.active {
+background: linear-gradient(135deg, rgba(5,150,105,0.35), rgba(5,150,105,0.15));
+color: #34d399;
+border: 1px solid rgba(52,211,153,0.2);
+}
+
+.nav-item svg {
+width: 18px; height: 18px;
+flex-shrink: 0;
+opacity: 0.8;
+}
+
+.sidebar-footer {
+padding: 16px 12px;
+border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.btn-logout {
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+padding: 10px;
+background: rgba(220,38,38,0.15);
+border: 1px solid rgba(220,38,38,0.25);
+border-radius: var(–radius-sm);
+color: #f87171;
+font-family: var(–font);
+font-size: 0.85rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s;
+}
+
+.btn-logout:hover { background: rgba(220,38,38,0.25); }
+
+/* MAIN CONTENT */
+.main-content {
+margin-right: 260px;
+flex: 1;
+display: flex;
+flex-direction: column;
+min-height: 100vh;
+}
+
+.topbar {
+background: white;
+padding: 0 28px;
+height: 64px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+border-bottom: 1px solid var(–border);
+box-shadow: var(–shadow-sm);
+position: sticky;
+top: 0;
+z-index: 50;
+}
+
+.topbar-title {
+font-size: 1.15rem;
+font-weight: 800;
+color: var(–text-primary);
+}
+
+.topbar-actions {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.hamburger {
+display: none;
+background: none;
+border: none;
+cursor: pointer;
+padding: 8px;
+color: var(–text-primary);
+}
+
+.page-content {
+padding: 28px;
+flex: 1;
+}
+
+/* ===== CARDS ===== */
 .card {
-  background: var(--card);
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 15px;
+background: var(–bg-card);
+border-radius: var(–radius);
+border: 1px solid var(–border);
+box-shadow: var(–shadow-sm);
 }
 
-input, select, button {
-  padding: 10px;
-  margin: 5px 0;
-  width: 100%;
+.card-header {
+padding: 18px 22px;
+border-bottom: 1px solid var(–border);
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+flex-wrap: wrap;
 }
 
-button {
-  background: var(--main);
-  color: #fff;
-  border: none;
-  cursor: pointer;
+.card-title {
+font-size: 1rem;
+font-weight: 800;
+color: var(–text-primary);
+display: flex;
+align-items: center;
+gap: 8px;
 }
 
-.tabs {
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
+.card-title svg {
+width: 20px; height: 20px;
+color: var(–primary);
 }
 
-.tab {
-  padding: 8px 12px;
-  background: #ddd;
-  cursor: pointer;
-  border-radius: 6px;
+.card-body { padding: 22px; }
+
+/* ===== STATS ===== */
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+gap: 16px;
+margin-bottom: 24px;
 }
 
-.active {
-  background: var(--main);
-  color: #fff;
+.stat-card {
+background: white;
+border-radius: var(–radius);
+padding: 20px;
+border: 1px solid var(–border);
+box-shadow: var(–shadow-sm);
+display: flex;
+align-items: center;
+gap: 16px;
+transition: all 0.2s;
 }
 
-.hidden {
+.stat-card:hover {
+box-shadow: var(–shadow);
+transform: translateY(-2px);
+}
+
+.stat-icon {
+width: 52px; height: 52px;
+border-radius: 14px;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+}
+
+.stat-icon svg { width: 26px; height: 26px; }
+
+.stat-info { flex: 1; }
+
+.stat-value {
+font-size: 1.6rem;
+font-weight: 900;
+color: var(–text-primary);
+line-height: 1;
+margin-bottom: 4px;
+}
+
+.stat-label {
+font-size: 0.8rem;
+color: var(–text-secondary);
+font-weight: 500;
+}
+
+/* ===== TABLE ===== */
+.table-wrapper { overflow-x: auto; }
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: 0.88rem;
+}
+
+thead th {
+background: var(–primary-lighter);
+padding: 12px 16px;
+text-align: right;
+font-size: 0.8rem;
+font-weight: 700;
+color: var(–primary-dark);
+border-bottom: 2px solid var(–border-dark);
+white-space: nowrap;
+}
+
+tbody tr {
+border-bottom: 1px solid var(–border);
+transition: background 0.15s;
+}
+
+tbody tr:hover { background: var(–primary-lighter); }
+
+tbody td {
+padding: 11px 16px;
+color: var(–text-primary);
+vertical-align: middle;
+}
+
+.empty-row td {
+text-align: center;
+color: var(–text-light);
+padding: 40px;
+font-size: 0.9rem;
+}
+
+/* ===== BADGES ===== */
+.badge {
+display: inline-flex;
+align-items: center;
+gap: 4px;
+padding: 3px 10px;
+border-radius: 20px;
+font-size: 0.75rem;
+font-weight: 700;
+}
+
+.badge-green { background: var(–primary-light); color: var(–primary-dark); }
+.badge-red { background: var(–danger-light); color: var(–danger); }
+.badge-yellow { background: var(–accent-light); color: var(–warning); }
+.badge-blue { background: var(–info-light); color: var(–info); }
+.badge-gray { background: #f3f4f6; color: #6b7280; }
+
+/* ===== TABS ===== */
+.tabs-wrapper {
+display: flex;
+gap: 6px;
+flex-wrap: wrap;
+margin-bottom: 20px;
+padding-bottom: 12px;
+border-bottom: 2px solid var(–border);
+}
+
+.tab-btn {
+padding: 8px 18px;
+border-radius: 20px;
+border: 2px solid var(–border-dark);
+background: white;
+font-family: var(–font);
+font-size: 0.85rem;
+font-weight: 700;
+color: var(–text-secondary);
+cursor: pointer;
+transition: all 0.2s;
+}
+
+.tab-btn:hover { border-color: var(–primary); color: var(–primary); }
+
+.tab-btn.active {
+background: var(–primary);
+border-color: var(–primary);
+color: white;
+box-shadow: 0 4px 12px rgba(5,150,105,0.3);
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.5);
+backdrop-filter: blur(4px);
+z-index: 1000;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 20px;
+animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+background: white;
+border-radius: var(–radius-lg);
+width: 100%;
+max-width: 520px;
+max-height: 90vh;
+overflow-y: auto;
+animation: slideUp 0.3s ease;
+box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+padding: 20px 24px;
+border-bottom: 1px solid var(–border);
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.modal-title {
+font-size: 1.05rem;
+font-weight: 800;
+color: var(–text-primary);
+}
+
+.modal-close {
+width: 32px; height: 32px;
+border: none;
+background: var(–bg);
+border-radius: 50%;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1.2rem;
+color: var(–text-secondary);
+transition: all 0.2s;
+}
+
+.modal-close:hover { background: var(–danger-light); color: var(–danger); }
+
+.modal-body { padding: 24px; }
+.modal-footer {
+padding: 16px 24px;
+border-top: 1px solid var(–border);
+display: flex;
+gap: 10px;
+justify-content: flex-end;
+}
+
+/* ===== STUDENT VIEW ===== */
+.student-hero {
+background: linear-gradient(135deg, #022c22 0%, #065f46 60%, var(–primary) 100%);
+border-radius: var(–radius-lg);
+padding: 32px;
+color: white;
+margin-bottom: 24px;
+position: relative;
+overflow: hidden;
+}
+
+.student-hero::before {
+content: ‘’;
+position: absolute;
+top: -50px; left: -50px;
+width: 200px; height: 200px;
+background: rgba(255,255,255,0.05);
+border-radius: 50%;
+}
+
+.student-hero::after {
+content: ‘’;
+position: absolute;
+bottom: -30px; right: -30px;
+width: 150px; height: 150px;
+background: rgba(255,255,255,0.05);
+border-radius: 50%;
+}
+
+.student-hero h2 {
+font-size: 1.5rem;
+font-weight: 900;
+margin-bottom: 8px;
+position: relative;
+z-index: 1;
+}
+
+.student-hero p {
+opacity: 0.75;
+font-size: 0.9rem;
+position: relative;
+z-index: 1;
+}
+
+.student-stats {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 12px;
+margin-top: 20px;
+position: relative;
+z-index: 1;
+}
+
+.student-stat {
+background: rgba(255,255,255,0.12);
+border-radius: var(–radius-sm);
+padding: 14px;
+text-align: center;
+border: 1px solid rgba(255,255,255,0.15);
+}
+
+.student-stat .val {
+font-size: 1.6rem;
+font-weight: 900;
+display: block;
+}
+
+.student-stat .lbl {
+font-size: 0.7rem;
+opacity: 0.7;
+}
+
+/* ===== WEEK GRID ===== */
+.weeks-nav {
+display: flex;
+gap: 6px;
+flex-wrap: wrap;
+margin-bottom: 16px;
+}
+
+.week-btn {
+padding: 6px 14px;
+border-radius: 20px;
+border: 1.5px solid var(–border-dark);
+background: white;
+font-family: var(–font);
+font-size: 0.8rem;
+font-weight: 600;
+color: var(–text-secondary);
+cursor: pointer;
+transition: all 0.15s;
+}
+
+.week-btn:hover { border-color: var(–primary); color: var(–primary); }
+
+.week-btn.active {
+background: var(–primary);
+border-color: var(–primary);
+color: white;
+}
+
+/* ===== FORM GRID ===== */
+.form-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 14px;
+}
+
+.form-grid .full { grid-column: 1 / -1; }
+
+/* ===== SCORE DISPLAY ===== */
+.score-badge {
+display: inline-flex;
+align-items: center;
+gap: 4px;
+font-weight: 800;
+font-size: 0.95rem;
+}
+
+.score-7 { color: #059669; }
+.score-6 { color: #0d9488; }
+.score-5 { color: #2563eb; }
+.score-4 { color: #7c3aed; }
+.score-3 { color: var(–warning); }
+.score-2 { color: #ea580c; }
+.score-1 { color: var(–danger); }
+
+/* ===== ALERTS ===== */
+.alert {
+padding: 12px 16px;
+border-radius: var(–radius-sm);
+font-size: 0.88rem;
+font-weight: 500;
+display: flex;
+align-items: center;
+gap: 10px;
+margin-bottom: 16px;
+}
+
+.alert-info { background: var(–info-light); color: var(–info); border: 1.5px solid #93c5fd; }
+.alert-success { background: var(–primary-light); color: var(–primary-dark); border: 1.5px solid var(–border-dark); }
+.alert-warning { background: var(–accent-light); color: var(–warning); border: 1.5px solid #fcd34d; }
+
+/* ===== LOADING ===== */
+.loading {
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 40px;
+color: var(–text-light);
+gap: 10px;
+font-size: 0.9rem;
+}
+
+.spinner {
+width: 20px; height: 20px;
+border: 3px solid var(–border-dark);
+border-top-color: var(–primary);
+border-radius: 50%;
+animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== DEVELOPER CREDITS ===== */
+.dev-credits {
+text-align: center;
+padding: 16px;
+font-size: 0.72rem;
+color: rgba(255,255,255,0.25);
+border-top: 1px solid rgba(255,255,255,0.06);
+line-height: 1.8;
+}
+
+/* ===== SEARCH ===== */
+.search-box {
+position: relative;
+max-width: 300px;
+}
+
+.search-box input {
+padding-right: 40px;
+background: var(–bg);
+border: 2px solid var(–border-dark);
+border-radius: 20px;
+font-size: 0.85rem;
+}
+
+.search-box svg {
+position: absolute;
+right: 12px;
+top: 50%;
+transform: translateY(-50%);
+width: 16px; height: 16px;
+color: var(–text-light);
+pointer-events: none;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+.sidebar {
+transform: translateX(100%);
+}
+
+```
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.main-content {
+  margin-right: 0;
+}
+
+.hamburger { display: flex; }
+
+.page-content { padding: 16px; }
+
+.stats-grid { grid-template-columns: 1fr 1fr; }
+
+.form-grid { grid-template-columns: 1fr; }
+
+.student-stats { grid-template-columns: repeat(3, 1fr); }
+
+.overlay-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
   display: none;
 }
-</style>
-</head>
 
+.overlay-bg.show { display: block; }
+```
+
+}
+
+@media (max-width: 480px) {
+.stats-grid { grid-template-columns: 1fr; }
+.student-stats { grid-template-columns: 1fr; }
+.login-card { padding: 32px 24px; }
+.topbar { padding: 0 16px; }
+}
+
+/* ===== PAGE SECTIONS ===== */
+.page-section { display: none; }
+.page-section.active { display: block; }
+
+/* ===== CONFIRM DIALOG ===== */
+.confirm-overlay {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.5);
+backdrop-filter: blur(4px);
+z-index: 2000;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 20px;
+}
+
+.confirm-box {
+background: white;
+border-radius: var(–radius-lg);
+padding: 28px;
+max-width: 380px;
+width: 100%;
+text-align: center;
+animation: slideUp 0.25s ease;
+box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+}
+
+.confirm-icon {
+width: 56px; height: 56px;
+background: var(–danger-light);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+margin: 0 auto 16px;
+}
+
+.confirm-icon svg { width: 28px; height: 28px; color: var(–danger); }
+
+.confirm-title {
+font-size: 1.1rem;
+font-weight: 800;
+color: var(–text-primary);
+margin-bottom: 8px;
+}
+
+.confirm-msg {
+font-size: 0.88rem;
+color: var(–text-secondary);
+margin-bottom: 20px;
+line-height: 1.6;
+}
+
+.confirm-actions { display: flex; gap: 10px; justify-content: center; }
+
+.no-results {
+text-align: center;
+padding: 60px 20px;
+color: var(–text-light);
+}
+
+.no-results svg {
+width: 48px; height: 48px;
+margin-bottom: 12px;
+color: var(–border-dark);
+}
+
+.no-results p {
+font-size: 0.9rem;
+margin-bottom: 4px;
+}
+
+.grade-stars {
+display: flex;
+gap: 3px;
+}
+
+.grade-stars span {
+width: 14px; height: 14px;
+border-radius: 50%;
+display: inline-block;
+}
+
+.tooltip-wrap { position: relative; }
+.tooltip-wrap:hover .tooltip { display: block; }
+
+.tooltip {
+display: none;
+position: absolute;
+bottom: 100%;
+right: 50%;
+transform: translateX(50%);
+background: #1f2937;
+color: white;
+padding: 6px 10px;
+border-radius: 6px;
+font-size: 0.75rem;
+white-space: nowrap;
+margin-bottom: 6px;
+z-index: 100;
+}
+</style>
+
+</head>
 <body>
 
-<div class="container">
+<!-- ===== LOGIN PAGE ===== -->
 
-<h2>نظام الإمام ورش</h2>
+<div id="loginPage">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <h1>نظام الإمام ورش</h1>
+      <p>منصة متابعة وتقييم الطلاب</p>
+    </div>
 
-<!-- Login -->
-<div id="login" class="card">
-  <h3>تسجيل الدخول</h3>
-  <input id="username" placeholder="اسم المستخدم">
-  <input id="password" type="password" placeholder="كلمة المرور / كود الطالب">
-  <button onclick="login()">دخول</button>
-  <p id="error" style="color:red"></p>
+```
+<div class="form-group">
+  <label>اسم المستخدم</label>
+  <input type="text" id="loginUser" placeholder="أدخل اسم المستخدم" autocomplete="username">
 </div>
 
-<!-- Main -->
-<div id="app" class="hidden">
-
-  <button onclick="logout()">تسجيل خروج</button>
-
-  <!-- Tabs -->
-  <div id="tabs" class="tabs"></div>
-
-  <!-- Content -->
-  <div id="content"></div>
-
+<div class="form-group">
+  <label>كلمة المرور / رمز الطالب</label>
+  <input type="password" id="loginPass" placeholder="أدخل كلمة المرور أو رمز الطالب" autocomplete="current-password">
 </div>
 
+<div class="error-msg" id="loginError">
+  <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  <span id="loginErrorText">بيانات غير صحيحة</span>
+</div>
+
+<button class="btn btn-primary btn-login" onclick="doLogin()">
+  <svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+  دخول
+</button>
+
+<div class="divider">المطورون المعتمدون</div>
+<p style="text-align:center;font-size:0.75rem;color:var(--text-light);line-height:1.8;">
+  محمد علي الشنقيطي &nbsp;|&nbsp; يزن أنس المحمدي &nbsp;|&nbsp; مصطفى عبد الله أحمد
+</p>
+```
+
+  </div>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+
+<div id="app">
+  <div class="overlay-bg" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+  <div class="layout">
+
+```
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="sidebar-logo-text">
+        <h2>الإمام ورش</h2>
+        <p>نظام المتابعة</p>
+      </div>
+    </div>
+    <div class="user-badge" id="userBadge">
+      <div class="avatar" id="userAvatar" style="background:var(--primary)">م</div>
+      <div class="info">
+        <div class="name" id="sidebarUserName">المستخدم</div>
+        <div class="role" id="sidebarUserRole">الدور</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-nav" id="sidebarNav"></div>
+
+  <div class="dev-credits">
+    محمد علي الشنقيطي<br>
+    يزن أنس المحمدي<br>
+    مصطفى عبد الله أحمد
+  </div>
+
+  <div class="sidebar-footer">
+    <button class="btn-logout" onclick="doLogout()">
+      <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+      تسجيل الخروج
+    </button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-content">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="hamburger" onclick="toggleSidebar()">
+        <svg viewBox="0 0 24 24" width="22" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="topbar-title" id="topbarTitle">لوحة التحكم</div>
+    </div>
+    <div class="topbar-actions" id="topbarActions"></div>
+  </div>
+
+  <div class="page-content">
+    <!-- PAGES -->
+    <div class="page-section active" id="pageDashboard"></div>
+    <div class="page-section" id="pageTeachers"></div>
+    <div class="page-section" id="pageStudents"></div>
+    <div class="page-section" id="pageClasses"></div>
+    <div class="page-section" id="pageRecords"></div>
+    <div class="page-section" id="pageReports"></div>
+    <div class="page-section" id="pageStudent"></div>
+    <div class="page-section" id="pageMyRecords"></div>
+  </div>
+</div>
+```
+
+  </div>
 </div>
 
 <!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
 <script>
-// Firebase Config
+// ===== FIREBASE INIT =====
 const firebaseConfig = {
   apiKey: "AIzaSyAC9BzBpw66oBDriZoi9A5zsThKLFZiNv8",
-  databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app"
+  authDomain: "imam-warsh.firebaseapp.com",
+  databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "imam-warsh",
+  storageBucket: "imam-warsh.appspot.com",
+  messagingSenderId: "000000000000",
+  appId: "1:000000000000:web:000000000000"
 };
 
-const app = firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// Globals
+// ===== STATE =====
 let currentUser = null;
 let currentRole = null;
-let currentClass = null;
+let currentPage = 'dashboard';
+let allStudents = {};
+let allTeachers = {};
+let allClasses = {};
+let allRecords = {};
+let selectedClass = null;
+let selectedWeek = 1;
+let searchQuery = '';
 
-// Login
-function login() {
-  let u = username.value;
-  let p = password.value;
+const DAYS = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس'];
+const DAY_KEYS = ['sun','mon','tue','wed','thu'];
+const WEEKS = 30;
 
-  if (u === "idarah" && p === "idarah2026") {
-    currentRole = "idarah";
-    init();
+const STATUS_OPTIONS = [
+  { val: 'hafiz', label: 'حافظ', badge: 'badge-green' },
+  { val: 'absent', label: 'غائب', badge: 'badge-red' },
+  { val: 'review', label: 'مراجعة', badge: 'badge-blue' },
+  { val: 'partial', label: 'ناقص', badge: 'badge-yellow' },
+  { val: 'other', label: 'أخرى', badge: 'badge-gray' }
+];
+
+function getStatusBadge(val) {
+  const s = STATUS_OPTIONS.find(x => x.val === val);
+  if (!s) return `<span class="badge badge-gray">${val||'-'}</span>`;
+  return `<span class="badge ${s.badge}">${s.label}</span>`;
+}
+
+function getScoreColor(score) {
+  if (!score) return '';
+  if (score >= 7) return 'score-7';
+  if (score >= 6) return 'score-6';
+  if (score >= 5) return 'score-5';
+  if (score >= 4) return 'score-4';
+  if (score >= 3) return 'score-3';
+  if (score >= 2) return 'score-2';
+  return 'score-1';
+}
+
+// ===== SVG ICONS =====
+const icons = {
+  dashboard: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>`,
+  teachers: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>`,
+  students: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+  classes: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>`,
+  records: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+  reports: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+  star: `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+  myrecords: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>`
+};
+
+// ===== LOGIN =====
+document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+async function doLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value.trim();
+  const errEl = document.getElementById('loginError');
+  const errTxt = document.getElementById('loginErrorText');
+  errEl.style.display = 'none';
+
+  if (!user && !pass) {
+    showLoginError('يرجى إدخال بيانات تسجيل الدخول');
+    return;
   }
-  else if (u === "admin" && p === "admin2026") {
-    currentRole = "admin";
-    init();
+
+  // Check fixed accounts
+  if (user === 'idarah' && pass === 'idarah2026') {
+    startSession({ role: 'idarah', name: 'الإدارة', id: 'idarah' });
+    return;
   }
-  else {
-    // check teacher
-    db.ref("teachers/" + u).once("value", snap => {
-      if (snap.exists() && snap.val().password === p) {
-        currentRole = "teacher";
-        currentUser = u;
-        init();
-      } else {
-        // student login by code
-        db.ref("students/" + p).once("value", s => {
-          if (s.exists()) {
-            currentRole = "student";
-            currentUser = p;
-            init();
-          } else {
-            error.innerText = "بيانات غير صحيحة";
-          }
+
+  if (user === 'admin' && pass === 'admin2026') {
+    startSession({ role: 'admin', name: 'المتابعة', id: 'admin' });
+    return;
+  }
+
+  // Check teacher accounts
+  try {
+    const teachersSnap = await db.ref('teachers').once('value');
+    const teachers = teachersSnap.val() || {};
+    for (const [tid, t] of Object.entries(teachers)) {
+      if (t.username === user && t.password === pass) {
+        startSession({ role: 'teacher', name: t.name, id: tid, classes: t.classes || [] });
+        return;
+      }
+    }
+
+    // Check student by code
+    const studentsSnap = await db.ref('students').once('value');
+    const students = studentsSnap.val() || {};
+    for (const [sid, s] of Object.entries(students)) {
+      if (s.code === user || s.code === pass) {
+        startSession({ role: 'student', name: s.name, id: sid, classId: s.classId, code: s.code });
+        return;
+      }
+    }
+
+    showLoginError('اسم المستخدم أو كلمة المرور غير صحيحة');
+  } catch (e) {
+    showLoginError('تعذر الاتصال بالخادم، تحقق من الاتصال');
+  }
+}
+
+function showLoginError(msg) {
+  document.getElementById('loginErrorText').textContent = msg;
+  document.getElementById('loginError').style.display = 'flex';
+}
+
+function startSession(user) {
+  currentUser = user;
+  currentRole = user.role;
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  setupSidebar();
+  loadData();
+}
+
+function doLogout() {
+  currentUser = null;
+  currentRole = null;
+  document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').style.display = 'none';
+  allStudents = {}; allTeachers = {}; allClasses = {}; allRecords = {};
+}
+
+// ===== SIDEBAR SETUP =====
+function setupSidebar() {
+  const roleNames = { idarah: 'الإدارة', admin: 'المتابعة', teacher: 'معلم', student: 'طالب' };
+  const roleColors = { idarah: '#059669', admin: '#2563eb', teacher: '#f59e0b', student: '#7c3aed' };
+  const col = roleColors[currentRole] || '#059669';
+
+  document.getElementById('sidebarUserName').textContent = currentUser.name;
+  document.getElementById('sidebarUserRole').textContent = roleNames[currentRole];
+  document.getElementById('userAvatar').textContent = currentUser.name.charAt(0);
+  document.getElementById('userAvatar').style.background = col;
+
+  const nav = document.getElementById('sidebarNav');
+  let html = '';
+
+  if (currentRole === 'idarah') {
+    html = `
+      <div class="nav-section-label">القائمة الرئيسية</div>
+      ${navItem('dashboard','لوحة التحكم',icons.dashboard)}
+      ${navItem('teachers','المعلمون',icons.teachers)}
+      ${navItem('students','الطلاب',icons.students)}
+      ${navItem('classes','الفصول',icons.classes)}
+      <div class="nav-section-label">الرصد والتقارير</div>
+      ${navItem('records','رصد الدرجات',icons.records)}
+      ${navItem('reports','التقارير',icons.reports)}
+    `;
+  } else if (currentRole === 'admin') {
+    html = `
+      <div class="nav-section-label">القائمة الرئيسية</div>
+      ${navItem('dashboard','لوحة التحكم',icons.dashboard)}
+      ${navItem('students','الطلاب',icons.students)}
+      ${navItem('classes','الفصول',icons.classes)}
+      <div class="nav-section-label">التقارير</div>
+      ${navItem('records','عرض الدرجات',icons.records)}
+      ${navItem('reports','التقارير',icons.reports)}
+    `;
+  } else if (currentRole === 'teacher') {
+    html = `
+      <div class="nav-section-label">القائمة الرئيسية</div>
+      ${navItem('dashboard','لوحة التحكم',icons.dashboard)}
+      ${navItem('records','رصد الدرجات',icons.records)}
+      ${navItem('reports','تقارير الفصل',icons.reports)}
+    `;
+  } else if (currentRole === 'student') {
+    html = `
+      <div class="nav-section-label">حسابي</div>
+      ${navItem('student','سجل إنجازاتي',icons.myrecords)}
+    `;
+  }
+
+  nav.innerHTML = html;
+}
+
+function navItem(page, label, icon) {
+  return `<div class="nav-item ${currentPage === page ? 'active' : ''}" onclick="navigateTo('${page}')">${icon}<span>${label}</span></div>`;
+}
+
+function navigateTo(page) {
+  currentPage = page;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el => {
+    if (el.getAttribute('onclick') === `navigateTo('${page}')`) el.classList.add('active');
+  });
+  document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+  const map = { dashboard: 'pageDashboard', teachers: 'pageTeachers', students: 'pageStudents', classes: 'pageClasses', records: 'pageRecords', reports: 'pageReports', student: 'pageStudent' };
+  const target = map[page] || 'pageDashboard';
+  document.getElementById(target).classList.add('active');
+  renderPage(page);
+  if (window.innerWidth <= 768) closeSidebar();
+}
+
+// ===== DATA LOADING =====
+function loadData() {
+  db.ref('teachers').on('value', snap => { allTeachers = snap.val() || {}; renderPage(currentPage); });
+  db.ref('students').on('value', snap => { allStudents = snap.val() || {}; renderPage(currentPage); });
+  db.ref('classes').on('value', snap => { allClasses = snap.val() || {}; renderPage(currentPage); });
+  db.ref('records').on('value', snap => { allRecords = snap.val() || {}; renderPage(currentPage); });
+
+  const firstPage = currentRole === 'student' ? 'student' : 'dashboard';
+  navigateTo(firstPage);
+}
+
+// ===== RENDER PAGES =====
+function renderPage(page) {
+  if (page === 'dashboard') renderDashboard();
+  else if (page === 'teachers') renderTeachers();
+  else if (page === 'students') renderStudents();
+  else if (page === 'classes') renderClasses();
+  else if (page === 'records') renderRecords();
+  else if (page === 'reports') renderReports();
+  else if (page === 'student') renderStudentView();
+}
+
+// ===== DASHBOARD =====
+function renderDashboard() {
+  const el = document.getElementById('pageDashboard');
+  const teacherCount = Object.keys(allTeachers).length;
+  const studentCount = Object.keys(allStudents).length;
+  const classCount = Object.keys(allClasses).length;
+
+  let totalRecords = 0, totalScore = 0, scoreCount = 0;
+  Object.values(allRecords).forEach(cls => {
+    Object.values(cls).forEach(week => {
+      Object.values(week).forEach(day => {
+        Object.values(day).forEach(rec => {
+          totalRecords++;
+          if (rec.score) { totalScore += parseInt(rec.score); scoreCount++; }
         });
-      }
-    });
-  }
-}
-
-function init() {
-  login.classList.add("hidden");
-  appDiv = document.getElementById("app");
-  appDiv.classList.remove("hidden");
-
-  loadClasses();
-}
-
-function logout() {
-  location.reload();
-}
-
-// Load Classes
-function loadClasses() {
-  db.ref("classes").on("value", snap => {
-    tabs.innerHTML = "";
-    snap.forEach(c => {
-      let div = document.createElement("div");
-      div.className = "tab";
-      div.innerText = c.key;
-      div.onclick = () => selectClass(c.key);
-      tabs.appendChild(div);
+      });
     });
   });
-}
 
-function selectClass(cls) {
-  currentClass = cls;
-  render();
-}
+  const avgScore = scoreCount > 0 ? (totalScore / scoreCount).toFixed(1) : '0';
 
-// Render
-function render() {
-  content.innerHTML = "";
+  document.getElementById('topbarTitle').textContent = 'لوحة التحكم';
 
-  if (currentRole === "student") {
-    showStudent();
-  }
-  else if (currentRole === "teacher") {
-    showTeacher();
-  }
-  else {
-    showAdmin();
-  }
-}
+  let greeting = 'مرحباً';
+  const hour = new Date().getHours();
+  if (hour < 12) greeting = 'صباح الخير';
+  else if (hour < 17) greeting = 'مساء الخير';
+  else greeting = 'مساء النور';
 
-// Admin View
-function showAdmin() {
-  let html = `
-  <div class="card">
-    <h3>إضافة طالب</h3>
-    <input id="sname" placeholder="اسم الطالب">
-    <input id="scode" placeholder="الكود">
-    <input id="sclass" placeholder="الفصل">
-    <button onclick="addStudent()">إضافة</button>
-  </div>
+  el.innerHTML = `
+    <div style="margin-bottom:24px;">
+      <h2 style="font-size:1.3rem;font-weight:800;color:var(--text-primary);margin-bottom:4px;">${greeting}، ${currentUser.name} 👋</h2>
+      <p style="color:var(--text-secondary);font-size:0.88rem;">هذه نظرة عامة على نظام الإمام ورش</p>
+    </div>
+
+    <div class="stats-grid">
+      ${currentRole !== 'teacher' ? `
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--primary-light);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">${icons.teachers.match(/<svg[^>]*>(.*)<\/svg>/s)?.[1]||''}</svg>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">${teacherCount}</div>
+            <div class="stat-label">معلم</div>
+          </div>
+        </div>
+      ` : ''}
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#ede9fe;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" width="26" height="26"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">${studentCount}</div>
+          <div class="stat-label">طالب</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#dbeafe;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" width="26" height="26"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">${classCount}</div>
+          <div class="stat-label">فصل</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--accent-light);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2" width="26" height="26"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">${totalRecords}</div>
+          <div class="stat-label">إجمالي السجلات</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#fef2f2;">
+          <svg viewBox="0 0 24 24" fill="#f59e0b" width="26" height="26"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">${avgScore}</div>
+          <div class="stat-label">متوسط الدرجة / 7</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          الفصول الدراسية
+        </div>
+      </div>
+      <div class="card-body">
+        ${Object.keys(allClasses).length === 0 ?
+          `<div class="no-results"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><p>لا توجد فصول بعد</p></div>` :
+          `<div class="tabs-wrapper" style="margin-bottom:0;">
+            ${Object.entries(allClasses).map(([cid,c]) => {
+              const count = Object.values(allStudents).filter(s=>s.classId===cid).length;
+              return `<div class="tab-btn" onclick="navigateTo('records');setTimeout(()=>selectClass('${cid}'),100)">${c.name} <span style="opacity:0.7;font-size:0.8em;">(${count})</span></div>`;
+            }).join('')}
+          </div>`
+        }
+      </div>
+    </div>
   `;
-  content.innerHTML = html;
 }
 
-// Add Student
-function addStudent() {
-  let s = {
-    name: sname.value,
-    class: sclass.value
-  };
-  db.ref("students/" + scode.value).set(s);
-  alert("تمت الإضافة");
+// ===== TEACHERS =====
+function renderTeachers() {
+  if (currentRole !== 'idarah') return;
+  document.getElementById('topbarTitle').textContent = 'المعلمون';
+  const el = document.getElementById('pageTeachers');
+  const list = Object.entries(allTeachers);
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">${icons.teachers} المعلمون (${list.length})</div>
+        <button class="btn btn-primary btn-sm" onclick="openTeacherModal()">
+          <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          إضافة معلم
+        </button>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>الاسم</th>
+              <th>اسم المستخدم</th>
+              <th>الفصول المسندة</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.length === 0 ? `<tr class="empty-row"><td colspan="5">لا يوجد معلمون بعد</td></tr>` :
+              list.map(([tid, t], i) => `
+                <tr>
+                  <td>${i+1}</td>
+                  <td><strong>${t.name}</strong></td>
+                  <td><code style="background:var(--bg);padding:2px 8px;border-radius:4px;font-size:0.85rem;">${t.username}</code></td>
+                  <td>${(t.classes||[]).map(cid => `<span class="badge badge-green">${allClasses[cid]?.name||cid}</span>`).join(' ') || '<span class="badge badge-gray">لا يوجد</span>'}</td>
+                  <td>
+                    <div style="display:flex;gap:6px;">
+                      <button class="btn btn-warning btn-xs" onclick="openTeacherModal('${tid}')">تعديل</button>
+                      <button class="btn btn-danger btn-xs" onclick="confirmDelete('teacher','${tid}','${t.name}')">حذف</button>
+                    </div>
+                  </td>
+                </tr>
+              `).join('')
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
 }
 
-// Teacher View
-function showTeacher() {
-  db.ref("students").once("value", snap => {
-    let html = `<div class="card"><h3>الطلاب</h3>`;
-    snap.forEach(s => {
-      if (s.val().class === currentClass) {
-        html += `
-        <div>
-          ${s.val().name}
-          <button onclick="record('${s.key}')">رصد</button>
-        </div>`;
+// ===== STUDENTS =====
+function renderStudents() {
+  document.getElementById('topbarTitle').textContent = 'الطلاب';
+  const el = document.getElementById('pageStudents');
+  let list = Object.entries(allStudents);
+
+  // Filter by teacher's classes
+  if (currentRole === 'teacher') {
+    list = list.filter(([sid, s]) => (currentUser.classes||[]).includes(s.classId));
+  }
+
+  const q = searchQuery.toLowerCase();
+  if (q) list = list.filter(([sid,s]) => s.name?.toLowerCase().includes(q) || s.code?.includes(q));
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">${icons.students} الطلاب (${list.length})</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <div class="search-box">
+            <input type="text" placeholder="بحث بالاسم أو الكود..." value="${searchQuery}" oninput="searchQuery=this.value;renderStudents()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          ${currentRole === 'idarah' ? `<button class="btn btn-primary btn-sm" onclick="openStudentModal()"><svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> إضافة طالب</button>` : ''}
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>الاسم</th>
+              <th>رمز الطالب</th>
+              <th>الفصل</th>
+              <th>المعدل العام</th>
+              ${currentRole === 'idarah' ? '<th>الإجراءات</th>' : ''}
+            </tr>
+          </thead>
+          <tbody>
+            ${list.length === 0 ? `<tr class="empty-row"><td colspan="${currentRole==='idarah'?6:5}">لا يوجد طلاب</td></tr>` :
+              list.map(([sid, s], i) => {
+                const avg = getStudentAvg(sid);
+                return `
+                  <tr>
+                    <td>${i+1}</td>
+                    <td><strong>${s.name}</strong></td>
+                    <td><code style="background:var(--primary-lighter);padding:3px 10px;border-radius:6px;font-size:0.85rem;color:var(--primary-dark);font-weight:700;">${s.code||'-'}</code></td>
+                    <td>${allClasses[s.classId]?.name || '-'}</td>
+                    <td><span class="score-badge ${getScoreColor(avg)}">${avg > 0 ? avg : '-'}</span></td>
+                    ${currentRole === 'idarah' ? `
+                      <td>
+                        <div style="display:flex;gap:6px;">
+                          <button class="btn btn-warning btn-xs" onclick="openStudentModal('${sid}')">تعديل</button>
+                          <button class="btn btn-danger btn-xs" onclick="confirmDelete('student','${sid}','${s.name}')">حذف</button>
+                        </div>
+                      </td>
+                    ` : ''}
+                  </tr>
+                `;
+              }).join('')
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function getStudentAvg(sid) {
+  let total = 0, count = 0;
+  Object.values(allRecords).forEach(cls => {
+    Object.values(cls).forEach(week => {
+      Object.values(week).forEach(day => {
+        const rec = day[sid];
+        if (rec?.score) { total += parseInt(rec.score); count++; }
+      });
+    });
+  });
+  return count > 0 ? (total / count).toFixed(1) : 0;
+}
+
+// ===== CLASSES =====
+function renderClasses() {
+  if (currentRole !== 'idarah' && currentRole !== 'admin') { navigateTo('records'); return; }
+  document.getElementById('topbarTitle').textContent = 'الفصول الدراسية';
+  const el = document.getElementById('pageClasses');
+  const list = Object.entries(allClasses);
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">${icons.classes} الفصول (${list.length})</div>
+        ${currentRole === 'idarah' ? `<button class="btn btn-primary btn-sm" onclick="openClassModal()"><svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> إضافة فصل</button>` : ''}
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>#</th><th>اسم الفصل</th><th>عدد الطلاب</th><th>المعلمون</th>${currentRole==='idarah'?'<th>الإجراءات</th>':''}</tr>
+          </thead>
+          <tbody>
+            ${list.length === 0 ? `<tr class="empty-row"><td colspan="${currentRole==='idarah'?5:4}">لا توجد فصول بعد</td></tr>` :
+              list.map(([cid,c],i) => {
+                const studs = Object.values(allStudents).filter(s=>s.classId===cid).length;
+                const teachers = Object.entries(allTeachers).filter(([tid,t])=>(t.classes||[]).includes(cid)).map(([tid,t])=>t.name);
+                return `
+                  <tr>
+                    <td>${i+1}</td>
+                    <td><strong>${c.name}</strong></td>
+                    <td><span class="badge badge-blue">${studs} طالب</span></td>
+                    <td>${teachers.length > 0 ? teachers.map(n=>`<span class="badge badge-green">${n}</span>`).join(' ') : '<span class="badge badge-gray">لا يوجد</span>'}</td>
+                    ${currentRole==='idarah'?`<td><div style="display:flex;gap:6px;"><button class="btn btn-warning btn-xs" onclick="openClassModal('${cid}')">تعديل</button><button class="btn btn-danger btn-xs" onclick="confirmDelete('class','${cid}','${c.name}')">حذف</button></div></td>`:''}
+                  </tr>
+                `;
+              }).join('')
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ===== RECORDS =====
+function renderRecords() {
+  document.getElementById('topbarTitle').textContent = 'رصد الدرجات';
+  const el = document.getElementById('pageRecords');
+
+  let classes = Object.entries(allClasses);
+  if (currentRole === 'teacher') {
+    classes = classes.filter(([cid]) => (currentUser.classes||[]).includes(cid));
+  }
+
+  if (classes.length === 0) {
+    el.innerHTML = `<div class="alert alert-warning">لا توجد فصول متاحة لك حالياً.</div>`;
+    return;
+  }
+
+  if (!selectedClass || !allClasses[selectedClass]) {
+    selectedClass = classes[0][0];
+  }
+
+  const weekDays = getWeekDays();
+
+  el.innerHTML = `
+    <div style="margin-bottom:20px;">
+      <div class="tabs-wrapper">
+        ${classes.map(([cid,c]) => `<button class="tab-btn ${selectedClass===cid?'active':''}" onclick="selectClass('${cid}')">${c.name}</button>`).join('')}
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span style="font-weight:700;font-size:0.9rem;">الأسبوع:</span>
+          <div class="weeks-nav">
+            ${Array.from({length:WEEKS},(_,i)=>`<button class="week-btn ${selectedWeek===i+1?'active':''}" onclick="selectWeek(${i+1})">أ${i+1}</button>`).join('')}
+          </div>
+        </div>
+        ${currentRole === 'idarah' ? `
+          <button class="btn btn-danger btn-sm" onclick="confirmResetClass('${selectedClass}')">
+            <svg viewBox="0 0 24 24" width="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+            تصفير الفصل
+          </button>
+        ` : ''}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          ${icons.records}
+          ${allClasses[selectedClass]?.name} — الأسبوع ${selectedWeek}
+        </div>
+        <div style="display:flex;gap:8px;font-size:0.8rem;color:var(--text-secondary);">
+          ${weekDays.map((d,i) => `<span>${DAYS[i]}: ${d}</span>`).join(' | ')}
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>الطالب</th>
+              ${DAYS.map((d,i) => `<th>${d}<br><span style="font-weight:400;opacity:0.7;font-size:0.75rem;">${weekDays[i]}</span></th>`).join('')}
+            </tr>
+          </thead>
+          <tbody id="recordsTableBody">
+            <tr><td colspan="6" class="loading"><div class="spinner"></div> جاري التحميل...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  renderRecordsBody();
+}
+
+function renderRecordsBody() {
+  const body = document.getElementById('recordsTableBody');
+  if (!body) return;
+
+  const students = Object.entries(allStudents).filter(([sid,s]) => s.classId === selectedClass);
+
+  if (students.length === 0) {
+    body.innerHTML = `<tr class="empty-row"><td colspan="6">لا يوجد طلاب في هذا الفصل</td></tr>`;
+    return;
+  }
+
+  const canEdit = currentRole === 'idarah' || currentRole === 'teacher';
+
+  body.innerHTML = students.map(([sid, s]) => {
+    const cells = DAY_KEYS.map((dk, di) => {
+      const rec = allRecords[selectedClass]?.[`week${selectedWeek}`]?.[dk]?.[sid];
+      if (rec) {
+        return `<td>
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            ${getStatusBadge(rec.status)}
+            <span class="score-badge ${getScoreColor(rec.score)}" style="font-size:0.9rem;">${rec.score ? rec.score+'/7' : '-'}</span>
+            ${rec.surah ? `<span style="font-size:0.75rem;color:var(--text-secondary);">${rec.surah}${rec.page?' ص'+rec.page:''}</span>` : ''}
+            ${rec.note ? `<span style="font-size:0.72rem;color:var(--text-light);font-style:italic;">${rec.note}</span>` : ''}
+            ${canEdit ? `<button class="btn btn-secondary btn-xs" onclick="openRecordModal('${sid}','${dk}')">تعديل</button>` : ''}
+          </div>
+        </td>`;
+      } else {
+        return `<td style="text-align:center;">
+          ${canEdit ? `<button class="btn btn-primary btn-xs" onclick="openRecordModal('${sid}','${dk}')">
+            <svg viewBox="0 0 24 24" width="12" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            رصد
+          </button>` : '<span style="color:var(--text-light);">-</span>'}
+        </td>`;
       }
     });
-    html += "</div>";
-    content.innerHTML = html;
+
+    return `<tr>
+      <td><strong>${s.name}</strong><br><code style="font-size:0.75rem;color:var(--primary);background:var(--primary-lighter);padding:1px 6px;border-radius:4px;">${s.code||''}</code></td>
+      ${cells.join('')}
+    </tr>`;
+  }).join('');
+}
+
+function getWeekDays() {
+  const base = new Date(2024, 8, 1);
+  const start = new Date(base);
+  start.setDate(start.getDate() + (selectedWeek - 1) * 7);
+  while (start.getDay() !== 0) start.setDate(start.getDate() + 1);
+  return Array.from({length:5}, (_, i) => {
+    const d = new Date(start);
+    d.setDate(d.getDate() + i);
+    return `${d.getDate()}/${d.getMonth()+1}`;
   });
 }
 
-// Record
-function record(id) {
-  let surah = prompt("السورة");
-  let page = prompt("الصفحة");
-  let grade = prompt("الدرجة /7");
-
-  db.ref("records/" + id).push({
-    surah, page, grade, date: new Date().toLocaleDateString()
-  });
-
-  alert("تم الحفظ");
+function selectClass(cid) {
+  selectedClass = cid;
+  renderRecords();
 }
 
-// Student View
-function showStudent() {
-  db.ref("records/" + currentUser).on("value", snap => {
-    let html = `<div class="card"><h3>سجل إنجازاتي</h3>`;
-    snap.forEach(r => {
-      let d = r.val();
-      html += `<div>${d.date} - ${d.surah} - ${d.grade}</div>`;
+function selectWeek(w) {
+  selectedWeek = w;
+  renderRecords();
+}
+
+// ===== REPORTS =====
+function renderReports() {
+  document.getElementById('topbarTitle').textContent = 'التقارير';
+  const el = document.getElementById('pageReports');
+
+  let classes = Object.entries(allClasses);
+  if (currentRole === 'teacher') {
+    classes = classes.filter(([cid]) => (currentUser.classes||[]).includes(cid));
+  }
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <div class="card-title">${icons.reports} تقارير الطلاب</div>
+      </div>
+      <div class="card-body">
+        ${classes.map(([cid,c]) => {
+          const students = Object.entries(allStudents).filter(([sid,s])=>s.classId===cid);
+          return `
+            <div style="margin-bottom:24px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <h3 style="font-size:1rem;font-weight:800;">${c.name}</h3>
+                <span class="badge badge-blue">${students.length} طالب</span>
+              </div>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>الطالب</th>
+                      <th>عدد السجلات</th>
+                      <th>المتوسط</th>
+                      <th>أعلى درجة</th>
+                      <th>الحضور</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${students.length === 0 ? `<tr class="empty-row"><td colspan="5">لا يوجد طلاب</td></tr>` :
+                      students.map(([sid,s]) => {
+                        const stats = getStudentStats(sid);
+                        return `
+                          <tr>
+                            <td><strong>${s.name}</strong></td>
+                            <td>${stats.count}</td>
+                            <td><span class="score-badge ${getScoreColor(stats.avg)}">${stats.avg > 0 ? stats.avg : '-'}</span></td>
+                            <td><span class="score-badge score-7">${stats.max > 0 ? stats.max+'/7' : '-'}</span></td>
+                            <td>
+                              <span class="badge ${stats.attendance > 70 ? 'badge-green' : stats.attendance > 50 ? 'badge-yellow' : 'badge-red'}">
+                                ${stats.attendance}%
+                              </span>
+                            </td>
+                          </tr>
+                        `;
+                      }).join('')
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+        }).join('')}
+        ${classes.length === 0 ? `<div class="alert alert-warning">لا توجد فصول متاحة.</div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function getStudentStats(sid) {
+  let total = 0, count = 0, max = 0, present = 0, total_days = 0;
+  Object.values(allRecords).forEach(cls => {
+    Object.values(cls).forEach(week => {
+      Object.values(week).forEach(day => {
+        const rec = day[sid];
+        if (rec) {
+          total_days++;
+          if (rec.status !== 'absent') present++;
+          if (rec.score) {
+            const sc = parseInt(rec.score);
+            total += sc; count++;
+            if (sc > max) max = sc;
+          }
+        }
+      });
     });
-    html += "</div>";
-    content.innerHTML = html;
   });
+  return {
+    count,
+    avg: count > 0 ? (total / count).toFixed(1) : 0,
+    max,
+    attendance: total_days > 0 ? Math.round((present / total_days) * 100) : 0
+  };
 }
 
+// ===== STUDENT VIEW =====
+function renderStudentView() {
+  document.getElementById('topbarTitle').textContent = 'سجل إنجازاتي';
+  const el = document.getElementById('pageStudent');
+
+  const sid = currentUser.id;
+  const student = allStudents[sid];
+  if (!student) {
+    el.innerHTML = `<div class="alert alert-warning">لم يتم العثور على بيانات الطالب.</div>`;
+    return;
+  }
+
+  const stats = getStudentStats(sid);
+  const lastRecord = getLastRecord(sid);
+
+  let allRecs = [];
+  Object.entries(allRecords).forEach(([cid, cls]) => {
+    Object.entries(cls).forEach(([wk, week]) => {
+      const weekNum = parseInt(wk.replace('week',''));
+      Object.entries(week).forEach(([dk, day]) => {
+        const rec = day[sid];
+        if (rec) {
+          const dayIdx = DAY_KEYS.indexOf(dk);
+          allRecs.push({ week: weekNum, day: DAYS[dayIdx]||dk, ...rec });
+        }
+      });
+    });
+  });
+
+  allRecs.sort((a,b) => b.week - a.week || DAY_KEYS.indexOf(b.day) - DAY_KEYS.indexOf(a.day));
+
+  el.innerHTML = `
+    <div class="student-hero">
+      <h2>🎉 أهلاً ${student.name}</h2>
+      <p>رمز الطالب: ${student.code} &nbsp;•&nbsp; الفصل: ${allClasses[student.classId]?.name||'-'}</p>
+      <div class="student-stats">
+        <div class="student-stat">
+          <span class="val">${stats.count}</span>
+          <span class="lbl">تسميع</span>
+        </div>
+        <div class="student-stat">
+          <span class="val">${stats.avg > 0 ? stats.avg : '-'}</span>
+          <span class="lbl">المعدل</span>
+        </div>
+        <div class="student-stat">
+          <span class="val">${stats.attendance}%</span>
+          <span class="lbl">الحضور</span>
+        </div>
+      </div>
+    </div>
+
+    ${lastRecord ? `
+      <div class="card" style="margin-bottom:20px;border-right:4px solid var(--primary);">
+        <div class="card-body" style="padding:16px 20px;">
+          <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px;font-weight:600;">آخر تسميع — الأسبوع ${lastRecord.week} | ${lastRecord.day}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+            ${getStatusBadge(lastRecord.status)}
+            ${lastRecord.score ? `<span class="score-badge ${getScoreColor(lastRecord.score)}" style="font-size:1rem;">${lastRecord.score}/7</span>` : ''}
+            ${lastRecord.surah ? `<span style="font-size:0.9rem;color:var(--text-primary);">📖 ${lastRecord.surah}${lastRecord.page?' — ص'+lastRecord.page:''}</span>` : ''}
+            ${lastRecord.note ? `<span style="font-size:0.85rem;color:var(--text-secondary);font-style:italic;">💬 ${lastRecord.note}</span>` : ''}
+          </div>
+        </div>
+      </div>
+    ` : ''}
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">${icons.records} سجل التسميع الكامل</div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>الأسبوع</th><th>اليوم</th><th>السورة</th><th>الصفحة</th><th>الدرجة</th><th>الحالة</th><th>ملاحظات المعلم</th></tr>
+          </thead>
+          <tbody>
+            ${allRecs.length === 0 ? `<tr class="empty-row"><td colspan="7">لا توجد سجلات بعد</td></tr>` :
+              allRecs.map(r => `
+                <tr>
+                  <td><span class="badge badge-blue">أسبوع ${r.week}</span></td>
+                  <td>${r.day}</td>
+                  <td>${r.surah||'-'}</td>
+                  <td>${r.page||'-'}</td>
+                  <td><span class="score-badge ${getScoreColor(r.score)}">${r.score ? r.score+'/7' : '-'}</span></td>
+                  <td>${getStatusBadge(r.status)}</td>
+                  <td style="font-style:italic;color:var(--text-secondary);font-size:0.85rem;">${r.note||'-'}</td>
+                </tr>
+              `).join('')
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function getLastRecord(sid) {
+  let last = null;
+  Object.entries(allRecords).forEach(([cid, cls]) => {
+    Object.entries(cls).forEach(([wk, week]) => {
+      const weekNum = parseInt(wk.replace('week',''));
+      Object.entries(week).forEach(([dk, day]) => {
+        const rec = day[sid];
+        if (rec) {
+          if (!last || weekNum > last.week) {
+            last = { week: weekNum, day: DAYS[DAY_KEYS.indexOf(dk)]||dk, ...rec };
+          }
+        }
+      });
+    });
+  });
+  return last;
+}
+
+// ===== MODALS =====
+// TEACHER MODAL
+function openTeacherModal(tid) {
+  const t = tid ? allTeachers[tid] : null;
+  const classOptions = Object.entries(allClasses).map(([cid,c]) =>
+    `<label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;">
+      <input type="checkbox" value="${cid}" ${(t?.classes||[]).includes(cid)?'checked':''} style="accent-color:var(--primary);">
+      ${c.name}
+    </label>`
+  ).join('');
+
+  showModal(`${tid?'تعديل':'إضافة'} معلم`, `
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>اسم المعلم *</label>
+        <input type="text" id="tName" value="${t?.name||''}" placeholder="الاسم الكامل">
+      </div>
+      <div class="form-group">
+        <label>اسم المستخدم *</label>
+        <input type="text" id="tUser" value="${t?.username||''}" placeholder="username">
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور *</label>
+        <input type="text" id="tPass" value="${t?.password||''}" placeholder="password">
+      </div>
+      <div class="form-group full">
+        <label>الفصول المسندة</label>
+        ${classOptions || '<p style="color:var(--text-light);font-size:0.85rem;">لا توجد فصول، أضف فصلاً أولاً</p>'}
+      </div>
+    </div>
+  `, () => saveTeacher(tid));
+}
+
+async function saveTeacher(tid) {
+  const name = document.getElementById('tName').value.trim();
+  const username = document.getElementById('tUser').value.trim();
+  const password = document.getElementById('tPass').value.trim();
+  const classes = [...document.querySelectorAll('#modalBody input[type=checkbox]:checked')].map(el=>el.value);
+
+  if (!name || !username || !password) { alert('يرجى ملء جميع الحقول المطلوبة'); return; }
+
+  const data = { name, username, password, classes };
+  const ref = tid ? db.ref(`teachers/${tid}`) : db.ref('teachers').push();
+  await ref.set(data);
+  closeModal();
+}
+
+// CLASS MODAL
+function openClassModal(cid) {
+  const c = cid ? allClasses[cid] : null;
+  showModal(`${cid?'تعديل':'إضافة'} فصل`, `
+    <div class="form-group">
+      <label>اسم الفصل *</label>
+      <input type="text" id="cName" value="${c?.name||''}" placeholder="مثال: 3/1">
+    </div>
+  `, () => saveClass(cid));
+}
+
+async function saveClass(cid) {
+  const name = document.getElementById('cName').value.trim();
+  if (!name) { alert('يرجى إدخال اسم الفصل'); return; }
+  const ref = cid ? db.ref(`classes/${cid}`) : db.ref('classes').push();
+  await ref.set({ name });
+  closeModal();
+}
+
+// STUDENT MODAL
+function openStudentModal(sid) {
+  const s = sid ? allStudents[sid] : null;
+  const classOptions = Object.entries(allClasses).map(([cid,c]) =>
+    `<option value="${cid}" ${s?.classId===cid?'selected':''}>${c.name}</option>`
+  ).join('');
+
+  showModal(`${sid?'تعديل':'إضافة'} طالب`, `
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>اسم الطالب *</label>
+        <input type="text" id="sName" value="${s?.name||''}" placeholder="الاسم الكامل">
+      </div>
+      <div class="form-group">
+        <label>رمز الطالب *</label>
+        <input type="text" id="sCode" value="${s?.code||''}" placeholder="كود فريد للدخول">
+      </div>
+      <div class="form-group">
+        <label>الفصل *</label>
+        <select id="sClass">
+          <option value="">اختر الفصل</option>
+          ${classOptions}
+        </select>
+      </div>
+    </div>
+  `, () => saveStudent(sid));
+}
+
+async function saveStudent(sid) {
+  const name = document.getElementById('sName').value.trim();
+  const code = document.getElementById('sCode').value.trim();
+  const classId = document.getElementById('sClass').value;
+  if (!name || !code || !classId) { alert('يرجى ملء جميع الحقول المطلوبة'); return; }
+  const ref = sid ? db.ref(`students/${sid}`) : db.ref('students').push();
+  await ref.set({ name, code, classId });
+  closeModal();
+}
+
+// RECORD MODAL
+function openRecordModal(sid, dayKey) {
+  const student = allStudents[sid];
+  if (!student) return;
+  const existing = allRecords[selectedClass]?.[`week${selectedWeek}`]?.[dayKey]?.[sid] || {};
+  const dayName = DAYS[DAY_KEYS.indexOf(dayKey)];
+
+  showModal(`رصد — ${student.name} | ${dayName} | أسبوع ${selectedWeek}`, `
+    <div class="form-grid">
+      <div class="form-group">
+        <label>السورة / الحزب</label>
+        <input type="text" id="rSurah" value="${existing.surah||''}" placeholder="اسم السورة">
+      </div>
+      <div class="form-group">
+        <label>رقم الصفحة</label>
+        <input type="number" id="rPage" value="${existing.page||''}" placeholder="رقم الصفحة" min="1" max="604">
+      </div>
+      <div class="form-group">
+        <label>الدرجة (من 7)</label>
+        <select id="rScore">
+          <option value="">غير مرصود</option>
+          ${[7,6,5,4,3,2,1].map(n=>`<option value="${n}" ${existing.score==n?'selected':''}>${n}/7</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>الحالة</label>
+        <select id="rStatus">
+          ${STATUS_OPTIONS.map(s=>`<option value="${s.val}" ${existing.status===s.val?'selected':''}>${s.label}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>ملاحظات المعلم</label>
+        <textarea id="rNote" rows="3" placeholder="ملاحظة اختيارية...">${existing.note||''}</textarea>
+
+```
+  </div>
+</div>
+```
+
+`, () => saveRecord(sid, dayKey));
+}
+
+async function saveRecord(sid, dayKey) {
+const data = {
+surah: document.getElementById(‘rSurah’).value.trim(),
+page: document.getElementById(‘rPage’).value,
+score: document.getElementById(‘rScore’).value,
+status: document.getElementById(‘rStatus’).value,
+note: document.getElementById(‘rNote’).value.trim(),
+updatedAt: new Date().toISOString()
+};
+await db.ref(`records/${selectedClass}/week${selectedWeek}/${dayKey}/${sid}`).set(data);
+closeModal();
+}
+
+// ===== MODAL HELPERS =====
+function showModal(title, body, onSave) {
+const overlay = document.createElement(‘div’);
+overlay.className = ‘modal-overlay’;
+overlay.id = ‘modalOverlay’;
+overlay.innerHTML = `<div class="modal"> <div class="modal-header"> <div class="modal-title">${title}</div> <button class="modal-close" onclick="closeModal()">✕</button> </div> <div class="modal-body" id="modalBody">${body}</div> <div class="modal-footer"> <button class="btn btn-secondary" onclick="closeModal()">إلغاء</button> <button class="btn btn-primary" onclick="window._modalSave && window._modalSave()"> <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> حفظ </button> </div> </div>`;
+document.body.appendChild(overlay);
+window._modalSave = onSave;
+const firstInput = overlay.querySelector(‘input, select, textarea’);
+if (firstInput) setTimeout(() => firstInput.focus(), 100);
+}
+
+function closeModal() {
+const overlay = document.getElementById(‘modalOverlay’);
+if (overlay) overlay.remove();
+window._modalSave = null;
+}
+
+// ===== CONFIRM / DELETE =====
+function confirmDelete(type, id, name) {
+showConfirm(
+`حذف ${name}`,
+`هل أنت متأكد من حذف "${name}"؟ لا يمكن التراجع عن هذا الإجراء.`,
+async () => {
+const paths = { teacher: `teachers/${id}`, student: `students/${id}`, class: `classes/${id}` };
+await db.ref(paths[type]).remove();
+}
+);
+}
+
+function confirmResetClass(cid) {
+showConfirm(
+‘تصفير بيانات الفصل’,
+`هل تريد حذف جميع سجلات درجات فصل "${allClasses[cid]?.name}"؟ لا يمكن التراجع.`,
+async () => { await db.ref(`records/${cid}`).remove(); }
+);
+}
+
+function showConfirm(title, msg, onConfirm) {
+const overlay = document.createElement(‘div’);
+overlay.className = ‘confirm-overlay’;
+overlay.id = ‘confirmOverlay’;
+overlay.innerHTML = `<div class="confirm-box"> <div class="confirm-icon"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> </div> <div class="confirm-title">${title}</div> <div class="confirm-msg">${msg}</div> <div class="confirm-actions"> <button class="btn btn-secondary" onclick="closeConfirm()">إلغاء</button> <button class="btn btn-danger" onclick="window._confirmAction && window._confirmAction(); closeConfirm();">تأكيد الحذف</button> </div> </div>`;
+document.body.appendChild(overlay);
+window._confirmAction = onConfirm;
+}
+
+function closeConfirm() {
+const el = document.getElementById(‘confirmOverlay’);
+if (el) el.remove();
+window._confirmAction = null;
+}
+
+// ===== SIDEBAR TOGGLE =====
+function toggleSidebar() {
+const sb = document.getElementById(‘sidebar’);
+const overlay = document.getElementById(‘sidebarOverlay’);
+sb.classList.toggle(‘open’);
+overlay.classList.toggle(‘show’);
+}
+
+function closeSidebar() {
+document.getElementById(‘sidebar’).classList.remove(‘open’);
+document.getElementById(‘sidebarOverlay’).classList.remove(‘show’);
+}
+
+// ===== LOGIN ENTER KEY =====
+document.getElementById(‘loginPass’).addEventListener(‘keydown’, e => { if (e.key === ‘Enter’) doLogin(); });
+document.getElementById(‘loginUser’).addEventListener(‘keydown’, e => { if (e.key === ‘Enter’) doLogin(); });
 </script>
 
 </body>
