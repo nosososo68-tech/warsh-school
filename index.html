@@ -3,169 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة تبيان | المبرمج مصطفى عبدالله أحمد</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <title>نظام ورش الاحترافي | 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-
     <style>
-        :root {
-            --primary: #1a5e63; /* أخضر ملكي */
-            --secondary: #ffffff;
-            --accent: #c5a059; /* ذهبي */
-            --dark-bg: #121212;
-            --dark-text: #00ff41; /* أخضر فسفوري للـ Dark Mode */
-        }
+        :root { --main: #27ae60; --dark: #2c3e50; --bg: #f4f7f6; --card: #ffffff; --text: #333; --red: #e74c3c; --blue: #3498db; }
+        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { background: var(--bg); color: var(--text); margin: 0; padding: 10px; direction: rtl; }
+        
+        .card { background: var(--card); border-radius: 15px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); width: 100%; max-width: 800px; margin: 10px auto; border-top: 6px solid var(--main); }
+        .hidden { display: none !important; }
 
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            transition: all 0.5s ease;
-        }
+        /* الأزرار */
+        .btn { padding: 12px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; justify-content: center; }
+        .btn-main { background: var(--main); color: white; width: 100%; }
+        .btn-blue { background: var(--blue); color: white; }
+        .btn-red { background: var(--red); color: white; }
+        .btn-outline { background: transparent; border: 1px solid var(--main); color: var(--main); }
 
-        /* أنميشن عصري */
-        .fade-in { animation: fadeIn 0.8s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* لوحة الفلاتر */
+        .filter-section { background: #e8f5e9; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        select, input { padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; }
 
-        .app-container { max-width: 500px; margin: auto; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.1); position: relative; }
-
-        header { background: var(--primary); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 30px 30px; }
-
-        .login-card { padding: 25px; margin-top: -30px; background: white; border-radius: 20px; margin-inline: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-
-        .tabs { display: flex; background: #f0f0f0; border-radius: 12px; padding: 5px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 12px; border: none; background: none; font-weight: bold; cursor: pointer; border-radius: 10px; transition: 0.3s; }
-        .tab-btn.active { background: var(--primary); color: white; }
-
-        input, select { width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-family: 'Tajawal'; font-size: 1rem; }
-
-        .main-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .main-btn:hover { transform: scale(1.02); background: #134549; }
-
-        .panel { display: none; padding: 20px; }
-
-        /* شاشة المعلم والإدارة */
-        .info-box { background: #f9f9f9; padding: 15px; border-radius: 15px; border-right: 5px solid var(--accent); margin-bottom: 15px; }
-        .footer-rights { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 0.8rem; color: #999; }
-
-        /* الألوان للتقادير */
-        .status- حافظ { color: #27ae60; font-weight: bold; }
-        .status-غائب { color: #e74c3c; font-weight: bold; }
+        /* الشبكة */
+        .student-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+        .student-item { background: white; border: 1px solid #eee; padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .student-item:hover { transform: translateY(-3px); border-color: var(--main); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .status-badge { font-size: 10px; padding: 4px 8px; border-radius: 20px; display: block; margin-top: 8px; font-weight: bold; }
+        
+        /* السجل التاريخي */
+        .record-card { background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-right: 4px solid var(--main); position: relative; }
+        .record-actions { position: absolute; left: 10px; top: 10px; display: flex; gap: 10px; }
+        
+        .stats-bar { display: flex; justify-content: space-around; background: var(--dark); color: white; padding: 10px; border-radius: 10px; margin-bottom: 15px; font-size: 13px; }
+        footer { text-align: center; font-size: 11px; color: #888; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div class="app-container fade-in">
-    <header>
-        <h1 style="margin:0;">تبيان</h1>
-        <p style="margin:5px 0 0; opacity: 0.8;">إشراف المبرمج مصطفى عبدالله أحمد</p>
-    </header>
-
-    <div id="login-screen" class="login-card">
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('admin')">الإدارة/المعلم</button>
-            <button class="tab-btn" onclick="switchTab('student')">الطالب</button>
-        </div>
-
-        <div id="admin-inputs">
-            <input type="text" id="user" placeholder="اسم المستخدم (Idarah)">
-            <input type="password" id="pass" placeholder="كلمة المرور">
-            <button class="main-btn" onclick="handleLogin('admin')">دخول النظام</button>
-        </div>
-
-        <div id="student-inputs" style="display:none;">
-            <input type="number" id="s-code" placeholder="أدخل كود الطالب المكون من 6 أرقام">
-            <button class="main-btn" onclick="handleLogin('student')">استعلام سريع</button>
-        </div>
-    </div>
-
-    <div id="admin-panel" class="panel">
-        <h3>لوحة التحكم الشاملة</h3>
-        <div class="info-box">إضافة معلمين، فصول، وتقارير أداء المملكة</div>
-        <input type="text" placeholder="اسم المعلم الجديد">
-        <input type="text" placeholder="تعيين كلمة مرور للمعلم">
-        <button class="main-btn" style="background:var(--accent)">إضافة معلم جديد</button>
-        <hr>
-        <h4>التقارير الأسبوعية للفصول</h4>
-        <div id="reports" style="font-size: 0.9rem;">
-            <p>✅ الفصول الممتازة: 12 فصل</p>
-            <p>⚠️ فصول تحتاج متابعة: 2 فصل</p>
-        </div>
-        <button class="main-btn" style="margin-top:20px; background:#666" onclick="location.reload()">تسجيل خروج</button>
-    </div>
-
-    <div id="teacher-panel" class="panel">
-        <h3>رصد الدرجات (أ. محمد)</h3>
-        <select id="day-select"><option>الأحد</option><option>الاثنين</option><option>الثلاثاء</option></select>
-        <select id="week-select"></select> <select id="grade-select">
-            <option>حافظ</option>
-            <option>حافظ جزئياً</option>
-            <option>غير حافظ</option>
-            <option>غائب</option>
-        </select>
-        <input type="number" placeholder="الدرجة من 10" id="score-input">
-        <button class="main-btn" onclick="saveData()">تثبيت / تعديل الدرجة</button>
-        <button class="main-btn" style="margin-top:20px; background:#666" onclick="location.reload()">تسجيل خروج</button>
-    </div>
-
-    <div class="footer-rights">تطوير المبرمج: مصطفى عبدالله أحمد © 2026</div>
+<div id="loginPage" class="card">
+    <h2 style="text-align:center">نظام ورش الذكي 🛡️</h2>
+    <input type="text" id="loginKey" style="width:100%" placeholder="كود الطالب أو المعلم">
+    <input type="password" id="loginPass" style="width:100%; margin-top:10px;" class="hidden" placeholder="كلمة المرور">
+    <button class="btn btn-main" style="margin-top:15px;" onclick="handleLogin()">دخول النظام</button>
+    <p style="text-align:center; font-size:12px; cursor:pointer; color:var(--blue)" onclick="toggleStaff()">دخول الإدارة والمعلمين</p>
 </div>
 
-<script>
-    // إعدادات Firebase (ضع معلوماتك هنا)
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT.firebaseapp.com",
-        databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT.appspot.com",
-        messagingSenderId: "YOUR_ID",
-        appId: "YOUR_APP_ID"
-    };
+<div id="mainApp" class="hidden">
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 id="userNameDisplay">أهلاً بك</h3>
+            <button class="btn btn-red" style="padding:5px 15px" onclick="location.reload()">خروج</button>
+        </div>
+
+        <div id="teacherView" class="hidden">
+            <div class="filter-section">
+                <span>تاريخ السجل:</span>
+                <select id="fWeek" onchange="loadStudentsGrid()"></select>
+                <select id="fDay" onchange="loadStudentsGrid()">
+                    <option>يوم الأحد</option><option>يوم الاثنين</option><option>يوم الثلاثاء</option><option>يوم الأربعاء</option><option>يوم الخميس</option>
+                </select>
+                <input type="text" id="searchBar" placeholder="بحث بالاسم..." oninput="loadStudentsGrid()">
+            </div>
+
+            <div id="statsBar" class="stats-bar">
+                <span>تم الرصد: <b id="statDone">0</b></span>
+                <span>بانتظار الرصد: <b id="statWait">0</b></span>
+            </div>
+
+            <div id="classTabs" style="margin-bottom:15px; display:flex; gap:5px; overflow-x:auto;"></div>
+            <div id="studentsGrid" class="student-grid"></div>
+        </div>
+
+        <div id="studentView" class="hidden">
+            <div class="stats-bar" style="background:var(--blue)">
+                <span id="stdPerformance">تقرير الأداء الجاري</span>
+            </div>
+            <div id="stdHistory"></div>
+        </div>
+    </div>
+</div>
+
+<div id="gradingModal" class="hidden card" style="position:fixed; top:5%; left:50%; transform:translateX(-50%); z-index:100; max-height:90vh; overflow-y:auto;">
+    <div style="display:flex; justify-content:space-between">
+        <h3 id="targetStudentName">رصد طالب</h3>
+        <button onclick="closeGrading()" style="border:none; background:none; font-size:20px; cursor:pointer;">✕</button>
+    </div>
     
-    // تفعيل Firebase (تأكد من وضع المعلومات أعلاه ليعمل الرصد الحقيقي)
-    // firebase.initializeApp(firebaseConfig);
-    // const database = firebase.database();
+    <div class="filter-section" style="background:#f0f0f0">
+        <select id="gWeek"></select>
+        <select id="gDay">
+            <option>يوم الأحد</option><option>يوم الاثنين</option><option>يوم الثلاثاء</option><option>يوم الأربعاء</option><option>يوم الخميس</option>
+        </select>
+        <input type="text" id="gPage" placeholder="الصفحة/الموضع">
+        <input type="number" id="gMark" placeholder="الدرجة / 7">
+        <select id="gStatus">
+            <option value="حافظ">حافظ ✅</option>
+            <option value="غير حافظ">غير حافظ ⚠️</option>
+            <option value="لم يسمع">لم يسمع ❌</option>
+            <option value="غائب">غائب 💤</option>
+        </select>
+        <textarea id="gNote" style="width:100%;" placeholder="ملاحظات المعلم..."></textarea>
+        <button class="btn btn-main" onclick="submitGrade()">حفظ البيانات</button>
+    </div>
 
-    // توليد 100 أسبوع لفظياً
-    const weekSelect = document.getElementById('week-select');
-    for(let i=1; i<=100; i++) {
-        let opt = document.createElement('option');
-        opt.text = "الأسبوع " + i;
-        weekSelect.add(opt);
+    <h4>السجل الزمني للطالب:</h4>
+    <div id="personalHistory"></div>
+</div>
+
+<div id="adminPanel" class="hidden card">
+    <button class="btn btn-outline" onclick="showScreen('mainApp')">العودة للرصد</button>
+    <h3>إعدادات النظام</h3>
+    <div style="background:#fff3f3; padding:15px; border-radius:10px; border:1px solid #ffcdd2;">
+        <h4 style="color:var(--red); margin-top:0;">إدارة البيانات (للمدير فقط)</h4>
+        <button class="btn btn-red" onclick="wipeAllData()">🔥 تصفير جميع درجات المدرسة</button>
+    </div>
+</div>
+
+<footer>برمجة المهندس: مصطفى عبد الله | 0599804296</footer>
+
+<script>
+    // الإعدادات وقاعدة البيانات
+    const firebaseConfig = { apiKey: "AIzaSyAC9BzBpw66oBDriZoi9A5zsThKLFZiNv8", databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app" };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let state = { students: [], teachers: [], user: null, activeClass: "3/1", editingIdx: null, activeSID: null };
+    const WEEKS = ["الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر","الحادي عشر","الثاني عشر","الثالث عشر","الرابع عشر","الخامس عشر"];
+    
+    // تهيئة القوائم
+    document.getElementById('fWeek').innerHTML = WEEKS.map(w => `<option value="الأسبوع ${w}">الأسبوع ${w}</option>`).join('');
+    document.getElementById('gWeek').innerHTML = WEEKS.map(w => `<option value="الأسبوع ${w}">الأسبوع ${w}</option>`).join('');
+
+    function init() {
+        db.ref('teachers').on('value', s => {
+            state.teachers = s.val() ? Object.entries(s.val()).map(([id, v]) => ({...v, tid: id})) : [];
+        });
+        db.ref('students').on('value', s => {
+            state.students = s.val() ? Object.entries(s.val()).map(([id, v]) => ({...v, id: id})) : [];
+            if(state.user) loadStudentsGrid();
+        });
     }
+    init();
 
-    function switchTab(t) {
-        document.getElementById('admin-inputs').style.display = t === 'admin' ? 'block' : 'none';
-        document.getElementById('student-inputs').style.display = t === 'student' ? 'block' : 'none';
-        document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', (t === 'admin' && i === 0) || (t === 'student' && i === 1)));
-    }
+    function toggleStaff() { document.getElementById('loginPass').classList.toggle('hidden'); }
 
-    function handleLogin(role) {
-        const u = document.getElementById('user').value;
-        const p = document.getElementById('pass').value;
-
-        if(role === 'admin') {
-            if(u === 'Idarah' && p === 'idarah2026') {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-            } else if (u === 'teacher' && p === '123') { // مثال لحساب معلم
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('teacher-panel').style.display = 'block';
-            } else {
-                alert('بيانات الدخول غير صحيحة');
-            }
-        } else {
-            alert('تم الدخول بكود الطالب: ' + document.getElementById('s-code').value);
+    function handleLogin() {
+        const key = document.getElementById('loginKey').value.trim();
+        const pass = document.getElementById('loginPass').value.trim();
+        
+        if(pass) { // دخول كادر
+            const t = state.teachers.find(x => x.user === key && x.pass === pass);
+            if(t) { state.user = t; showDashboard(); } else alert("خطأ في البيانات");
+        } else { // دخول طالب
+            const s = state.students.find(x => x.code === key);
+            if(s) { state.user = s; showStudentPanel(s); } else alert("الكود غير موجود");
         }
     }
 
-    function saveData() {
-        alert('تم رصد الدرجة بنجاح. يمكنك تعديلها في أي وقت من هذه الشاشة.');
-        // هنا يتم استدعاء database.ref().set() للربط مع فاير بيس
+    function showDashboard() {
+        showScreen('mainApp');
+        document.getElementById('teacherView').classList.remove('hidden');
+        document.getElementById('userNameDisplay').innerText = `المعلم: ${state.user.user}`;
+        
+        const myClasses = (state.user.role === 'super_admin' || state.user.user === 'saad') ? ["3/1", "3/2", "3/3", "3/4", "3/5"] : (Array.isArray(state.user.assignedClass) ? state.user.assignedClass : [state.user.assignedClass]);
+        
+        const tabs = document.getElementById('classTabs');
+        tabs.innerHTML = myClasses.map(c => `<button class="btn btn-outline" onclick="changeClass('${c}')">${c}</button>`).join('');
+        state.activeClass = myClasses[0];
+        loadStudentsGrid();
+    }
+
+    function changeClass(c) { state.activeClass = c; loadStudentsGrid(); }
+
+    function loadStudentsGrid() {
+        const grid = document.getElementById('studentsGrid');
+        const week = document.getElementById('fWeek').value;
+        const day = document.getElementById('fDay').value;
+        const search = document.getElementById('searchBar').value.toLowerCase();
+        
+        grid.innerHTML = "";
+        let done = 0, wait = 0;
+
+        state.students.filter(s => s.class === state.activeClass && s.name.toLowerCase().includes(search)).forEach(s => {
+            const rec = (s.records || []).find(r => r.week === week && r.day === day);
+            const item = document.createElement('div');
+            item.className = 'student-item';
+            
+            if(rec) {
+                done++;
+                const color = rec.status === 'حافظ' ? '#d4edda' : '#f8d7da';
+                const txt = rec.status === 'حافظ' ? '#155724' : '#721c24';
+                item.innerHTML = `<b>${s.name}</b> <span class="status-badge" style="background:${color}; color:${txt}">${rec.status} (${rec.mark})</span>`;
+            } else {
+                wait++;
+                item.innerHTML = `<b>${s.name}</b> <span class="status-badge" style="background:#eee; color:#666">لم يرصد</span>`;
+            }
+            
+            item.onclick = () => openGrading(s);
+            grid.appendChild(item);
+        });
+        
+        document.getElementById('statDone').innerText = done;
+        document.getElementById('statWait').innerText = wait;
+    }
+
+    function openGrading(s) {
+        state.activeSID = s.id;
+        state.editingIdx = null;
+        document.getElementById('targetStudentName').innerText = "رصد: " + s.name;
+        document.getElementById('gWeek').value = document.getElementById('fWeek').value;
+        document.getElementById('gDay').value = document.getElementById('fDay').value;
+        document.getElementById('gradingModal').classList.remove('hidden');
+        renderPersonalHistory(s);
+    }
+
+    function submitGrade() {
+        const s = state.students.find(x => x.id === state.activeSID);
+        const newRec = {
+            week: document.getElementById('gWeek').value,
+            day: document.getElementById('gDay').value,
+            page: document.getElementById('gPage').value,
+            mark: document.getElementById('gMark').value,
+            status: document.getElementById('gStatus').value,
+            note: document.getElementById('gNote').value,
+            teacher: state.user.user
+        };
+
+        if(!s.records) s.records = [];
+        
+        if(state.editingIdx !== null) {
+            s.records[state.editingIdx] = newRec;
+        } else {
+            const idx = s.records.findIndex(r => r.week === newRec.week && r.day === newRec.day);
+            if(idx !== -1) s.records[idx] = newRec; else s.records.push(newRec);
+        }
+
+        db.ref('students/'+state.activeSID+'/records').set(s.records).then(() => {
+            alert("تم الحفظ ✅");
+            state.editingIdx = null;
+            renderPersonalHistory(s);
+        });
+    }
+
+    function renderPersonalHistory(s) {
+        const container = document.getElementById('personalHistory');
+        container.innerHTML = (s.records || []).map((r, i) => `
+            <div class="record-card">
+                <div class="record-actions">
+                    <button onclick="editRec(${i})" style="color:blue; border:none; background:none; cursor:pointer;">تعديل</button>
+                    <button onclick="delRec(${i})" style="color:red; border:none; background:none; cursor:pointer;">حذف</button>
+                </div>
+                <b>${r.week} - ${r.day}</b><br>
+                الحالة: ${r.status} | الدرجة: ${r.mark} | الموضع: ${r.page}
+            </div>`).reverse().join('');
+    }
+
+    function editRec(i) {
+        const r = state.students.find(x => x.id === state.activeSID).records[i];
+        state.editingIdx = i;
+        document.getElementById('gWeek').value = r.week;
+        document.getElementById('gDay').value = r.day;
+        document.getElementById('gPage').value = r.page || "";
+        document.getElementById('gMark').value = r.mark;
+        document.getElementById('gStatus').value = r.status;
+        document.getElementById('gNote').value = r.note || "";
+    }
+
+    function delRec(i) {
+        if(confirm("حذف هذا السجل نهائياً؟")) {
+            const s = state.students.find(x => x.id === state.activeSID);
+            s.records.splice(i, 1);
+            db.ref('students/'+state.activeSID+'/records').set(s.records);
+        }
+    }
+
+    function wipeAllData() {
+        if(prompt("اكتب كلمة 'تأكيد' لمسح جميع الدرجات:") === "تأكيد") {
+            state.students.forEach(s => db.ref('students/'+s.id+'/records').remove());
+            alert("تم تصفير النظام بنجاح.");
+        }
+    }
+
+    function showStudentPanel(s) {
+        showScreen('mainApp');
+        document.getElementById('studentView').classList.remove('hidden');
+        document.getElementById('userNameDisplay').innerText = `الطالب: ${s.name}`;
+        const container = document.getElementById('stdHistory');
+        container.innerHTML = (s.records || []).map(r => `
+            <div class="record-card">
+                <b>${r.week} - ${r.day}</b><br>
+                الحالة: ${r.status} | الدرجة: ${r.mark}/7 | الموضع: ${r.page}
+            </div>`).reverse().join('');
+    }
+
+    function closeGrading() { document.getElementById('gradingModal').classList.add('hidden'); }
+    function showScreen(id) { 
+        document.getElementById('loginPage').classList.add('hidden');
+        document.getElementById('mainApp').classList.add('hidden');
+        document.getElementById(id).classList.remove('hidden');
     }
 </script>
-
 </body>
 </html>
