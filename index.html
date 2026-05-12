@@ -1,1671 +1,1407 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>التوالي والتوازي في الدوائر الكهربائية</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Amiri:wght@400;700&family=Reem+Kufi:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --bg-primary: #0a0e27;
-        --bg-secondary: #131a3d;
-        --bg-card: rgba(20, 27, 64, 0.7);
-        --accent-blue: #3b82f6;
-        --accent-cyan: #06b6d4;
-        --accent-amber: #f59e0b;
-        --accent-green: #10b981;
-        --accent-red: #ef4444;
-        --accent-purple: #8b5cf6;
-        --text-primary: #f1f5f9;
-        --text-secondary: #94a3b8;
-        --border: rgba(255, 255, 255, 0.1);
-        --glow-blue: 0 0 30px rgba(59, 130, 246, 0.5);
-        --glow-amber: 0 0 30px rgba(245, 158, 11, 0.5);
-    }
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+  <!-- Primary Meta Tags -->
+  <title>VOLT STORE — حلول رقمية احترافية | Professional Digital Solutions</title>
+  <meta name="title" content="VOLT STORE — Professional Digital Solutions" />
+  <meta name="description" content="VOLT STORE — حلول رقمية احترافية وتطوير مخصص. مواقع، أنظمة، ومتاجر إلكترونية. We build websites, systems, and online stores tailored to your needs." />
+  <meta name="keywords" content="VOLT STORE, web development, e-commerce, custom websites, تصميم مواقع, متجر الكتروني, السعودية, Saudi Arabia" />
+  <meta name="author" content="VOLT STORE" />
 
-    html, body {
-        height: 100%;
-        overflow: hidden;
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://voltstore.example/" />
+  <meta property="og:title" content="VOLT STORE — Professional Digital Solutions" />
+  <meta property="og:description" content="حلول رقمية احترافية وتطوير مخصص — Power Your Workflow." />
+  <meta property="og:image" content="assets/banner.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" content="VOLT STORE — Professional Digital Solutions" />
+  <meta property="twitter:description" content="حلول رقمية احترافية وتطوير مخصص — Power Your Workflow." />
+  <meta property="twitter:image" content="assets/banner.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="apple-touch-icon" href="assets/logo.png" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- AOS Animations -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'volt-black': '#0A0A0A',
+            'volt-dark': '#111111',
+            'volt-card': '#161616',
+            'volt-border': '#1f1f1f',
+            'volt-red': '#E63030',
+            'volt-red-bright': '#FF1A1A',
+            'volt-red-deep': '#B30000',
+            'volt-white': '#FFFFFF',
+            'volt-muted': '#9CA3AF',
+          },
+          fontFamily: {
+            'inter': ['Inter', 'sans-serif'],
+            'poppins': ['Poppins', 'sans-serif'],
+            'tajawal': ['Tajawal', 'sans-serif'],
+            'cairo': ['Cairo', 'sans-serif'],
+          },
+        }
+      }
     }
+  </script>
+
+  <style>
+    /* =========================
+       BASE
+       ========================= */
+    * { -webkit-tap-highlight-color: transparent; }
+
+    html { scroll-behavior: smooth; }
 
     body {
-        font-family: 'Tajawal', sans-serif;
-        background: var(--bg-primary);
-        color: var(--text-primary);
-        position: relative;
-        direction: rtl;
-    }
-
-    /* Animated background */
-    body::before {
-        content: '';
-        position: fixed;
-        inset: 0;
-        background:
-            radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
-            radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.12) 0%, transparent 40%),
-            radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
-        z-index: 0;
-        animation: bgShift 20s ease-in-out infinite;
-    }
-
-    @keyframes bgShift {
-        0%, 100% { transform: scale(1) rotate(0deg); }
-        50% { transform: scale(1.1) rotate(2deg); }
-    }
-
-    /* Grid pattern */
-    body::after {
-        content: '';
-        position: fixed;
-        inset: 0;
-        background-image:
-            linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-        background-size: 40px 40px;
-        z-index: 0;
-        pointer-events: none;
-    }
-
-    .presentation {
-        position: relative;
-        width: 100vw;
-        height: 100vh;
-        z-index: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* Top bar */
-    .top-bar {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        padding: 20px 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        z-index: 100;
-        background: linear-gradient(180deg, rgba(10,14,39,0.9) 0%, transparent 100%);
-    }
-
-    .logo {
-        font-family: 'Reem Kufi', sans-serif;
-        font-size: 18px;
-        font-weight: 600;
-        color: var(--text-primary);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .logo-icon {
-        width: 32px;
-        height: 32px;
-        background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: var(--glow-blue);
-    }
-
-    .slide-counter {
-        font-family: 'Tajawal', sans-serif;
-        font-size: 14px;
-        color: var(--text-secondary);
-        background: var(--bg-card);
-        padding: 8px 16px;
-        border-radius: 20px;
-        border: 1px solid var(--border);
-        backdrop-filter: blur(10px);
-    }
-
-    .slide-counter span {
-        color: var(--accent-cyan);
-        font-weight: 700;
-    }
-
-    /* Slides container */
-    .slides-container {
-        flex: 1;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .slide {
-        position: absolute;
-        inset: 0;
-        padding: 80px 60px 100px;
-        display: flex;
-        flex-direction: column;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateX(-30px);
-        transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
-                    transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
-                    visibility 0.7s;
-    }
-
-    .slide.active {
-        opacity: 1;
-        visibility: visible;
-        transform: translateX(0);
-    }
-
-    .slide.exit-right {
-        transform: translateX(30px);
-    }
-
-    /* Slide content */
-    .slide-header {
-        margin-bottom: 30px;
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    .slide.active .slide-header {
-        animation: slideInUp 0.8s 0.2s forwards cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    @keyframes slideInUp {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .slide-tag {
-        display: inline-block;
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--accent-cyan);
-        background: rgba(6, 182, 212, 0.15);
-        padding: 6px 14px;
-        border-radius: 6px;
-        border: 1px solid rgba(6, 182, 212, 0.3);
-        margin-bottom: 16px;
-    }
-
-    .slide-title {
-        font-family: 'Reem Kufi', sans-serif;
-        font-size: 42px;
-        font-weight: 700;
-        line-height: 1.2;
-        background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-
-    .slide-subtitle {
-        font-size: 18px;
-        color: var(--text-secondary);
-        margin-top: 10px;
-        font-weight: 400;
-    }
-
-    .slide-body {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 40px;
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    .slide.active .slide-body {
-        animation: slideInUp 0.8s 0.4s forwards cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* Slide 1 — Title */
-    .title-slide {
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 60px;
-    }
-
-    .title-slide .main-title {
-        font-family: 'Reem Kufi', sans-serif;
-        font-size: 80px;
-        font-weight: 700;
-        line-height: 1.1;
-        margin-bottom: 24px;
-        background: linear-gradient(135deg, #f59e0b 0%, #06b6d4 50%, #3b82f6 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        animation: titleGlow 3s ease-in-out infinite alternate;
-    }
-
-    @keyframes titleGlow {
-        0% { filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.3)); }
-        100% { filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.5)); }
-    }
-
-    .title-slide .subtitle {
-        font-size: 22px;
-        color: var(--text-secondary);
-        margin-bottom: 50px;
-        font-weight: 300;
-    }
-
-    .title-visual {
-        width: 100%;
-        max-width: 700px;
-        margin: 0 auto;
-    }
-
-    .author-tag {
-        margin-top: 40px;
-        font-size: 16px;
-        color: var(--text-secondary);
-        padding: 12px 24px;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 40px;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        backdrop-filter: blur(10px);
-    }
-
-    .author-tag::before {
-        content: '';
-        width: 8px;
-        height: 8px;
-        background: var(--accent-green);
-        border-radius: 50%;
-        box-shadow: 0 0 10px var(--accent-green);
-        animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.5; transform: scale(1.3); }
-    }
-
-    /* Cards & content blocks */
-    .content-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 28px;
-        backdrop-filter: blur(20px);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .content-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100px;
-        height: 100px;
-        background: radial-gradient(circle, var(--accent-blue) 0%, transparent 70%);
-        opacity: 0.15;
-        border-radius: 50%;
-    }
-
-    .text-content {
-        flex: 1;
-        max-width: 500px;
-    }
-
-    .text-content h3 {
-        font-family: 'Reem Kufi', sans-serif;
-        font-size: 26px;
-        margin-bottom: 16px;
-        color: #fff;
-    }
-
-    .text-content p {
-        font-size: 17px;
-        line-height: 1.8;
-        color: var(--text-secondary);
-        margin-bottom: 16px;
-    }
-
-    .visual-content {
-        flex: 1.2;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    /* Feature list */
-    .feature-list {
-        list-style: none;
-        margin-top: 20px;
-    }
-
-    .feature-list li {
-        padding: 14px 18px;
-        background: rgba(255, 255, 255, 0.03);
-        border-right: 3px solid var(--accent-cyan);
-        border-radius: 8px;
-        margin-bottom: 10px;
-        font-size: 16px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        transition: all 0.3s;
-    }
-
-    .feature-list li:hover {
-        background: rgba(255, 255, 255, 0.06);
-        transform: translateX(-4px);
-    }
-
-    .feature-list li .icon {
-        width: 28px;
-        height: 28px;
-        flex-shrink: 0;
-    }
-
-    /* Formulas */
-    .formula-box {
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        border-radius: 12px;
-        padding: 20px 24px;
-        margin: 12px 0;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        font-family: 'Amiri', serif;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .formula-box::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 4px;
-        background: var(--accent-green);
-    }
-
-    .formula-label {
-        font-family: 'Tajawal', sans-serif;
-        font-size: 14px;
-        color: var(--text-secondary);
-        font-weight: 500;
-        min-width: 90px;
-    }
-
-    .formula {
-        font-size: 24px;
-        font-weight: 700;
-        color: #fff;
-        direction: ltr;
-        unicode-bidi: bidi-override;
-        flex: 1;
-        text-align: left;
-    }
-
-    .formula .var {
-        color: var(--accent-cyan);
-    }
-
-    .formula .num {
-        color: var(--accent-amber);
-    }
-
-    /* Two columns */
-    .two-col {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
-        width: 100%;
-    }
-
-    .col-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 24px;
-        backdrop-filter: blur(20px);
-    }
-
-    .col-card h4 {
-        font-family: 'Reem Kufi', sans-serif;
-        font-size: 22px;
-        margin-bottom: 16px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .col-card.series h4 { color: var(--accent-amber); }
-    .col-card.parallel h4 { color: var(--accent-cyan); }
-
-    .col-card .badge {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-    }
-
-    .col-card.series .badge {
-        background: rgba(245, 158, 11, 0.2);
-        color: var(--accent-amber);
-    }
-
-    .col-card.parallel .badge {
-        background: rgba(6, 182, 212, 0.2);
-        color: var(--accent-cyan);
-    }
-
-    /* Comparison table */
-    .compare-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        background: var(--bg-card);
-        border-radius: 16px;
-        overflow: hidden;
-        backdrop-filter: blur(20px);
-        border: 1px solid var(--border);
-    }
-
-    .compare-table th, .compare-table td {
-        padding: 18px 20px;
-        text-align: right;
-        font-size: 16px;
-    }
-
-    .compare-table thead {
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    .compare-table th {
-        font-family: 'Reem Kufi', sans-serif;
-        font-weight: 600;
-        font-size: 17px;
-        color: #fff;
-    }
-
-    .compare-table th:nth-child(2) { color: var(--accent-amber); }
-    .compare-table th:nth-child(3) { color: var(--accent-cyan); }
-
-    .compare-table tbody tr {
-        border-top: 1px solid var(--border);
-        transition: background 0.3s;
-    }
-
-    .compare-table tbody tr:hover {
-        background: rgba(255, 255, 255, 0.03);
-    }
-
-    .compare-table td:first-child {
-        font-weight: 600;
-        color: var(--text-primary);
-    }
-
-    .compare-table td:nth-child(2),
-    .compare-table td:nth-child(3) {
-        color: var(--text-secondary);
-        font-family: 'Amiri', serif;
-    }
-
-    /* Real-world examples */
-    .examples-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
-        width: 100%;
-    }
-
-    .example-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 30px;
-        backdrop-filter: blur(20px);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .example-card.amber::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at top right, rgba(245, 158, 11, 0.15), transparent 60%);
-        pointer-events: none;
-    }
-
-    .example-card.cyan::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at top right, rgba(6, 182, 212, 0.15), transparent 60%);
-        pointer-events: none;
-    }
-
-    .example-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
-
-    .example-card.amber .example-icon {
-        background: rgba(245, 158, 11, 0.2);
-        border: 1px solid rgba(245, 158, 11, 0.4);
-    }
-
-    .example-card.cyan .example-icon {
-        background: rgba(6, 182, 212, 0.2);
-        border: 1px solid rgba(6, 182, 212, 0.4);
-    }
-
-    .example-card h3 {
-        font-family: 'Reem Kufi', sans-serif;
-        font-size: 24px;
-        margin-bottom: 12px;
-    }
-
-    .example-card.amber h3 { color: var(--accent-amber); }
-    .example-card.cyan h3 { color: var(--accent-cyan); }
-
-    .example-card p {
-        font-size: 15px;
-        line-height: 1.8;
-        color: var(--text-secondary);
-    }
-
-    .example-card .warning {
-        margin-top: 16px;
-        padding: 12px 16px;
-        background: rgba(239, 68, 68, 0.1);
-        border-right: 3px solid var(--accent-red);
-        border-radius: 6px;
-        font-size: 14px;
-        color: #fca5a5;
-    }
-
-    /* Worked example */
-    .worked-example {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        width: 100%;
-    }
-
-    .problem-statement {
-        grid-column: 1 / -1;
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
-        border: 1px solid rgba(59, 130, 246, 0.3);
-        border-radius: 12px;
-        padding: 20px 24px;
-        font-size: 16px;
-        line-height: 1.8;
-    }
-
-    .problem-statement strong {
-        color: var(--accent-cyan);
-        font-weight: 700;
-    }
-
-    .solution-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 22px;
-    }
-
-    .solution-card h5 {
-        font-family: 'Reem Kufi', sans-serif;
-        font-size: 18px;
-        margin-bottom: 14px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .solution-card.series h5 { color: var(--accent-amber); }
-    .solution-card.parallel h5 { color: var(--accent-cyan); }
-
-    .step {
-        font-family: 'Amiri', serif;
-        font-size: 16px;
-        padding: 8px 0;
-        color: var(--text-secondary);
-        direction: ltr;
-        text-align: left;
-    }
-
-    .step .result {
-        color: var(--accent-green);
-        font-weight: 700;
-        font-size: 18px;
-    }
-
-    /* Summary slide */
-    .summary-points {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-        width: 100%;
-        max-width: 900px;
-        margin: 0 auto;
-    }
-
-    .summary-point {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 22px;
-        display: flex;
-        gap: 16px;
-        align-items: flex-start;
-        backdrop-filter: blur(20px);
-    }
-
-    .summary-point .num {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        flex-shrink: 0;
-        font-family: 'Reem Kufi', sans-serif;
-    }
-
-    .summary-point div {
-        flex: 1;
-    }
-
-    .summary-point h5 {
-        font-size: 16px;
-        margin-bottom: 4px;
-        color: #fff;
-    }
-
-    .summary-point p {
-        font-size: 14px;
-        color: var(--text-secondary);
-        line-height: 1.6;
-    }
-
-    .credits-card {
-        margin-top: 30px;
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(6, 182, 212, 0.1));
-        border: 1px solid rgba(245, 158, 11, 0.3);
-        border-radius: 16px;
-        padding: 24px 30px;
-        text-align: center;
-        backdrop-filter: blur(20px);
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .credits-card h6 {
-        font-size: 14px;
-        color: var(--text-secondary);
-        margin-bottom: 8px;
-        font-weight: 400;
-    }
-
-    .credits-card .name {
-        font-family: 'Reem Kufi', sans-serif;
-        font-size: 26px;
-        font-weight: 700;
-        background: linear-gradient(135deg, var(--accent-amber), var(--accent-cyan));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-
-    /* Bottom bar */
-    .bottom-bar {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 16px 40px 20px;
-        background: linear-gradient(0deg, rgba(10,14,39,0.95) 0%, transparent 100%);
-        z-index: 100;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .progress-container {
-        height: 3px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 3px;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .progress-bar {
-        height: 100%;
-        background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan), var(--accent-amber));
-        width: 0%;
-        transition: width 0.1s linear;
-        box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-    }
-
-    .controls {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-    }
-
-    .nav-dots {
-        display: flex;
-        gap: 8px;
-    }
-
-    .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        cursor: pointer;
-        transition: all 0.3s;
-        border: none;
-    }
-
-    .dot:hover {
-        background: rgba(255, 255, 255, 0.4);
-        transform: scale(1.3);
-    }
-
-    .dot.active {
-        background: var(--accent-cyan);
-        width: 28px;
-        border-radius: 4px;
-        box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
-    }
-
-    .control-buttons {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-
-    .control-btn {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        color: var(--text-primary);
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s;
-        backdrop-filter: blur(10px);
-    }
-
-    .control-btn:hover {
-        background: rgba(59, 130, 246, 0.2);
-        border-color: var(--accent-blue);
-        transform: translateY(-2px);
-    }
-
-    .control-btn.play-pause {
-        width: 48px;
-        height: 48px;
-        background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-        border: none;
-        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
-    }
-
-    .control-btn.play-pause:hover {
-        transform: translateY(-2px) scale(1.05);
-    }
-
-    .timer {
-        font-family: 'Tajawal', sans-serif;
-        font-size: 13px;
-        color: var(--text-secondary);
-        background: var(--bg-card);
-        padding: 6px 14px;
-        border-radius: 20px;
-        border: 1px solid var(--border);
-        backdrop-filter: blur(10px);
-        font-variant-numeric: tabular-nums;
-    }
-
-    /* Footer credit */
-    .footer-credit {
-        position: absolute;
-        bottom: 80px;
-        right: 40px;
-        font-size: 12px;
-        color: var(--text-secondary);
-        opacity: 0.7;
-        z-index: 50;
-        background: var(--bg-card);
-        padding: 6px 14px;
-        border-radius: 20px;
-        border: 1px solid var(--border);
-        backdrop-filter: blur(10px);
-    }
-
-    /* SVG Animations */
-    @keyframes flow {
-        from { stroke-dashoffset: 0; }
-        to { stroke-dashoffset: -30; }
-    }
-
-    .current-flow {
-        stroke-dasharray: 6 4;
-        animation: flow 1s linear infinite;
-    }
-
-    @keyframes bulbPulse {
-        0%, 100% {
-            filter: drop-shadow(0 0 8px #fbbf24) drop-shadow(0 0 16px #f59e0b);
-            opacity: 1;
-        }
-        50% {
-            filter: drop-shadow(0 0 16px #fbbf24) drop-shadow(0 0 32px #f59e0b);
-            opacity: 0.85;
-        }
-    }
-
-    .bulb-glow {
-        animation: bulbPulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes electronMove {
-        from { offset-distance: 0%; }
-        to { offset-distance: 100%; }
-    }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-        .slide { padding: 70px 30px 100px; }
-        .slide-title { font-size: 32px; }
-        .title-slide .main-title { font-size: 56px; }
-        .slide-body { flex-direction: column; }
-        .two-col, .examples-grid, .summary-points, .worked-example {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .top-bar { padding: 14px 20px; }
-        .bottom-bar { padding: 12px 20px 16px; }
-        .slide { padding: 60px 20px 110px; }
-        .slide-title { font-size: 24px; }
-        .title-slide .main-title { font-size: 38px; }
-        .title-slide .subtitle { font-size: 16px; }
-        .footer-credit { right: 20px; bottom: 90px; font-size: 11px; }
-    }
-</style>
+      background-color: #0A0A0A;
+      color: #FFFFFF;
+      font-family: 'Inter', 'Poppins', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    body[dir="rtl"] {
+      font-family: 'Tajawal', 'Cairo', sans-serif;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #0A0A0A; }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #E63030, #B30000);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: #FF1A1A; }
+
+    /* =========================
+       BACKGROUND EFFECTS
+       ========================= */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(230, 48, 48, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(230, 48, 48, 0.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    .radial-glow {
+      background: radial-gradient(circle at 50% 0%, rgba(230, 48, 48, 0.18) 0%, rgba(10, 10, 10, 0) 60%);
+    }
+
+    .radial-glow-bottom {
+      background: radial-gradient(circle at 50% 100%, rgba(230, 48, 48, 0.12) 0%, rgba(10, 10, 10, 0) 60%);
+    }
+
+    /* =========================
+       NAVBAR
+       ========================= */
+    .navbar {
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background-color: rgba(10, 10, 10, 0.75);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled {
+      background-color: rgba(10, 10, 10, 0.92);
+      border-bottom-color: rgba(230, 48, 48, 0.25);
+      box-shadow: 0 10px 40px -10px rgba(230, 48, 48, 0.15);
+    }
+
+    .nav-link {
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #E63030, #FF1A1A);
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px #E63030;
+    }
+    .nav-link:hover { color: #E63030; }
+    .nav-link:hover::after { width: 100%; }
+
+    /* =========================
+       HERO
+       ========================= */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/banner.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.35;
+      filter: contrast(1.05);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(10, 10, 10, 0.55) 0%, rgba(10, 10, 10, 0.85) 60%, #0A0A0A 100%),
+        radial-gradient(ellipse at center, rgba(230, 48, 48, 0.18) 0%, rgba(10, 10, 10, 0) 70%);
+    }
+
+    .hero-title {
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      background: linear-gradient(180deg, #FFFFFF 0%, #B5B5B5 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-title .accent {
+      background: linear-gradient(135deg, #E63030 0%, #FF1A1A 50%, #E63030 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 60px rgba(230, 48, 48, 0.4);
+    }
+
+    /* =========================
+       BUTTONS
+       ========================= */
+    .btn-primary {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.95rem 2rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      background: linear-gradient(135deg, #E63030 0%, #B30000 100%);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 30px -8px rgba(230, 48, 48, 0.5);
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #FF1A1A 0%, #E63030 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .btn-primary > * { position: relative; z-index: 1; }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 40px -8px rgba(230, 48, 48, 0.7), 0 0 30px rgba(230, 48, 48, 0.35);
+    }
+    .btn-primary:hover::before { opacity: 1; }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.8rem;
+      font-weight: 600;
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      transition: all 0.3s ease;
+    }
+    .btn-outline:hover {
+      background: rgba(230, 48, 48, 0.08);
+      border-color: #E63030;
+      color: #E63030;
+      box-shadow: 0 0 25px rgba(230, 48, 48, 0.25);
+    }
+
+    /* =========================
+       SECTION HELPERS
+       ========================= */
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border: 1px solid rgba(230, 48, 48, 0.35);
+      background: rgba(230, 48, 48, 0.08);
+      color: #E63030;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .section-divider {
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #E63030, #FF1A1A);
+      border-radius: 999px;
+      box-shadow: 0 0 15px rgba(230, 48, 48, 0.6);
+    }
+
+    /* =========================
+       PRICING CARDS
+       ========================= */
+    .pricing-card {
+      position: relative;
+      background: linear-gradient(180deg, #161616 0%, #0E0E0E 100%);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      padding: 2rem 1.75rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+    .pricing-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(230, 48, 48, 0) 0%, rgba(230, 48, 48, 0) 50%, rgba(230, 48, 48, 0) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      transition: background 0.4s ease;
+      pointer-events: none;
+    }
+    .pricing-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(230, 48, 48, 0.5), transparent);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .pricing-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(230, 48, 48, 0.4);
+      box-shadow:
+        0 20px 60px -15px rgba(230, 48, 48, 0.4),
+        0 0 0 1px rgba(230, 48, 48, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+    .pricing-card:hover::before {
+      background: linear-gradient(135deg, rgba(230, 48, 48, 0.4) 0%, rgba(230, 48, 48, 0) 50%, rgba(230, 48, 48, 0.4) 100%);
+    }
+    .pricing-card:hover::after { opacity: 1; }
+
+    .pricing-card.featured {
+      background: linear-gradient(180deg, #1a0a0a 0%, #0E0E0E 100%);
+      border-color: rgba(230, 48, 48, 0.5);
+      box-shadow: 0 20px 50px -15px rgba(230, 48, 48, 0.35);
+    }
+    .pricing-card.featured::after { opacity: 1; }
+
+    .price-tag {
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #E63030 0%, #FF1A1A 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px rgba(230, 48, 48, 0.3);
+    }
+
+    .feature-bullet {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      color: #C8C8C8;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+    .feature-bullet i {
+      color: #E63030;
+      margin-top: 0.2rem;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: 16px;
+      inset-inline-end: 16px;
+      padding: 0.3rem 0.75rem;
+      background: linear-gradient(135deg, #E63030, #B30000);
+      color: #FFFFFF;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      box-shadow: 0 4px 15px rgba(230, 48, 48, 0.5);
+    }
+
+    /* =========================
+       FEATURE CARDS
+       ========================= */
+    .feature-card {
+      position: relative;
+      background: linear-gradient(180deg, #161616 0%, #0E0E0E 100%);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 2rem 1.5rem;
+      transition: all 0.4s ease;
+      overflow: hidden;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(230, 48, 48, 0.35);
+      box-shadow: 0 15px 40px -10px rgba(230, 48, 48, 0.3);
+    }
+    .feature-icon-wrap {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(230, 48, 48, 0.15), rgba(230, 48, 48, 0.04));
+      border: 1px solid rgba(230, 48, 48, 0.25);
+      color: #E63030;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.4s ease;
+    }
+    .feature-card:hover .feature-icon-wrap {
+      background: linear-gradient(135deg, #E63030, #B30000);
+      color: #FFFFFF;
+      box-shadow: 0 0 25px rgba(230, 48, 48, 0.5);
+      transform: scale(1.05);
+    }
+
+    /* =========================
+       CONTACT CARDS
+       ========================= */
+    .contact-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem;
+      background: linear-gradient(180deg, #161616 0%, #0E0E0E 100%);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: #FFFFFF;
+    }
+    .contact-card:hover {
+      border-color: rgba(230, 48, 48, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px -10px rgba(230, 48, 48, 0.3);
+    }
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #E63030, #B30000);
+      color: #FFFFFF;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 15px rgba(230, 48, 48, 0.4);
+    }
+
+    /* =========================
+       INFO BOX
+       ========================= */
+    .info-box {
+      position: relative;
+      background: linear-gradient(135deg, rgba(230, 48, 48, 0.08) 0%, rgba(230, 48, 48, 0.02) 100%);
+      border: 1px solid rgba(230, 48, 48, 0.3);
+      border-radius: 16px;
+      padding: 1.5rem 1.75rem;
+      overflow: hidden;
+    }
+    .info-box::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, #E63030, #FF1A1A);
+      box-shadow: 0 0 15px rgba(230, 48, 48, 0.5);
+    }
+
+    /* =========================
+       FLOATING WHATSAPP
+       ========================= */
+    .float-whatsapp {
+      position: fixed;
+      bottom: 22px;
+      left: 22px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #25D366;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
+      z-index: 9999;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: wa-pulse 2.2s ease-in-out infinite;
+    }
+    .float-whatsapp:hover {
+      transform: scale(1.08);
+      box-shadow: 0 10px 40px rgba(37, 211, 102, 0.7);
+    }
+    .float-whatsapp .wa-tooltip {
+      position: absolute;
+      left: calc(100% + 14px);
+      top: 50%;
+      transform: translateY(-50%);
+      background: #0A0A0A;
+      color: #FFFFFF;
+      padding: 0.55rem 0.95rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      border: 1px solid rgba(37, 211, 102, 0.4);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    body[dir="rtl"] .float-whatsapp .wa-tooltip {
+      left: auto;
+      right: calc(100% + 14px);
+    }
+    .float-whatsapp:hover .wa-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+    @keyframes wa-pulse {
+      0%, 100% { box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5), 0 0 0 0 rgba(37, 211, 102, 0.6); }
+      50% { box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6), 0 0 0 18px rgba(37, 211, 102, 0); }
+    }
+
+    @media (max-width: 768px) {
+      .float-whatsapp {
+        width: 55px;
+        height: 55px;
+        font-size: 1.6rem;
+        bottom: 18px;
+        left: 18px;
+      }
+    }
+
+    /* =========================
+       FOOTER
+       ========================= */
+    .social-icon {
+      width: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #FFFFFF;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .social-icon:hover {
+      background: linear-gradient(135deg, #E63030, #B30000);
+      border-color: transparent;
+      color: #FFFFFF;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(230, 48, 48, 0.4);
+    }
+
+    /* =========================
+       MOBILE MENU
+       ========================= */
+    .mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .mobile-menu.open { max-height: 400px; }
+
+    /* =========================
+       LANG TOGGLE
+       ========================= */
+    .lang-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.85rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.02);
+      cursor: pointer;
+    }
+    .lang-toggle:hover {
+      border-color: #E63030;
+      color: #E63030;
+      background: rgba(230, 48, 48, 0.08);
+      box-shadow: 0 0 18px rgba(230, 48, 48, 0.25);
+    }
+
+    /* =========================
+       HERO STATS
+       ========================= */
+    .stat-block {
+      text-align: center;
+      padding: 1rem;
+    }
+    .stat-num {
+      font-weight: 900;
+      font-size: 2rem;
+      background: linear-gradient(135deg, #E63030, #FF1A1A);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+
+    /* =========================
+       RTL TWEAKS
+       ========================= */
+    body[dir="rtl"] .section-tag,
+    body[dir="rtl"] .feature-bullet {
+      direction: rtl;
+    }
+    body[dir="rtl"] .feature-bullet i { margin-top: 0.25rem; }
+
+    /* =========================
+       UTIL
+       ========================= */
+    .text-balance { text-wrap: balance; }
+    .gradient-border {
+      position: relative;
+    }
+  </style>
 </head>
-<body>
 
-<div class="presentation">
-    <!-- Top bar -->
-    <div class="top-bar">
-        <div class="logo">
-            <div class="logo-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" fill="white"/>
-                </svg>
-            </div>
-            <span>الفيزياء التفاعلية</span>
+<body class="bg-volt-black text-volt-white antialiased">
+
+  <!-- ============================
+       NAVBAR
+       ============================ -->
+  <nav id="navbar" class="navbar fixed top-0 inset-x-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+
+        <!-- Logo -->
+        <a href="#home" class="flex items-center gap-3 group">
+          <img src="assets/logo.png" alt="VOLT STORE Logo" class="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-110" />
+          <div class="leading-tight">
+            <div class="font-black text-lg tracking-tight">VOLT <span class="text-volt-red">STORE</span></div>
+            <div class="text-[10px] tracking-[0.25em] text-volt-muted uppercase font-semibold" data-i18n="navbar.tagline">DIGITAL PRODUCTS</div>
+          </div>
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden lg:flex items-center gap-10">
+          <a href="#home" class="nav-link text-sm font-semibold uppercase tracking-wider" data-i18n="nav.home">Home</a>
+          <a href="#services" class="nav-link text-sm font-semibold uppercase tracking-wider" data-i18n="nav.services">Services</a>
+          <a href="#about" class="nav-link text-sm font-semibold uppercase tracking-wider" data-i18n="nav.about">About</a>
+          <a href="#contact" class="nav-link text-sm font-semibold uppercase tracking-wider" data-i18n="nav.contact">Contact</a>
         </div>
-        <div class="slide-counter">
-            <span id="currentSlide">1</span> / <span id="totalSlides">10</span>
+
+        <!-- Right side -->
+        <div class="flex items-center gap-3">
+          <button id="langToggle" class="lang-toggle" aria-label="Toggle language">
+            <i class="fa-solid fa-globe"></i>
+            <span id="langLabel">EN</span>
+          </button>
+
+          <!-- Mobile burger -->
+          <button id="burger" class="lg:hidden w-10 h-10 inline-flex items-center justify-center rounded-lg border border-white/10 hover:border-volt-red hover:text-volt-red transition-colors" aria-label="Menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
         </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="mobile-menu lg:hidden">
+        <div class="pb-6 pt-2 flex flex-col gap-2">
+          <a href="#home" class="mobile-link py-3 px-4 rounded-lg hover:bg-white/5 font-semibold" data-i18n="nav.home">Home</a>
+          <a href="#services" class="mobile-link py-3 px-4 rounded-lg hover:bg-white/5 font-semibold" data-i18n="nav.services">Services</a>
+          <a href="#about" class="mobile-link py-3 px-4 rounded-lg hover:bg-white/5 font-semibold" data-i18n="nav.about">About</a>
+          <a href="#contact" class="mobile-link py-3 px-4 rounded-lg hover:bg-white/5 font-semibold" data-i18n="nav.contact">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================
+       HERO
+       ============================ -->
+  <section id="home" class="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="absolute inset-0 grid-bg opacity-30"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="max-w-4xl mx-auto text-center">
+
+        <div class="section-tag mb-6 mx-auto" data-aos="fade-down">
+          <i class="fa-solid fa-bolt-lightning"></i>
+          <span data-i18n="hero.badge">EST. MMXXVI · DIGITAL PRODUCTS</span>
+        </div>
+
+        <h1 class="hero-title text-balance text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-6" data-aos="fade-up">
+          <span data-i18n="hero.title1">Professional Web Solutions</span>
+          <br />
+          <span class="accent" data-i18n="hero.title2">& Custom Development</span>
+        </h1>
+
+        <p class="text-volt-muted text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-10 text-balance" data-aos="fade-up" data-aos-delay="100" data-i18n="hero.sub">
+          We build websites, systems, and online stores tailored to your needs.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 items-center justify-center" data-aos="fade-up" data-aos-delay="200">
+          <a href="https://wa.me/966599804296?text=Hello%20VOLT%20STORE%2C%20I%27m%20interested%20in%20your%20services" target="_blank" rel="noopener" class="btn-primary text-base">
+            <i class="fa-brands fa-whatsapp text-xl"></i>
+            <span data-i18n="hero.cta">Order via WhatsApp</span>
+          </a>
+          <a href="#services" class="btn-outline text-base">
+            <i class="fa-solid fa-layer-group"></i>
+            <span data-i18n="hero.cta2">View Packages</span>
+          </a>
+        </div>
+
+        <!-- Stats Strip -->
+        <div class="mt-16 grid grid-cols-3 gap-4 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="300">
+          <div class="stat-block">
+            <div class="stat-num">5</div>
+            <div class="text-xs uppercase tracking-widest text-volt-muted mt-1" data-i18n="hero.stat1">Packages</div>
+          </div>
+          <div class="stat-block border-x border-white/5">
+            <div class="stat-num">24/7</div>
+            <div class="text-xs uppercase tracking-widest text-volt-muted mt-1" data-i18n="hero.stat2">Support</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-num">100%</div>
+            <div class="text-xs uppercase tracking-widest text-volt-muted mt-1" data-i18n="hero.stat3">Custom</div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Slides -->
-    <div class="slides-container" id="slidesContainer">
+    <!-- bottom fade -->
+    <div class="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-b from-transparent to-volt-black z-10 pointer-events-none"></div>
+  </section>
 
-        <!-- Slide 1: Title -->
-        <div class="slide title-slide active" data-slide="1">
-            <div>
-                <h1 class="main-title">التوالي والتوازي</h1>
-                <p class="subtitle">في الدوائر الكهربائية — رحلة بصرية تفاعلية</p>
-                <div class="title-visual">
-                    <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
-                        <defs>
-                            <linearGradient id="wireGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#06b6d4"/>
-                                <stop offset="100%" stop-color="#3b82f6"/>
-                            </linearGradient>
-                            <radialGradient id="bulbGrad">
-                                <stop offset="0%" stop-color="#fef3c7"/>
-                                <stop offset="40%" stop-color="#fbbf24"/>
-                                <stop offset="100%" stop-color="#f59e0b"/>
-                            </radialGradient>
-                            <filter id="glow">
-                                <feGaussianBlur stdDeviation="4" result="b"/>
-                                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                            </filter>
-                        </defs>
+  <!-- ============================
+       SERVICES / PACKAGES
+       ============================ -->
+  <section id="services" class="relative py-24 overflow-hidden">
+    <div class="absolute inset-0 radial-glow pointer-events-none"></div>
 
-                        <!-- Decorative circuit -->
-                        <g opacity="0.9">
-                            <!-- Outer rect -->
-                            <rect x="80" y="60" width="540" height="160" rx="8" fill="none" stroke="url(#wireGrad1)" stroke-width="3" class="current-flow"/>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                            <!-- Battery left -->
-                            <line x1="80" y1="120" x2="80" y2="100" stroke="url(#wireGrad1)" stroke-width="3"/>
-                            <line x1="60" y1="100" x2="100" y2="100" stroke="#fff" stroke-width="4"/>
-                            <line x1="70" y1="90" x2="90" y2="90" stroke="#fff" stroke-width="2"/>
-                            <text x="50" y="80" fill="#06b6d4" font-size="14" font-family="Amiri">+</text>
-                            <text x="50" y="150" fill="#06b6d4" font-size="14" font-family="Amiri">−</text>
-                            <line x1="80" y1="160" x2="80" y2="180" stroke="url(#wireGrad1)" stroke-width="3"/>
+      <div class="text-center mb-16" data-aos="fade-up">
+        <div class="section-tag mb-5">
+          <i class="fa-solid fa-bolt"></i>
+          <span data-i18n="services.tag">OUR SERVICES</span>
+        </div>
+        <h2 class="section-title text-4xl sm:text-5xl md:text-6xl mb-4" data-i18n="services.title">Our Packages</h2>
+        <div class="section-divider mx-auto mb-5"></div>
+        <p class="text-volt-muted max-w-2xl mx-auto text-balance" data-i18n="services.sub">
+          Choose the perfect package for your business — clean pricing, no hidden fees, fast delivery.
+        </p>
+      </div>
 
-                            <!-- Bulbs -->
-                            <g transform="translate(220,100)">
-                                <circle cx="0" cy="20" r="22" fill="url(#bulbGrad)" filter="url(#glow)" class="bulb-glow"/>
-                                <path d="M-8,38 L-8,46 M8,38 L8,46 M-10,46 L10,46" stroke="#fff" stroke-width="2"/>
-                            </g>
-                            <g transform="translate(350,100)">
-                                <circle cx="0" cy="20" r="22" fill="url(#bulbGrad)" filter="url(#glow)" class="bulb-glow" style="animation-delay:0.3s"/>
-                                <path d="M-8,38 L-8,46 M8,38 L8,46 M-10,46 L10,46" stroke="#fff" stroke-width="2"/>
-                            </g>
-                            <g transform="translate(480,100)">
-                                <circle cx="0" cy="20" r="22" fill="url(#bulbGrad)" filter="url(#glow)" class="bulb-glow" style="animation-delay:0.6s"/>
-                                <path d="M-8,38 L-8,46 M8,38 L8,46 M-10,46 L10,46" stroke="#fff" stroke-width="2"/>
-                            </g>
-                        </g>
+      <!-- Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
 
-                        <!-- Floating particles -->
-                        <circle cx="150" cy="60" r="4" fill="#06b6d4" opacity="0.8">
-                            <animate attributeName="cx" from="80" to="620" dur="3s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="300" cy="220" r="4" fill="#3b82f6" opacity="0.8">
-                            <animate attributeName="cx" from="620" to="80" dur="3s" repeatCount="indefinite"/>
-                        </circle>
-                    </svg>
-                </div>
-                <div class="author-tag">إعداد: مصطفى عبدالله أحمد</div>
-            </div>
+        <!-- Card 1 -->
+        <div class="pricing-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="feature-icon-wrap"><i class="fa-solid fa-id-card"></i></div>
+          <h3 class="text-xl font-bold mb-2" data-i18n="pkg1.name">Portfolio Website</h3>
+          <p class="text-volt-muted text-sm mb-5 min-h-[44px]" data-i18n="pkg1.desc">A clean, professional portfolio website to showcase your work, services, or brand identity.</p>
+          <div class="flex items-end gap-2 mb-6">
+            <span class="price-tag text-5xl">99</span>
+            <span class="text-volt-muted font-semibold mb-1.5" data-i18n="common.currency">SAR</span>
+          </div>
+          <ul class="space-y-3 mb-7">
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg1.f1">Modern responsive design</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg1.f2">Up to 5 pages</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg1.f3">Domain included</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg1.f4">Bilingual (AR / EN)</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg1.f5">Mobile optimized</span></li>
+          </ul>
+          <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="btn-primary w-full" data-wa-pkg="Portfolio Website — 99 SAR">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span data-i18n="common.order">Order via WhatsApp</span>
+          </a>
         </div>
 
-        <!-- Slide 2: Introduction -->
-        <div class="slide" data-slide="2">
-            <div class="slide-header">
-                <span class="slide-tag">مقدمة</span>
-                <h2 class="slide-title">ما هي الدائرة الكهربائية؟</h2>
-                <p class="slide-subtitle">الأساس الذي يحرّك العالم من حولنا</p>
-            </div>
-            <div class="slide-body">
-                <div class="text-content">
-                    <p>الدائرة الكهربائية هي مسار مغلق يسمح للتيار الكهربائي بالتدفق من مصدر للجهد (مثل البطارية) عبر مكوّنات مختلفة (مقاومات، مصابيح) ثم العودة إلى المصدر.</p>
-                    <p>هناك طريقتان رئيسيتان لتوصيل المكوّنات داخل الدائرة:</p>
-                    <ul class="feature-list">
-                        <li>
-                            <svg class="icon" viewBox="0 0 24 24" fill="none">
-                                <circle cx="6" cy="12" r="2" fill="#f59e0b"/>
-                                <circle cx="12" cy="12" r="2" fill="#f59e0b"/>
-                                <circle cx="18" cy="12" r="2" fill="#f59e0b"/>
-                                <line x1="8" y1="12" x2="10" y2="12" stroke="#f59e0b" stroke-width="2"/>
-                                <line x1="14" y1="12" x2="16" y2="12" stroke="#f59e0b" stroke-width="2"/>
-                            </svg>
-                            <strong>التوصيل على التوالي</strong> &mdash; مكوّنات تتبع بعضها على مسار واحد
-                        </li>
-                        <li>
-                            <svg class="icon" viewBox="0 0 24 24" fill="none">
-                                <circle cx="12" cy="6" r="2" fill="#06b6d4"/>
-                                <circle cx="12" cy="12" r="2" fill="#06b6d4"/>
-                                <circle cx="12" cy="18" r="2" fill="#06b6d4"/>
-                                <line x1="4" y1="6" x2="4" y2="18" stroke="#06b6d4" stroke-width="2"/>
-                                <line x1="20" y1="6" x2="20" y2="18" stroke="#06b6d4" stroke-width="2"/>
-                            </svg>
-                            <strong>التوصيل على التوازي</strong> &mdash; فروع متعددة بين نقطتين
-                        </li>
-                    </ul>
-                </div>
-                <div class="visual-content">
-                    <svg viewBox="0 0 380 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:380px;">
-                        <defs>
-                            <linearGradient id="introGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.2"/>
-                                <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.05"/>
-                            </linearGradient>
-                        </defs>
-                        <rect x="20" y="20" width="340" height="280" rx="20" fill="url(#introGrad)" stroke="#3b82f6" stroke-opacity="0.3" stroke-width="2"/>
-
-                        <!-- Atom-like animation -->
-                        <circle cx="190" cy="160" r="20" fill="#3b82f6" filter="url(#glow)"/>
-                        <text x="190" y="166" text-anchor="middle" fill="white" font-size="14" font-weight="bold">e⁻</text>
-
-                        <ellipse cx="190" cy="160" rx="120" ry="40" fill="none" stroke="#06b6d4" stroke-width="1.5" opacity="0.5">
-                            <animateTransform attributeName="transform" type="rotate" from="0 190 160" to="360 190 160" dur="8s" repeatCount="indefinite"/>
-                        </ellipse>
-                        <ellipse cx="190" cy="160" rx="120" ry="40" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.5" transform="rotate(60 190 160)">
-                            <animateTransform attributeName="transform" type="rotate" from="60 190 160" to="420 190 160" dur="6s" repeatCount="indefinite"/>
-                        </ellipse>
-                        <ellipse cx="190" cy="160" rx="120" ry="40" fill="none" stroke="#10b981" stroke-width="1.5" opacity="0.5" transform="rotate(-60 190 160)">
-                            <animateTransform attributeName="transform" type="rotate" from="-60 190 160" to="300 190 160" dur="10s" repeatCount="indefinite"/>
-                        </ellipse>
-
-                        <circle cx="310" cy="160" r="6" fill="#06b6d4">
-                            <animateTransform attributeName="transform" type="rotate" from="0 190 160" to="360 190 160" dur="8s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="250" cy="125" r="6" fill="#f59e0b">
-                            <animateTransform attributeName="transform" type="rotate" from="60 190 160" to="420 190 160" dur="6s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="130" cy="195" r="6" fill="#10b981">
-                            <animateTransform attributeName="transform" type="rotate" from="-60 190 160" to="300 190 160" dur="10s" repeatCount="indefinite"/>
-                        </circle>
-
-                        <text x="190" y="280" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="Tajawal">تدفق الإلكترونات</text>
-                    </svg>
-                </div>
-            </div>
+        <!-- Card 2 -->
+        <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-icon-wrap"><i class="fa-solid fa-gauge-high"></i></div>
+          <h3 class="text-xl font-bold mb-2" data-i18n="pkg2.name">Smart Management System</h3>
+          <p class="text-volt-muted text-sm mb-5 min-h-[44px]" data-i18n="pkg2.desc">A custom system for schools, data organization, or analytics dashboards with full management features.</p>
+          <div class="flex items-end gap-2 mb-6">
+            <span class="price-tag text-5xl">199</span>
+            <span class="text-volt-muted font-semibold mb-1.5" data-i18n="common.currency">SAR</span>
+          </div>
+          <ul class="space-y-3 mb-7">
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg2.f1">Admin dashboard</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg2.f2">Database & reports</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg2.f3">User roles & permissions</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg2.f4">Custom workflows</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg2.f5">Domain included</span></li>
+          </ul>
+          <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="btn-primary w-full" data-wa-pkg="Smart Management System — 199 SAR">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span data-i18n="common.order">Order via WhatsApp</span>
+          </a>
         </div>
 
-        <!-- Slide 3: Series Circuit -->
-        <div class="slide" data-slide="3">
-            <div class="slide-header">
-                <span class="slide-tag" style="color:#f59e0b;background:rgba(245,158,11,0.15);border-color:rgba(245,158,11,0.3);">الدائرة الأولى</span>
-                <h2 class="slide-title">دائرة التوالي</h2>
-                <p class="slide-subtitle">المكوّنات على مسار واحد متتابع</p>
-            </div>
-            <div class="slide-body">
-                <div class="text-content">
-                    <h3 style="color:#f59e0b;">التعريف</h3>
-                    <p>تُوصَّل المقاومات على التوالي عندما تترتّب على مسار واحد بحيث يمرّ نفس التيار الكهربائي عبر كلٍّ منها بالتسلسل، دون أيّ تفرّع.</p>
-                    <h3 style="color:#f59e0b;margin-top:20px;">مثال واقعي</h3>
-                    <p>أضواء شجرة عيد الميلاد القديمة — إذا انقطعت لمبة واحدة، تنطفئ كل اللمبات لأن المسار الكهربائي قد انقطع.</p>
-                </div>
-                <div class="visual-content">
-                    <svg viewBox="0 0 460 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:460px;">
-                        <defs>
-                            <filter id="seriesGlow">
-                                <feGaussianBlur stdDeviation="3" result="b"/>
-                                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                            </filter>
-                        </defs>
-
-                        <!-- Wires (current flow) -->
-                        <path d="M60,80 L60,40 L400,40 L400,80" fill="none" stroke="#3b82f6" stroke-width="3" class="current-flow"/>
-                        <path d="M60,200 L60,240 L400,240 L400,200" fill="none" stroke="#3b82f6" stroke-width="3" class="current-flow" style="animation-direction:reverse;"/>
-
-                        <!-- Battery -->
-                        <line x1="60" y1="80" x2="60" y2="110" stroke="#3b82f6" stroke-width="3"/>
-                        <line x1="40" y1="110" x2="80" y2="110" stroke="#fff" stroke-width="4"/>
-                        <line x1="48" y1="125" x2="72" y2="125" stroke="#fff" stroke-width="2"/>
-                        <line x1="40" y1="145" x2="80" y2="145" stroke="#fff" stroke-width="4"/>
-                        <line x1="48" y1="160" x2="72" y2="160" stroke="#fff" stroke-width="2"/>
-                        <text x="20" y="135" fill="#06b6d4" font-size="14" font-family="Amiri">V</text>
-                        <line x1="60" y1="170" x2="60" y2="200" stroke="#3b82f6" stroke-width="3"/>
-
-                        <!-- Three resistors in series along top wire -->
-                        <g transform="translate(150,40)">
-                            <rect x="-25" y="-10" width="50" height="20" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="2" rx="3"/>
-                            <text x="0" y="5" text-anchor="middle" fill="#f59e0b" font-size="14" font-weight="bold" font-family="Amiri">R₁</text>
-                        </g>
-                        <g transform="translate(230,40)">
-                            <rect x="-25" y="-10" width="50" height="20" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="2" rx="3"/>
-                            <text x="0" y="5" text-anchor="middle" fill="#f59e0b" font-size="14" font-weight="bold" font-family="Amiri">R₂</text>
-                        </g>
-                        <g transform="translate(310,40)">
-                            <rect x="-25" y="-10" width="50" height="20" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="2" rx="3"/>
-                            <text x="0" y="5" text-anchor="middle" fill="#f59e0b" font-size="14" font-weight="bold" font-family="Amiri">R₃</text>
-                        </g>
-
-                        <!-- Bulb on right -->
-                        <g transform="translate(400,140)">
-                            <circle cx="0" cy="0" r="22" fill="url(#bulbGrad)" filter="url(#seriesGlow)" class="bulb-glow"/>
-                            <line x1="0" y1="22" x2="0" y2="60" stroke="#3b82f6" stroke-width="3"/>
-                            <text x="32" y="5" fill="#fbbf24" font-size="13" font-family="Amiri">L</text>
-                        </g>
-
-                        <!-- Direction arrow -->
-                        <g transform="translate(230,15)">
-                            <path d="M-15,0 L15,0 M10,-5 L15,0 L10,5" stroke="#06b6d4" stroke-width="2" fill="none"/>
-                            <text x="0" y="-8" text-anchor="middle" fill="#06b6d4" font-size="11" font-family="Tajawal">اتجاه التيار</text>
-                        </g>
-
-                        <!-- Animated current particles -->
-                        <circle r="4" fill="#06b6d4">
-                            <animateMotion path="M60,80 L60,40 L400,40 L400,200 L60,200 L60,80" dur="3s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle r="4" fill="#3b82f6">
-                            <animateMotion path="M60,80 L60,40 L400,40 L400,200 L60,200 L60,80" dur="3s" begin="1s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle r="4" fill="#06b6d4">
-                            <animateMotion path="M60,80 L60,40 L400,40 L400,200 L60,200 L60,80" dur="3s" begin="2s" repeatCount="indefinite"/>
-                        </circle>
-                    </svg>
-                </div>
-            </div>
+        <!-- Card 3 (Popular) -->
+        <div class="pricing-card featured" data-aos="fade-up" data-aos-delay="200">
+          <div class="popular-badge" data-i18n="common.popular">POPULAR</div>
+          <div class="feature-icon-wrap"><i class="fa-solid fa-cart-shopping"></i></div>
+          <h3 class="text-xl font-bold mb-2" data-i18n="pkg3.name">Complete E-Commerce Store</h3>
+          <p class="text-volt-muted text-sm mb-5 min-h-[44px]" data-i18n="pkg3.desc">A full-featured online store with shopping cart, product management, and modern checkout (template-based).</p>
+          <div class="flex items-end gap-2 mb-6">
+            <span class="price-tag text-5xl">299</span>
+            <span class="text-volt-muted font-semibold mb-1.5" data-i18n="common.currency">SAR</span>
+          </div>
+          <ul class="space-y-3 mb-7">
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg3.f1">Shopping cart & checkout</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg3.f2">Product management</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg3.f3">Logo & banner design</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg3.f4">Premium template setup</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg3.f5">Domain included</span></li>
+          </ul>
+          <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="btn-primary w-full" data-wa-pkg="Complete E-Commerce Store — 299 SAR">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span data-i18n="common.order">Order via WhatsApp</span>
+          </a>
         </div>
 
-        <!-- Slide 4: Series Properties -->
-        <div class="slide" data-slide="4">
-            <div class="slide-header">
-                <span class="slide-tag" style="color:#f59e0b;background:rgba(245,158,11,0.15);border-color:rgba(245,158,11,0.3);">قوانين التوالي</span>
-                <h2 class="slide-title">خواص دائرة التوالي</h2>
-                <p class="slide-subtitle">العلاقات الأساسية للتيار، الجهد، والمقاومة</p>
-            </div>
-            <div class="slide-body" style="flex-direction:column;align-items:stretch;justify-content:center;gap:20px;">
-                <div class="formula-box">
-                    <span class="formula-label">⚡ التيار الكهربائي</span>
-                    <span class="formula"><span class="var">I</span> = <span class="var">I₁</span> = <span class="var">I₂</span> = <span class="var">I₃</span></span>
-                    <span style="color:#94a3b8;font-size:14px;">ثابت في كل المكوّنات</span>
-                </div>
-                <div class="formula-box">
-                    <span class="formula-label">🔋 فرق الجهد</span>
-                    <span class="formula"><span class="var">V</span> = <span class="var">V₁</span> + <span class="var">V₂</span> + <span class="var">V₃</span></span>
-                    <span style="color:#94a3b8;font-size:14px;">يتوزّع على المقاومات</span>
-                </div>
-                <div class="formula-box">
-                    <span class="formula-label">🔧 المقاومة الكلية</span>
-                    <span class="formula"><span class="var">R</span> = <span class="var">R₁</span> + <span class="var">R₂</span> + <span class="var">R₃</span></span>
-                    <span style="color:#94a3b8;font-size:14px;">مجموع المقاومات</span>
-                </div>
-                <div class="content-card" style="margin-top:10px;border-color:rgba(239,68,68,0.3);">
-                    <div style="display:flex;align-items:center;gap:14px;">
-                        <div style="width:44px;height:44px;background:rgba(239,68,68,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                                <path d="M12 9v4M12 17h.01M3.07 19h17.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L1.34 16c-.77 1.33.19 3 1.73 3z" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <strong style="color:#fca5a5;font-size:16px;">تنبيه مهم:</strong>
-                            <span style="color:#94a3b8;font-size:15px;"> إذا تعطّل أيّ مكوّن في دائرة التوالي، تتوقف الدائرة كاملة عن العمل.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Card 4 -->
+        <div class="pricing-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="feature-icon-wrap"><i class="fa-solid fa-code"></i></div>
+          <h3 class="text-xl font-bold mb-2" data-i18n="pkg4.name">Custom E-Commerce (From Scratch)</h3>
+          <p class="text-volt-muted text-sm mb-5 min-h-[44px]" data-i18n="pkg4.desc">A fully independent, custom-coded e-commerce store built from zero — unique design, full ownership, no templates.</p>
+          <div class="flex items-end gap-2 mb-6">
+            <span class="price-tag text-5xl">499</span>
+            <span class="text-volt-muted font-semibold mb-1.5" data-i18n="common.currency">SAR</span>
+          </div>
+          <ul class="space-y-3 mb-7">
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg4.f1">Custom code, no templates</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg4.f2">Unique premium design</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg4.f3">Full source code ownership</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg4.f4">Advanced features included</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg4.f5">Domain included</span></li>
+          </ul>
+          <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="btn-primary w-full" data-wa-pkg="Custom E-Commerce Store (From Scratch) — 499 SAR">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span data-i18n="common.order">Order via WhatsApp</span>
+          </a>
         </div>
 
-        <!-- Slide 5: Parallel Circuit -->
-        <div class="slide" data-slide="5">
-            <div class="slide-header">
-                <span class="slide-tag">الدائرة الثانية</span>
-                <h2 class="slide-title">دائرة التوازي</h2>
-                <p class="slide-subtitle">فروع متعددة بين نقطتين مشتركتين</p>
-            </div>
-            <div class="slide-body">
-                <div class="text-content">
-                    <h3 style="color:#06b6d4;">التعريف</h3>
-                    <p>تُوصَّل المقاومات على التوازي عندما تتفرّع من نقطة مشتركة وتعود إلى نقطة مشتركة أخرى، بحيث يمرّ التيار في فروع منفصلة.</p>
-                    <h3 style="color:#06b6d4;margin-top:20px;">مثال واقعي</h3>
-                    <p>الأجهزة الكهربائية في المنزل — كل جهاز موصول على التوازي مع الآخرين، فإذا تعطّل أحدها يستمر الباقي بالعمل بشكل طبيعي.</p>
-                </div>
-                <div class="visual-content">
-                    <svg viewBox="0 0 460 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:460px;">
-                        <!-- Top wire -->
-                        <path d="M60,60 L400,60" fill="none" stroke="#3b82f6" stroke-width="3" class="current-flow"/>
-                        <!-- Bottom wire -->
-                        <path d="M60,260 L400,260" fill="none" stroke="#3b82f6" stroke-width="3" class="current-flow" style="animation-direction:reverse;"/>
-
-                        <!-- Battery left -->
-                        <line x1="60" y1="60" x2="60" y2="140" stroke="#3b82f6" stroke-width="3"/>
-                        <line x1="40" y1="140" x2="80" y2="140" stroke="#fff" stroke-width="4"/>
-                        <line x1="48" y1="155" x2="72" y2="155" stroke="#fff" stroke-width="2"/>
-                        <line x1="40" y1="170" x2="80" y2="170" stroke="#fff" stroke-width="4"/>
-                        <line x1="48" y1="185" x2="72" y2="185" stroke="#fff" stroke-width="2"/>
-                        <text x="20" y="165" fill="#06b6d4" font-size="14" font-family="Amiri">V</text>
-                        <line x1="60" y1="200" x2="60" y2="260" stroke="#3b82f6" stroke-width="3"/>
-
-                        <!-- Three parallel branches -->
-                        <!-- Branch 1 -->
-                        <line x1="180" y1="60" x2="180" y2="140" stroke="#3b82f6" stroke-width="2.5" class="current-flow"/>
-                        <rect x="155" y="140" width="50" height="40" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="2" rx="3"/>
-                        <text x="180" y="165" text-anchor="middle" fill="#f59e0b" font-size="14" font-weight="bold" font-family="Amiri">R₁</text>
-                        <line x1="180" y1="180" x2="180" y2="260" stroke="#3b82f6" stroke-width="2.5" class="current-flow"/>
-
-                        <!-- Branch 2 -->
-                        <line x1="280" y1="60" x2="280" y2="140" stroke="#3b82f6" stroke-width="2.5" class="current-flow"/>
-                        <rect x="255" y="140" width="50" height="40" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="2" rx="3"/>
-                        <text x="280" y="165" text-anchor="middle" fill="#f59e0b" font-size="14" font-weight="bold" font-family="Amiri">R₂</text>
-                        <line x1="280" y1="180" x2="280" y2="260" stroke="#3b82f6" stroke-width="2.5" class="current-flow"/>
-
-                        <!-- Branch 3 -->
-                        <line x1="380" y1="60" x2="380" y2="140" stroke="#3b82f6" stroke-width="2.5" class="current-flow"/>
-                        <rect x="355" y="140" width="50" height="40" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="2" rx="3"/>
-                        <text x="380" y="165" text-anchor="middle" fill="#f59e0b" font-size="14" font-weight="bold" font-family="Amiri">R₃</text>
-                        <line x1="380" y1="180" x2="380" y2="260" stroke="#3b82f6" stroke-width="2.5" class="current-flow"/>
-
-                        <!-- Current labels -->
-                        <text x="180" y="30" text-anchor="middle" fill="#06b6d4" font-size="13" font-family="Amiri">I₁</text>
-                        <text x="280" y="30" text-anchor="middle" fill="#06b6d4" font-size="13" font-family="Amiri">I₂</text>
-                        <text x="380" y="30" text-anchor="middle" fill="#06b6d4" font-size="13" font-family="Amiri">I₃</text>
-
-                        <!-- Animated particles in branches -->
-                        <circle r="3.5" fill="#06b6d4">
-                            <animate attributeName="cy" values="60;260" dur="2s" repeatCount="indefinite"/>
-                            <animate attributeName="cx" values="180;180" dur="2s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle r="3.5" fill="#3b82f6">
-                            <animate attributeName="cy" values="60;260" dur="2.3s" repeatCount="indefinite"/>
-                            <animate attributeName="cx" values="280;280" dur="2.3s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle r="3.5" fill="#06b6d4">
-                            <animate attributeName="cy" values="60;260" dur="1.8s" repeatCount="indefinite"/>
-                            <animate attributeName="cx" values="380;380" dur="1.8s" repeatCount="indefinite"/>
-                        </circle>
-
-                        <!-- Junction dots -->
-                        <circle cx="180" cy="60" r="4" fill="#fff"/>
-                        <circle cx="280" cy="60" r="4" fill="#fff"/>
-                        <circle cx="380" cy="60" r="4" fill="#fff"/>
-                        <circle cx="180" cy="260" r="4" fill="#fff"/>
-                        <circle cx="280" cy="260" r="4" fill="#fff"/>
-                        <circle cx="380" cy="260" r="4" fill="#fff"/>
-
-                        <text x="120" y="50" text-anchor="middle" fill="#06b6d4" font-size="13" font-family="Amiri">I</text>
-                    </svg>
-                </div>
-            </div>
+        <!-- Card 5 -->
+        <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-icon-wrap"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <h3 class="text-xl font-bold mb-2" data-i18n="pkg5.name">Fully Custom Website</h3>
+          <p class="text-volt-muted text-sm mb-5 min-h-[44px]" data-i18n="pkg5.desc">Any website you imagine — fully custom design and development tailored to your exact requirements.</p>
+          <div class="flex items-end gap-2 mb-6">
+            <span class="price-tag text-5xl">799</span>
+            <span class="text-volt-muted font-semibold mb-1.5" data-i18n="common.currency">SAR</span>
+          </div>
+          <ul class="space-y-3 mb-7">
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg5.f1">Any concept, any niche</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg5.f2">100% custom UI/UX</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg5.f3">Advanced functionality</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg5.f4">Premium performance</span></li>
+            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg5.f5">Domain included</span></li>
+          </ul>
+          <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="btn-primary w-full" data-wa-pkg="Fully Custom Website — 799 SAR">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span data-i18n="common.order">Order via WhatsApp</span>
+          </a>
         </div>
 
-        <!-- Slide 6: Parallel Properties -->
-        <div class="slide" data-slide="6">
-            <div class="slide-header">
-                <span class="slide-tag">قوانين التوازي</span>
-                <h2 class="slide-title">خواص دائرة التوازي</h2>
-                <p class="slide-subtitle">العلاقات الأساسية في التوصيل المتفرّع</p>
-            </div>
-            <div class="slide-body" style="flex-direction:column;align-items:stretch;justify-content:center;gap:20px;">
-                <div class="formula-box">
-                    <span class="formula-label">⚡ التيار الكهربائي</span>
-                    <span class="formula"><span class="var">I</span> = <span class="var">I₁</span> + <span class="var">I₂</span> + <span class="var">I₃</span></span>
-                    <span style="color:#94a3b8;font-size:14px;">يتوزّع على الفروع</span>
-                </div>
-                <div class="formula-box">
-                    <span class="formula-label">🔋 فرق الجهد</span>
-                    <span class="formula"><span class="var">V</span> = <span class="var">V₁</span> = <span class="var">V₂</span> = <span class="var">V₃</span></span>
-                    <span style="color:#94a3b8;font-size:14px;">ثابت على كل فرع</span>
-                </div>
-                <div class="formula-box">
-                    <span class="formula-label">🔧 المقاومة الكلية</span>
-                    <span class="formula">1/<span class="var">R</span> = 1/<span class="var">R₁</span> + 1/<span class="var">R₂</span> + 1/<span class="var">R₃</span></span>
-                    <span style="color:#94a3b8;font-size:14px;">مقلوب المجموع</span>
-                </div>
-                <div class="content-card" style="margin-top:10px;border-color:rgba(16,185,129,0.3);">
-                    <div style="display:flex;align-items:center;gap:14px;">
-                        <div style="width:44px;height:44px;background:rgba(16,185,129,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <strong style="color:#6ee7b7;font-size:16px;">ملاحظة:</strong>
-                            <span style="color:#94a3b8;font-size:15px;"> المقاومة الكلية في التوازي أصغر من أصغر مقاومة في الدائرة، وتعطّل أيّ فرع لا يؤثّر على الفروع الأخرى.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Card 6 — Consultation CTA -->
+        <div class="pricing-card flex flex-col justify-center items-center text-center" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-icon-wrap mb-5"><i class="fa-solid fa-headset"></i></div>
+          <h3 class="text-xl font-bold mb-3" data-i18n="pkgX.name">Not sure which to pick?</h3>
+          <p class="text-volt-muted text-sm mb-6 text-balance" data-i18n="pkgX.desc">Chat with us on WhatsApp and we'll guide you to the perfect package for your project.</p>
+          <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="btn-primary w-full" data-wa-pkg="Free Consultation">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span data-i18n="pkgX.cta">Get a Free Consultation</span>
+          </a>
         </div>
 
-        <!-- Slide 7: Comparison Table -->
-        <div class="slide" data-slide="7">
-            <div class="slide-header">
-                <span class="slide-tag">مقارنة شاملة</span>
-                <h2 class="slide-title">التوالي مقابل التوازي</h2>
-                <p class="slide-subtitle">جدول مقارنة بين الدائرتين</p>
-            </div>
-            <div class="slide-body" style="align-items:stretch;">
-                <table class="compare-table">
-                    <thead>
-                        <tr>
-                            <th>وجه المقارنة</th>
-                            <th>التوالي</th>
-                            <th>التوازي</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>التيار الكهربائي</td>
-                            <td>I = I₁ = I₂ = I₃ (ثابت)</td>
-                            <td>I = I₁ + I₂ + I₃ (متغيّر)</td>
-                        </tr>
-                        <tr>
-                            <td>فرق الجهد</td>
-                            <td>V = V₁ + V₂ + V₃ (متغيّر)</td>
-                            <td>V = V₁ = V₂ = V₃ (ثابت)</td>
-                        </tr>
-                        <tr>
-                            <td>المقاومة الكلية</td>
-                            <td>R = R₁ + R₂ + R₃</td>
-                            <td>1/R = 1/R₁ + 1/R₂ + 1/R₃</td>
-                        </tr>
-                        <tr>
-                            <td>عدد المسارات</td>
-                            <td>مسار واحد فقط</td>
-                            <td>مسارات متعدّدة</td>
-                        </tr>
-                        <tr>
-                            <td>عند تعطّل مكوّن</td>
-                            <td><span style="color:#fca5a5;">تتوقف الدائرة كاملة</span></td>
-                            <td><span style="color:#6ee7b7;">تستمرّ بقية الفروع</span></td>
-                        </tr>
-                        <tr>
-                            <td>قيمة المقاومة الكلية</td>
-                            <td>أكبر من أكبر مقاومة</td>
-                            <td>أصغر من أصغر مقاومة</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+      </div>
+
+      <!-- Info Box -->
+      <div class="info-box mt-12" data-aos="fade-up">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-volt-red/15 text-volt-red flex items-center justify-center">
+            <i class="fa-solid fa-circle-info"></i>
+          </div>
+          <div>
+            <h4 class="font-bold mb-1.5" data-i18n="info.title">Important Note</h4>
+            <p class="text-volt-muted text-sm leading-relaxed" data-i18n="info.body">All prices include the DOMAIN only. Templates and themes (if used) include product setup, logo design, and a custom banner based on the client's request.</p>
+          </div>
         </div>
-
-        <!-- Slide 8: Real-world Examples -->
-        <div class="slide" data-slide="8">
-            <div class="slide-header">
-                <span class="slide-tag">تطبيقات حياتية</span>
-                <h2 class="slide-title">أين نجدها في حياتنا؟</h2>
-                <p class="slide-subtitle">أمثلة عملية من العالم من حولنا</p>
-            </div>
-            <div class="slide-body" style="align-items:stretch;">
-                <div class="examples-grid">
-                    <div class="example-card amber">
-                        <div class="example-icon">
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                <circle cx="8" cy="20" r="4" fill="#f59e0b"/>
-                                <circle cx="16" cy="14" r="4" fill="#fbbf24"/>
-                                <circle cx="24" cy="20" r="4" fill="#f59e0b"/>
-                                <line x1="12" y1="20" x2="12" y2="14" stroke="#f59e0b" stroke-width="1.5"/>
-                                <line x1="20" y1="14" x2="20" y2="20" stroke="#f59e0b" stroke-width="1.5"/>
-                            </svg>
-                        </div>
-                        <h3>أضواء عيد الميلاد</h3>
-                        <p>تُوصَّل لمبات الزينة القديمة على التوالي، مما يجعل الدائرة بسيطة وموفّرة للأسلاك. التيار نفسه يمرّ في كل اللمبات.</p>
-                        <div class="warning">
-                            ⚠️ العيب: إذا انقطعت لمبة واحدة، تنطفئ السلسلة كاملة!
-                        </div>
-                    </div>
-
-                    <div class="example-card cyan">
-                        <div class="example-icon">
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                <rect x="4" y="6" width="24" height="20" rx="2" stroke="#06b6d4" stroke-width="2"/>
-                                <line x1="10" y1="12" x2="22" y2="12" stroke="#06b6d4" stroke-width="2"/>
-                                <line x1="10" y1="16" x2="22" y2="16" stroke="#06b6d4" stroke-width="2"/>
-                                <line x1="10" y1="20" x2="22" y2="20" stroke="#06b6d4" stroke-width="2"/>
-                            </svg>
-                        </div>
-                        <h3>التمديدات المنزلية</h3>
-                        <p>كل جهاز كهربائي في المنزل (الثلاجة، التلفاز، المصابيح) موصول على التوازي مع الشبكة الرئيسية، وكلها تعمل بنفس الجهد (220V).</p>
-                        <div class="warning" style="background:rgba(16,185,129,0.1);border-color:#10b981;color:#6ee7b7;">
-                            ✓ الميزة: تعطّل جهاز واحد لا يؤثّر على باقي الأجهزة!
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 9: Worked Example -->
-        <div class="slide" data-slide="9">
-            <div class="slide-header">
-                <span class="slide-tag">مثال محلول</span>
-                <h2 class="slide-title">تطبيق عددي</h2>
-                <p class="slide-subtitle">احسب المقاومة الكلية بالطريقتين</p>
-            </div>
-            <div class="slide-body" style="align-items:stretch;">
-                <div class="worked-example">
-                    <div class="problem-statement">
-                        <strong>السؤال:</strong> لدينا ثلاث مقاومات قيمها R₁ = 6 Ω، R₂ = 3 Ω، R₃ = 2 Ω، احسب المقاومة الكلية في حالتي التوصيل على التوالي وعلى التوازي.
-                    </div>
-
-                    <div class="solution-card series">
-                        <h5>🔸 الحل على التوالي</h5>
-                        <div class="step">R = R₁ + R₂ + R₃</div>
-                        <div class="step">R = 6 + 3 + 2</div>
-                        <div class="step"><span class="result">R = 11 Ω</span></div>
-                        <div style="margin-top:14px;padding:10px;background:rgba(245,158,11,0.1);border-radius:8px;font-size:13px;color:#94a3b8;">
-                            المقاومة الكلية أكبر من أكبر مقاومة (6 Ω) ✓
-                        </div>
-                    </div>
-
-                    <div class="solution-card parallel">
-                        <h5>🔹 الحل على التوازي</h5>
-                        <div class="step">1/R = 1/6 + 1/3 + 1/2</div>
-                        <div class="step">1/R = 1/6 + 2/6 + 3/6 = 6/6</div>
-                        <div class="step"><span class="result">R = 1 Ω</span></div>
-                        <div style="margin-top:14px;padding:10px;background:rgba(6,182,212,0.1);border-radius:8px;font-size:13px;color:#94a3b8;">
-                            المقاومة الكلية أصغر من أصغر مقاومة (2 Ω) ✓
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 10: Summary -->
-        <div class="slide" data-slide="10">
-            <div class="slide-header">
-                <span class="slide-tag">الخلاصة</span>
-                <h2 class="slide-title">النقاط الرئيسية</h2>
-                <p class="slide-subtitle">ملخّص الرحلة عبر الدوائر الكهربائية</p>
-            </div>
-            <div class="slide-body" style="flex-direction:column;align-items:stretch;justify-content:center;gap:24px;">
-                <div class="summary-points">
-                    <div class="summary-point">
-                        <div class="num">1</div>
-                        <div>
-                            <h5>التوالي = مسار واحد</h5>
-                            <p>التيار ثابت ويمرّ بالتسلسل عبر كل المكوّنات</p>
-                        </div>
-                    </div>
-                    <div class="summary-point">
-                        <div class="num">2</div>
-                        <div>
-                            <h5>التوازي = فروع متعدّدة</h5>
-                            <p>الجهد ثابت على كل فرع والتيار يتوزّع</p>
-                        </div>
-                    </div>
-                    <div class="summary-point">
-                        <div class="num">3</div>
-                        <div>
-                            <h5>R في التوالي تزداد</h5>
-                            <p>المقاومة الكلية = مجموع المقاومات</p>
-                        </div>
-                    </div>
-                    <div class="summary-point">
-                        <div class="num">4</div>
-                        <div>
-                            <h5>R في التوازي تقلّ</h5>
-                            <p>المقاومة الكلية أصغر من أصغر مقاومة</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="credits-card">
-                    <h6>إعداد الطالبين</h6>
-                    <div class="name">يزن انس المحمدي & مصطفى عبدالله أحمد</div>
-                    <div style="margin-top:10px;font-size:13px;color:#94a3b8;">شكراً لمتابعتكم 🎓</div>
-                </div>
-            </div>
-        </div>
+      </div>
 
     </div>
+  </section>
 
-    <!-- Footer credit -->
-    <div class="footer-credit">إعداد: مصطفى عبدالله أحمد</div>
+  <!-- ============================
+       ABOUT / WHY US
+       ============================ -->
+  <section id="about" class="relative py-24 overflow-hidden border-t border-white/5">
+    <div class="absolute inset-0 grid-bg opacity-30 pointer-events-none"></div>
 
-    <!-- Bottom bar -->
-    <div class="bottom-bar">
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <div class="section-tag mb-5">
+          <i class="fa-solid fa-star"></i>
+          <span data-i18n="about.tag">WHY US</span>
         </div>
-        <div class="controls">
-            <div class="nav-dots" id="navDots"></div>
-            <div class="control-buttons">
-                <button class="control-btn" id="prevBtn" title="السابق">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                <button class="control-btn play-pause" id="playPauseBtn" title="تشغيل/إيقاف">
-                    <svg id="pauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="white">
-                        <rect x="6" y="5" width="4" height="14" rx="1"/>
-                        <rect x="14" y="5" width="4" height="14" rx="1"/>
-                    </svg>
-                    <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="white" style="display:none;">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                </button>
-                <button class="control-btn" id="nextBtn" title="التالي">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="timer">
-                <span id="currentTime">00:00</span> / <span id="totalTime">02:00</span>
-            </div>
+        <h2 class="section-title text-4xl sm:text-5xl md:text-6xl mb-4" data-i18n="about.title">Why VOLT STORE?</h2>
+        <div class="section-divider mx-auto mb-5"></div>
+        <p class="text-volt-muted max-w-2xl mx-auto text-balance" data-i18n="about.sub">
+          Premium quality, honest pricing, and dedicated support — built for businesses that want results.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="feature-icon-wrap"><i class="fa-solid fa-bolt"></i></div>
+          <h3 class="font-bold text-lg mb-2" data-i18n="feat1.title">Fast Delivery</h3>
+          <p class="text-volt-muted text-sm leading-relaxed" data-i18n="feat1.desc">Quick turnaround times without compromising on quality. Most projects ready within days.</p>
         </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-icon-wrap"><i class="fa-solid fa-pen-ruler"></i></div>
+          <h3 class="font-bold text-lg mb-2" data-i18n="feat2.title">Professional Design</h3>
+          <p class="text-volt-muted text-sm leading-relaxed" data-i18n="feat2.desc">Modern, clean, premium aesthetics that elevate your brand and convert visitors.</p>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-icon-wrap"><i class="fa-solid fa-language"></i></div>
+          <h3 class="font-bold text-lg mb-2" data-i18n="feat3.title">Bilingual Support</h3>
+          <p class="text-volt-muted text-sm leading-relaxed" data-i18n="feat3.desc">Full Arabic and English support — RTL ready out of the box, perfect for the Saudi market.</p>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="feature-icon-wrap"><i class="fa-solid fa-shield-halved"></i></div>
+          <h3 class="font-bold text-lg mb-2" data-i18n="feat4.title">After-Sale Support</h3>
+          <p class="text-volt-muted text-sm leading-relaxed" data-i18n="feat4.desc">We're here after launch — ongoing assistance, updates, and dedicated client care.</p>
+        </div>
+      </div>
     </div>
-</div>
+  </section>
 
-<script>
-    const slides = document.querySelectorAll('.slide');
-    const totalSlides = slides.length;
-    const TOTAL_DURATION = 120; // 120 seconds
-    const SLIDE_DURATION = TOTAL_DURATION / totalSlides; // 12 seconds each
+  <!-- ============================
+       CONTACT
+       ============================ -->
+  <section id="contact" class="relative py-24 overflow-hidden border-t border-white/5">
+    <div class="absolute inset-0 radial-glow-bottom pointer-events-none"></div>
 
-    let currentSlideIndex = 0;
-    let isPlaying = true;
-    let elapsed = 0;
-    let intervalId = null;
+    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14" data-aos="fade-up">
+        <div class="section-tag mb-5">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span data-i18n="contact.tag">CONTACT</span>
+        </div>
+        <h2 class="section-title text-4xl sm:text-5xl md:text-6xl mb-4" data-i18n="contact.title">Get In Touch</h2>
+        <div class="section-divider mx-auto mb-5"></div>
+        <p class="text-volt-muted max-w-2xl mx-auto text-balance" data-i18n="contact.sub">
+          Have a project in mind? Let's talk. We typically respond within minutes on WhatsApp.
+        </p>
+      </div>
 
-    const progressBar = document.getElementById('progressBar');
-    const currentSlideEl = document.getElementById('currentSlide');
-    const totalSlidesEl = document.getElementById('totalSlides');
-    const currentTimeEl = document.getElementById('currentTime');
-    const totalTimeEl = document.getElementById('totalTime');
-    const navDots = document.getElementById('navDots');
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const playIcon = document.getElementById('playIcon');
-    const pauseIcon = document.getElementById('pauseIcon');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="contact-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="contact-icon"><i class="fa-brands fa-whatsapp"></i></div>
+          <div>
+            <div class="text-xs uppercase tracking-widest text-volt-muted font-bold">WhatsApp</div>
+            <div class="font-semibold mt-1" dir="ltr">+966 59 980 4296</div>
+          </div>
+        </a>
+        <a href="mailto:voltstore301@gmail.com" class="contact-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+          <div>
+            <div class="text-xs uppercase tracking-widest text-volt-muted font-bold" data-i18n="contact.email">Email</div>
+            <div class="font-semibold mt-1 break-all">voltstore301@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://www.tiktok.com/@volt.store77" target="_blank" rel="noopener" class="contact-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="contact-icon"><i class="fa-brands fa-tiktok"></i></div>
+          <div>
+            <div class="text-xs uppercase tracking-widest text-volt-muted font-bold">TikTok</div>
+            <div class="font-semibold mt-1">@volt.store77</div>
+          </div>
+        </a>
+      </div>
 
-    totalSlidesEl.textContent = totalSlides;
-    totalTimeEl.textContent = formatTime(TOTAL_DURATION);
+      <div class="mt-12 text-center" data-aos="fade-up">
+        <a href="https://wa.me/966599804296?text=Hello%20VOLT%20STORE%2C%20I%27m%20interested%20in%20your%20services" target="_blank" rel="noopener" class="btn-primary text-base">
+          <i class="fa-brands fa-whatsapp text-xl"></i>
+          <span data-i18n="contact.cta">Start a Conversation</span>
+        </a>
+      </div>
+    </div>
+  </section>
 
-    // Build nav dots
-    for (let i = 0; i < totalSlides; i++) {
-        const dot = document.createElement('button');
-        dot.className = 'dot' + (i === 0 ? ' active' : '');
-        dot.setAttribute('aria-label', `الشريحة ${i + 1}`);
-        dot.addEventListener('click', () => goToSlide(i));
-        navDots.appendChild(dot);
+  <!-- ============================
+       FOOTER
+       ============================ -->
+  <footer class="relative border-t border-white/5 pt-16 pb-8 overflow-hidden">
+    <div class="absolute inset-0 grid-bg opacity-20 pointer-events-none"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+        <!-- Brand -->
+        <div>
+          <a href="#home" class="inline-flex items-center gap-3 mb-4">
+            <img src="assets/logo.png" alt="VOLT STORE Logo" class="h-12 w-12 object-contain" />
+            <div class="leading-tight">
+              <div class="font-black text-lg tracking-tight">VOLT <span class="text-volt-red">STORE</span></div>
+              <div class="text-[10px] tracking-[0.25em] text-volt-muted uppercase font-semibold" data-i18n="footer.brand">POWER YOUR WORKFLOW</div>
+            </div>
+          </a>
+          <p class="text-volt-muted text-sm max-w-xs leading-relaxed" data-i18n="footer.tagline">
+            Professional digital solutions, custom development, and premium online stores — crafted with care.
+          </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h4 class="font-bold text-sm uppercase tracking-widest mb-4 text-volt-muted" data-i18n="footer.linksTitle">Quick Links</h4>
+          <div class="flex flex-col gap-2">
+            <a href="#home" class="text-sm hover:text-volt-red transition-colors" data-i18n="nav.home">Home</a>
+            <a href="#services" class="text-sm hover:text-volt-red transition-colors" data-i18n="nav.services">Services</a>
+            <a href="#about" class="text-sm hover:text-volt-red transition-colors" data-i18n="nav.about">About</a>
+            <a href="#contact" class="text-sm hover:text-volt-red transition-colors" data-i18n="nav.contact">Contact</a>
+          </div>
+        </div>
+
+        <!-- Social -->
+        <div>
+          <h4 class="font-bold text-sm uppercase tracking-widest mb-4 text-volt-muted" data-i18n="footer.socialTitle">Follow Us</h4>
+          <div class="flex items-center gap-3">
+            <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="social-icon" aria-label="WhatsApp">
+              <i class="fa-brands fa-whatsapp"></i>
+            </a>
+            <a href="https://www.tiktok.com/@volt.store77" target="_blank" rel="noopener" class="social-icon" aria-label="TikTok">
+              <i class="fa-brands fa-tiktok"></i>
+            </a>
+            <a href="mailto:voltstore301@gmail.com" class="social-icon" aria-label="Email">
+              <i class="fa-solid fa-envelope"></i>
+            </a>
+          </div>
+          <div class="mt-5 text-xs text-volt-muted">
+            <div class="font-semibold uppercase tracking-widest mb-1" data-i18n="footer.colors">PALETTE</div>
+            <div class="flex items-center gap-2 font-mono">
+              <span class="w-3 h-3 rounded-full bg-volt-black border border-white/20"></span><span>0A0A0A</span>
+              <span class="w-3 h-3 rounded-full bg-white border border-white/20 ms-2"></span><span>FFFFFF</span>
+              <span class="w-3 h-3 rounded-full bg-volt-red ms-2"></span><span>E63030</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-xs text-volt-muted" data-i18n="footer.copyright">© 2026 VOLT STORE — All Rights Reserved</p>
+        <p class="text-xs text-volt-muted font-mono">VOLT / STORE / EST. MMXXVI</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================
+       FLOATING WHATSAPP (BOTTOM-LEFT)
+       ============================ -->
+  <a href="https://wa.me/966599804296?text=Hello%20VOLT%20STORE%2C%20I%27m%20interested%20in%20your%20services"
+     id="floatWA"
+     target="_blank"
+     rel="noopener"
+     class="float-whatsapp"
+     aria-label="Chat with us on WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+    <span class="wa-tooltip" id="waTooltip">Chat with us</span>
+  </a>
+
+  <!-- ============================
+       AOS
+       ============================ -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <!-- ============================
+       SCRIPTS
+       ============================ -->
+  <script>
+    /* ============================
+       TRANSLATIONS
+       ============================ */
+    const I18N = {
+      en: {
+        "navbar.tagline": "DIGITAL PRODUCTS",
+        "nav.home": "Home",
+        "nav.services": "Services",
+        "nav.about": "About",
+        "nav.contact": "Contact",
+
+        "hero.badge": "EST. MMXXVI · DIGITAL PRODUCTS",
+        "hero.title1": "Professional Web Solutions",
+        "hero.title2": "& Custom Development",
+        "hero.sub": "We build websites, systems, and online stores tailored to your needs.",
+        "hero.cta": "Order via WhatsApp",
+        "hero.cta2": "View Packages",
+        "hero.stat1": "Packages",
+        "hero.stat2": "Support",
+        "hero.stat3": "Custom",
+
+        "services.tag": "OUR SERVICES",
+        "services.title": "Our Packages",
+        "services.sub": "Choose the perfect package for your business — clean pricing, no hidden fees, fast delivery.",
+
+        "common.currency": "SAR",
+        "common.order": "Order via WhatsApp",
+        "common.popular": "POPULAR",
+
+        "pkg1.name": "Portfolio Website",
+        "pkg1.desc": "A clean, professional portfolio website to showcase your work, services, or brand identity.",
+        "pkg1.f1": "Modern responsive design",
+        "pkg1.f2": "Up to 5 pages",
+        "pkg1.f3": "Domain included",
+        "pkg1.f4": "Bilingual (AR / EN)",
+        "pkg1.f5": "Mobile optimized",
+
+        "pkg2.name": "Smart Management System",
+        "pkg2.desc": "A custom system for schools, data organization, or analytics dashboards with full management features.",
+        "pkg2.f1": "Admin dashboard",
+        "pkg2.f2": "Database & reports",
+        "pkg2.f3": "User roles & permissions",
+        "pkg2.f4": "Custom workflows",
+        "pkg2.f5": "Domain included",
+
+        "pkg3.name": "Complete E-Commerce Store",
+        "pkg3.desc": "A full-featured online store with shopping cart, product management, and modern checkout (template-based).",
+        "pkg3.f1": "Shopping cart & checkout",
+        "pkg3.f2": "Product management",
+        "pkg3.f3": "Logo & banner design",
+        "pkg3.f4": "Premium template setup",
+        "pkg3.f5": "Domain included",
+
+        "pkg4.name": "Custom E-Commerce (From Scratch)",
+        "pkg4.desc": "A fully independent, custom-coded e-commerce store built from zero — unique design, full ownership, no templates.",
+        "pkg4.f1": "Custom code, no templates",
+        "pkg4.f2": "Unique premium design",
+        "pkg4.f3": "Full source code ownership",
+        "pkg4.f4": "Advanced features included",
+        "pkg4.f5": "Domain included",
+
+        "pkg5.name": "Fully Custom Website",
+        "pkg5.desc": "Any website you imagine — fully custom design and development tailored to your exact requirements.",
+        "pkg5.f1": "Any concept, any niche",
+        "pkg5.f2": "100% custom UI/UX",
+        "pkg5.f3": "Advanced functionality",
+        "pkg5.f4": "Premium performance",
+        "pkg5.f5": "Domain included",
+
+        "pkgX.name": "Not sure which to pick?",
+        "pkgX.desc": "Chat with us on WhatsApp and we'll guide you to the perfect package for your project.",
+        "pkgX.cta": "Get a Free Consultation",
+
+        "info.title": "Important Note",
+        "info.body": "All prices include the DOMAIN only. Templates and themes (if used) include product setup, logo design, and a custom banner based on the client's request.",
+
+        "about.tag": "WHY US",
+        "about.title": "Why VOLT STORE?",
+        "about.sub": "Premium quality, honest pricing, and dedicated support — built for businesses that want results.",
+        "feat1.title": "Fast Delivery",
+        "feat1.desc": "Quick turnaround times without compromising on quality. Most projects ready within days.",
+        "feat2.title": "Professional Design",
+        "feat2.desc": "Modern, clean, premium aesthetics that elevate your brand and convert visitors.",
+        "feat3.title": "Bilingual Support",
+        "feat3.desc": "Full Arabic and English support — RTL ready out of the box, perfect for the Saudi market.",
+        "feat4.title": "After-Sale Support",
+        "feat4.desc": "We're here after launch — ongoing assistance, updates, and dedicated client care.",
+
+        "contact.tag": "CONTACT",
+        "contact.title": "Get In Touch",
+        "contact.sub": "Have a project in mind? Let's talk. We typically respond within minutes on WhatsApp.",
+        "contact.email": "Email",
+        "contact.cta": "Start a Conversation",
+
+        "footer.brand": "POWER YOUR WORKFLOW",
+        "footer.tagline": "Professional digital solutions, custom development, and premium online stores — crafted with care.",
+        "footer.linksTitle": "Quick Links",
+        "footer.socialTitle": "Follow Us",
+        "footer.colors": "PALETTE",
+        "footer.copyright": "© 2026 VOLT STORE — All Rights Reserved",
+
+        "wa.tooltip": "Chat with us",
+        "wa.message": "Hello VOLT STORE, I'm interested in your services"
+      },
+
+      ar: {
+        "navbar.tagline": "منتجات رقمية",
+        "nav.home": "الرئيسية",
+        "nav.services": "الخدمات",
+        "nav.about": "من نحن",
+        "nav.contact": "تواصل",
+
+        "hero.badge": "تأسست عام ٢٠٢٦ · منتجات رقمية",
+        "hero.title1": "حلول رقمية احترافية",
+        "hero.title2": "وتطوير مخصص",
+        "hero.sub": "نصمم لك المواقع والأنظمة والمتاجر الإلكترونية باحترافية عالية.",
+        "hero.cta": "اطلب عبر واتساب",
+        "hero.cta2": "تصفح الباقات",
+        "hero.stat1": "باقات",
+        "hero.stat2": "دعم",
+        "hero.stat3": "مخصص",
+
+        "services.tag": "خدماتنا",
+        "services.title": "باقاتنا",
+        "services.sub": "اختر الباقة المناسبة لمشروعك — أسعار واضحة، بدون رسوم خفية، تسليم سريع.",
+
+        "common.currency": "ريال",
+        "common.order": "اطلب عبر واتساب",
+        "common.popular": "الأكثر طلباً",
+
+        "pkg1.name": "موقع عرض أعمال",
+        "pkg1.desc": "موقع احترافي وأنيق لعرض أعمالك أو خدماتك أو هويتك التجارية.",
+        "pkg1.f1": "تصميم عصري ومتجاوب",
+        "pkg1.f2": "حتى ٥ صفحات",
+        "pkg1.f3": "الدومين مشمول",
+        "pkg1.f4": "ثنائي اللغة (عربي / إنجليزي)",
+        "pkg1.f5": "متوافق مع الجوال",
+
+        "pkg2.name": "نظام إدارة ذكي",
+        "pkg2.desc": "نظام مخصص للمدارس أو لتنظيم وتحليل البيانات مع لوحة تحكم كاملة.",
+        "pkg2.f1": "لوحة تحكم للمدير",
+        "pkg2.f2": "قاعدة بيانات وتقارير",
+        "pkg2.f3": "صلاحيات وأدوار المستخدمين",
+        "pkg2.f4": "تدفقات عمل مخصصة",
+        "pkg2.f5": "الدومين مشمول",
+
+        "pkg3.name": "متجر إلكتروني متكامل",
+        "pkg3.desc": "متجر إلكتروني كامل بسلة شراء وإدارة منتجات وتجربة شراء عصرية (قائم على قالب جاهز).",
+        "pkg3.f1": "سلة شراء وإتمام الطلب",
+        "pkg3.f2": "إدارة المنتجات",
+        "pkg3.f3": "تصميم اللوقو والبانر",
+        "pkg3.f4": "إعداد قالب احترافي",
+        "pkg3.f5": "الدومين مشمول",
+
+        "pkg4.name": "متجر إلكتروني من الصفر",
+        "pkg4.desc": "متجر إلكتروني مستقل ومبني من الصفر بتصميم فريد بدون استخدام قوالب جاهزة.",
+        "pkg4.f1": "كود مخصص بدون قوالب",
+        "pkg4.f2": "تصميم فريد ومميز",
+        "pkg4.f3": "ملكية كاملة للكود",
+        "pkg4.f4": "ميزات متقدمة شاملة",
+        "pkg4.f5": "الدومين مشمول",
+
+        "pkg5.name": "موقع حسب الطلب",
+        "pkg5.desc": "أي موقع تتخيله — تصميم وتطوير كامل ومخصص حسب متطلباتك بالضبط.",
+        "pkg5.f1": "أي فكرة أو مجال",
+        "pkg5.f2": "تصميم وتجربة مستخدم مخصصة 100٪",
+        "pkg5.f3": "وظائف متقدمة",
+        "pkg5.f4": "أداء عالي وممتاز",
+        "pkg5.f5": "الدومين مشمول",
+
+        "pkgX.name": "غير متأكد من الباقة المناسبة؟",
+        "pkgX.desc": "تواصل معنا عبر واتساب وسنرشدك للباقة المثالية لمشروعك.",
+        "pkgX.cta": "احصل على استشارة مجانية",
+
+        "info.title": "ملاحظة مهمة",
+        "info.body": "الأسعار شاملة الدومين فقط. القوالب والثيمات (إن وُجدت) تشمل إعداد المنتج، وتصميم اللوقو، وبانر مخصص حسب طلب العميل.",
+
+        "about.tag": "لماذا نحن",
+        "about.title": "لماذا VOLT STORE؟",
+        "about.sub": "جودة احترافية، أسعار صادقة، ودعم متخصص — مصمم لأصحاب الأعمال الذين يبحثون عن نتائج حقيقية.",
+        "feat1.title": "تسليم سريع",
+        "feat1.desc": "نلتزم بمواعيد التسليم دون التأثير على جودة العمل. معظم المشاريع جاهزة خلال أيام.",
+        "feat2.title": "تصميم احترافي",
+        "feat2.desc": "تصاميم عصرية وأنيقة ترتقي بعلامتك التجارية وتزيد من تحويل الزوار.",
+        "feat3.title": "دعم لغتين",
+        "feat3.desc": "دعم كامل للعربية والإنجليزية مع تخطيط RTL جاهز — مثالي للسوق السعودي.",
+        "feat4.title": "دعم ما بعد البيع",
+        "feat4.desc": "نحن معك بعد التسليم — دعم مستمر، تحديثات، وعناية متخصصة بعملائنا.",
+
+        "contact.tag": "تواصل",
+        "contact.title": "تواصل معنا",
+        "contact.sub": "عندك مشروع في بالك؟ تواصل معنا. عادةً نرد خلال دقائق عبر واتساب.",
+        "contact.email": "البريد الإلكتروني",
+        "contact.cta": "ابدأ المحادثة",
+
+        "footer.brand": "POWER YOUR WORKFLOW",
+        "footer.tagline": "حلول رقمية احترافية وتطوير مخصص ومتاجر إلكترونية متميزة — مصنوعة بعناية.",
+        "footer.linksTitle": "روابط سريعة",
+        "footer.socialTitle": "تابعنا",
+        "footer.colors": "الألوان",
+        "footer.copyright": "© 2026 VOLT STORE — جميع الحقوق محفوظة",
+
+        "wa.tooltip": "تواصل معنا",
+        "wa.message": "السلام عليكم، أنا مهتم بخدماتكم"
+      }
+    };
+
+    /* ============================
+       LANGUAGE LOGIC
+       ============================ */
+    const WA_NUMBER = "966599804296";
+
+    function applyLanguage(lang) {
+      const dict = I18N[lang];
+      const isRTL = (lang === 'ar');
+
+      // root attrs
+      document.documentElement.lang = lang;
+      document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+      document.body.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+
+      // toggle label = shows the OTHER lang (the one you can switch to)
+      const langLabel = document.getElementById('langLabel');
+      if (langLabel) langLabel.textContent = isRTL ? 'EN' : 'AR';
+
+      // replace all i18n strings
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined) {
+          el.textContent = dict[key];
+        }
+      });
+
+      // update WA tooltip
+      const tooltip = document.getElementById('waTooltip');
+      if (tooltip) tooltip.textContent = dict["wa.tooltip"];
+
+      // update floating WA href with translated msg
+      const floatWA = document.getElementById('floatWA');
+      if (floatWA) {
+        floatWA.href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(dict["wa.message"])}`;
+      }
+
+      // update all package WhatsApp links with pre-filled message
+      document.querySelectorAll('[data-wa-pkg]').forEach(link => {
+        const pkg = link.getAttribute('data-wa-pkg');
+        const prefix = isRTL
+          ? `السلام عليكم VOLT STORE، أنا مهتم بباقة: ${pkg}`
+          : `Hello VOLT STORE, I'm interested in the package: ${pkg}`;
+        link.href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(prefix)}`;
+      });
+
+      // persist
+      try { localStorage.setItem('volt_lang', lang); } catch(e) {}
+
+      // page title
+      document.title = isRTL
+        ? "VOLT STORE — حلول رقمية احترافية"
+        : "VOLT STORE — Professional Digital Solutions";
     }
 
-    function formatTime(seconds) {
-        const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-        const s = Math.floor(seconds % 60).toString().padStart(2, '0');
-        return `${m}:${s}`;
+    function getInitialLang() {
+      try {
+        const saved = localStorage.getItem('volt_lang');
+        if (saved === 'ar' || saved === 'en') return saved;
+      } catch(e) {}
+      return 'ar'; // default per spec
     }
 
-    function updateUI() {
-        slides.forEach((s, i) => {
-            s.classList.remove('active', 'exit-right');
-            if (i === currentSlideIndex) {
-                s.classList.add('active');
-            } else if (i < currentSlideIndex) {
-                s.classList.add('exit-right');
-            }
+    /* ============================
+       INIT
+       ============================ */
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // Initial language
+      applyLanguage(getInitialLang());
+
+      // Lang toggle
+      document.getElementById('langToggle').addEventListener('click', () => {
+        const current = document.documentElement.dir === 'rtl' ? 'ar' : 'en';
+        applyLanguage(current === 'ar' ? 'en' : 'ar');
+      });
+
+      // Sticky navbar shadow
+      const navbar = document.getElementById('navbar');
+      const onScroll = () => {
+        if (window.scrollY > 30) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // Mobile menu
+      const burger = document.getElementById('burger');
+      const mobileMenu = document.getElementById('mobileMenu');
+      burger.addEventListener('click', () => {
+        mobileMenu.classList.toggle('open');
+      });
+      document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+      });
+
+      // AOS init
+      if (window.AOS) {
+        AOS.init({
+          duration: 700,
+          easing: 'ease-out-cubic',
+          once: true,
+          offset: 60
         });
-
-        document.querySelectorAll('.dot').forEach((d, i) => {
-            d.classList.toggle('active', i === currentSlideIndex);
-        });
-
-        currentSlideEl.textContent = currentSlideIndex + 1;
-    }
-
-    function goToSlide(index) {
-        if (index < 0 || index >= totalSlides) return;
-        currentSlideIndex = index;
-        elapsed = index * SLIDE_DURATION;
-        updateUI();
-    }
-
-    function nextSlide() {
-        if (currentSlideIndex < totalSlides - 1) {
-            goToSlide(currentSlideIndex + 1);
-        } else {
-            // Loop back
-            goToSlide(0);
-        }
-    }
-
-    function prevSlide() {
-        goToSlide(Math.max(0, currentSlideIndex - 1));
-    }
-
-    function tick() {
-        if (!isPlaying) return;
-        elapsed += 0.1;
-
-        if (elapsed >= TOTAL_DURATION) {
-            elapsed = 0;
-            currentSlideIndex = 0;
-            updateUI();
-        }
-
-        const targetSlide = Math.min(totalSlides - 1, Math.floor(elapsed / SLIDE_DURATION));
-        if (targetSlide !== currentSlideIndex) {
-            currentSlideIndex = targetSlide;
-            updateUI();
-        }
-
-        const pct = (elapsed / TOTAL_DURATION) * 100;
-        progressBar.style.width = pct + '%';
-        currentTimeEl.textContent = formatTime(elapsed);
-    }
-
-    function togglePlayPause() {
-        isPlaying = !isPlaying;
-        playIcon.style.display = isPlaying ? 'none' : 'block';
-        pauseIcon.style.display = isPlaying ? 'block' : 'none';
-    }
-
-    playPauseBtn.addEventListener('click', togglePlayPause);
-    nextBtn.addEventListener('click', () => {
-        nextSlide();
+      }
     });
-    prevBtn.addEventListener('click', () => {
-        prevSlide();
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') nextSlide(); // RTL: left = next
-        else if (e.key === 'ArrowRight') prevSlide(); // RTL: right = prev
-        else if (e.key === ' ') {
-            e.preventDefault();
-            togglePlayPause();
-        }
-    });
-
-    // Start the timer
-    intervalId = setInterval(tick, 100);
-</script>
-
+  </script>
 </body>
 </html>
