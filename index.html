@@ -1,1407 +1,2584 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>سند | Sanad — نظام إدارة المغاسل الاحترافي</title>
+<meta name="description" content="سند - نظام إدارة المغاسل الاحترافي. حلول متكاملة لإدارة المغاسل في المملكة العربية السعودية." />
+<meta name="theme-color" content="#0A0E27" />
 
-  <!-- Primary Meta Tags -->
-  <title>VOLT STORE — حلول رقمية احترافية | Professional Digital Solutions</title>
-  <meta name="title" content="VOLT STORE — Professional Digital Solutions" />
-  <meta name="description" content="VOLT STORE — حلول رقمية احترافية وتطوير مخصص. مواقع، أنظمة، ومتاجر إلكترونية. We build websites, systems, and online stores tailored to your needs." />
-  <meta name="keywords" content="VOLT STORE, web development, e-commerce, custom websites, تصميم مواقع, متجر الكتروني, السعودية, Saudi Arabia" />
-  <meta name="author" content="VOLT STORE" />
+<!-- ============================
+  منتج تجاري — Sanad SaaS © 2026
+  هذا الملف يحوي كامل التطبيق
+============================ -->
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://voltstore.example/" />
-  <meta property="og:title" content="VOLT STORE — Professional Digital Solutions" />
-  <meta property="og:description" content="حلول رقمية احترافية وتطوير مخصص — Power Your Workflow." />
-  <meta property="og:image" content="assets/banner.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:title" content="VOLT STORE — Professional Digital Solutions" />
-  <meta property="twitter:description" content="حلول رقمية احترافية وتطوير مخصص — Power Your Workflow." />
-  <meta property="twitter:image" content="assets/banner.png" />
+<!-- مكتبة الرسوم البيانية -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="assets/logo.png" />
-  <link rel="apple-touch-icon" href="assets/logo.png" />
+<!-- مكتبة QR Code للفواتير -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+/* =========================================
+   متغيرات الألوان للثيمات (Dark/Light)
+========================================= */
+:root {
+  --primary: #2563EB;
+  --primary-light: #3B82F6;
+  --primary-dark: #1E40AF;
+  --primary-glow: rgba(59,130,246,0.35);
+  --success: #10B981;
+  --success-light: #34D399;
+  --danger: #EF4444;
+  --danger-light: #F87171;
+  --warning: #F59E0B;
+  --info: #06B6D4;
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  /* الثيم الداكن (افتراضي) */
+  --bg-primary: #0A0E27;
+  --bg-secondary: #0F1729;
+  --bg-tertiary: #1A1F3A;
+  --card-bg: rgba(37,43,72,0.6);
+  --card-border: rgba(59,130,246,0.18);
+  --text-primary: #FFFFFF;
+  --text-secondary: #E5E7EB;
+  --text-muted: #94A3B8;
+  --input-bg: rgba(15,23,41,0.6);
+  --input-border: rgba(59,130,246,0.22);
+  --hover-bg: rgba(59,130,246,0.08);
+  --shadow-lg: 0 25px 50px -12px rgba(0,0,0,0.55);
+  --shadow-md: 0 10px 25px -6px rgba(0,0,0,0.45);
+  --blur: 18px;
+  --gradient-1: linear-gradient(135deg,#3B82F6 0%,#8B5CF6 100%);
+  --gradient-2: linear-gradient(135deg,#2563EB 0%,#06B6D4 100%);
+  --gradient-3: linear-gradient(135deg,#0A0E27 0%,#1E3A8A 100%);
+}
 
-  <!-- AOS Animations -->
-  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+[data-theme="light"] {
+  --bg-primary: #F9FAFB;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F3F4F6;
+  --card-bg: #FFFFFF;
+  --card-border: #E5E7EB;
+  --text-primary: #1E293B;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --input-bg: #F9FAFB;
+  --input-border: #E5E7EB;
+  --hover-bg: #F3F4F6;
+  --shadow-lg: 0 25px 50px -12px rgba(15,23,42,0.15);
+  --shadow-md: 0 10px 25px -6px rgba(15,23,42,0.10);
+  --gradient-3: linear-gradient(135deg,#EFF6FF 0%,#DBEAFE 100%);
+}
 
-  <!-- Tailwind Config -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'volt-black': '#0A0A0A',
-            'volt-dark': '#111111',
-            'volt-card': '#161616',
-            'volt-border': '#1f1f1f',
-            'volt-red': '#E63030',
-            'volt-red-bright': '#FF1A1A',
-            'volt-red-deep': '#B30000',
-            'volt-white': '#FFFFFF',
-            'volt-muted': '#9CA3AF',
-          },
-          fontFamily: {
-            'inter': ['Inter', 'sans-serif'],
-            'poppins': ['Poppins', 'sans-serif'],
-            'tajawal': ['Tajawal', 'sans-serif'],
-            'cairo': ['Cairo', 'sans-serif'],
-          },
-        }
-      }
-    }
-  </script>
+/* =========================================
+   إعادة الضبط والأساسيات
+========================================= */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: 'Tajawal','IBM Plex Sans Arabic','Cairo','Inter','Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+html[dir="ltr"] body { font-family:'Inter','Plus Jakarta Sans',system-ui,sans-serif; }
 
-  <style>
-    /* =========================
-       BASE
-       ========================= */
-    * { -webkit-tap-highlight-color: transparent; }
+button,input,select,textarea { font-family: inherit; }
+button { cursor:pointer; border:none; background:none; color:inherit; }
+a { color:inherit; text-decoration:none; }
+img { max-width:100%; display:block; }
 
-    html { scroll-behavior: smooth; }
+/* شريط التمرير المخصص */
+::-webkit-scrollbar { width:10px; height:10px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius:8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary-light); }
 
-    body {
-      background-color: #0A0A0A;
-      color: #FFFFFF;
-      font-family: 'Inter', 'Poppins', sans-serif;
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
+/* =========================================
+   مكونات عامة
+========================================= */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:12px 24px; border-radius:12px; font-weight:600; font-size:15px;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  position:relative; overflow:hidden;
+}
+.btn-primary {
+  background: var(--gradient-1);
+  color:#fff;
+  box-shadow: 0 8px 24px var(--primary-glow);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px var(--primary-glow); }
+.btn-primary:active { transform: translateY(0); }
+.btn-secondary { background: var(--card-bg); color: var(--text-primary); border:1px solid var(--card-border); backdrop-filter: blur(var(--blur)); }
+.btn-secondary:hover { background: var(--hover-bg); }
+.btn-danger { background: linear-gradient(135deg,#EF4444,#DC2626); color:#fff; box-shadow:0 8px 24px rgba(239,68,68,0.3); }
+.btn-danger:hover { transform:translateY(-2px); }
+.btn-success { background: linear-gradient(135deg,#10B981,#059669); color:#fff; box-shadow:0 8px 24px rgba(16,185,129,0.3); }
+.btn-icon { padding:10px; border-radius:10px; }
+.btn-block { width:100%; }
+.btn-lg { padding:16px 32px; font-size:17px; border-radius:14px; }
 
-    body[dir="rtl"] {
-      font-family: 'Tajawal', 'Cairo', sans-serif;
-    }
+.card {
+  background: var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:16px;
+  padding:24px;
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+[data-theme="light"] .card { backdrop-filter:none; }
+.card:hover { box-shadow: var(--shadow-lg); }
 
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: #0A0A0A; }
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, #E63030, #B30000);
-      border-radius: 10px;
-    }
-    ::-webkit-scrollbar-thumb:hover { background: #FF1A1A; }
+.input,select.input,textarea.input {
+  width:100%; padding:13px 16px; border-radius:12px;
+  background: var(--input-bg); color: var(--text-primary);
+  border:1px solid var(--input-border); font-size:15px;
+  transition: all 0.2s;
+}
+.input:focus { outline:none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+.input::placeholder { color: var(--text-muted); }
+.input-label { display:block; font-size:14px; font-weight:600; margin-bottom:8px; color:var(--text-secondary); }
+.form-group { margin-bottom:18px; }
+textarea.input { resize:vertical; min-height:80px; }
 
-    /* =========================
-       BACKGROUND EFFECTS
-       ========================= */
-    .grid-bg {
-      background-image:
-        linear-gradient(rgba(230, 48, 48, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(230, 48, 48, 0.04) 1px, transparent 1px);
-      background-size: 50px 50px;
-    }
+.badge { display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px; font-size:12px; font-weight:700; }
+.badge-success { background: rgba(16,185,129,0.15); color: var(--success); }
+.badge-danger { background: rgba(239,68,68,0.15); color: var(--danger); }
+.badge-warning { background: rgba(245,158,11,0.15); color: var(--warning); }
+.badge-info { background: rgba(6,182,212,0.15); color: var(--info); }
+.badge-primary { background: rgba(59,130,246,0.15); color: var(--primary-light); }
 
-    .radial-glow {
-      background: radial-gradient(circle at 50% 0%, rgba(230, 48, 48, 0.18) 0%, rgba(10, 10, 10, 0) 60%);
-    }
+/* =========================================
+   الشاشات / التطبيق
+========================================= */
+.screen { display:none; min-height:100vh; animation: fadeIn 0.4s ease; }
+.screen.active { display:block; }
+@keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform:none; } }
 
-    .radial-glow-bottom {
-      background: radial-gradient(circle at 50% 100%, rgba(230, 48, 48, 0.12) 0%, rgba(10, 10, 10, 0) 60%);
-    }
+/* =========================================
+   الصفحة الترحيبية
+========================================= */
+.landing { position:relative; overflow:hidden; }
+.landing-bg {
+  position:fixed; inset:0; z-index:-1;
+  background: var(--gradient-3);
+}
+.landing-bg::before, .landing-bg::after {
+  content:''; position:absolute; border-radius:50%;
+  filter: blur(80px); opacity: 0.5; animation: float 18s ease-in-out infinite;
+}
+.landing-bg::before { width:480px; height:480px; background: var(--primary); top:-100px; right:-100px; }
+.landing-bg::after { width:520px; height:520px; background:#8B5CF6; bottom:-150px; left:-100px; animation-delay:-9s; }
+[data-theme="light"] .landing-bg::before,
+[data-theme="light"] .landing-bg::after { opacity:0.25; }
 
-    /* =========================
-       NAVBAR
-       ========================= */
-    .navbar {
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      background-color: rgba(10, 10, 10, 0.75);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.3s ease;
-    }
-    .navbar.scrolled {
-      background-color: rgba(10, 10, 10, 0.92);
-      border-bottom-color: rgba(230, 48, 48, 0.25);
-      box-shadow: 0 10px 40px -10px rgba(230, 48, 48, 0.15);
-    }
+@keyframes float {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(40px,-30px) scale(1.05); }
+}
 
-    .nav-link {
-      position: relative;
-      transition: color 0.3s ease;
-    }
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #E63030, #FF1A1A);
-      transition: width 0.3s ease;
-      box-shadow: 0 0 10px #E63030;
-    }
-    .nav-link:hover { color: #E63030; }
-    .nav-link:hover::after { width: 100%; }
+.particles { position:fixed; inset:0; z-index:-1; pointer-events:none; }
+.particle {
+  position:absolute; width:4px; height:4px; background: var(--primary-light);
+  border-radius:50%; opacity:0.4; animation: rise 12s linear infinite;
+}
+@keyframes rise {
+  0% { transform: translateY(100vh) scale(0); opacity:0; }
+  10% { opacity:0.6; }
+  90% { opacity:0.4; }
+  100% { transform: translateY(-10vh) scale(1); opacity:0; }
+}
 
-    /* =========================
-       HERO
-       ========================= */
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background-image: url('assets/banner.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      opacity: 0.35;
-      filter: contrast(1.05);
-    }
+.top-nav {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 32px; position:sticky; top:0; z-index:50;
+  background: rgba(10,14,39,0.5); backdrop-filter: blur(20px);
+  border-bottom:1px solid var(--card-border);
+}
+[data-theme="light"] .top-nav { background: rgba(255,255,255,0.7); }
+.top-nav-logo { display:flex; align-items:center; gap:10px; font-size:22px; font-weight:800; }
+.top-nav-actions { display:flex; align-items:center; gap:10px; }
 
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(180deg, rgba(10, 10, 10, 0.55) 0%, rgba(10, 10, 10, 0.85) 60%, #0A0A0A 100%),
-        radial-gradient(ellipse at center, rgba(230, 48, 48, 0.18) 0%, rgba(10, 10, 10, 0) 70%);
-    }
+.lang-select, .theme-btn {
+  background: var(--card-bg); color: var(--text-primary);
+  border:1px solid var(--card-border); padding:9px 14px; border-radius:10px;
+  font-size:14px; cursor:pointer; transition:all 0.2s;
+}
+.lang-select:hover, .theme-btn:hover { background: var(--hover-bg); }
+.lang-select option { background: var(--bg-secondary); color: var(--text-primary); }
 
-    .hero-title {
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      line-height: 1.05;
-      background: linear-gradient(180deg, #FFFFFF 0%, #B5B5B5 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+/* الشعار */
+.sanad-logo {
+  font-family:'Cairo','Tajawal',sans-serif;
+  font-weight:900;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display:inline-block;
+  letter-spacing: -1px;
+}
 
-    .hero-title .accent {
-      background: linear-gradient(135deg, #E63030 0%, #FF1A1A 50%, #E63030 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 60px rgba(230, 48, 48, 0.4);
-    }
+.hero {
+  text-align:center;
+  padding: 80px 24px 100px;
+  max-width: 1100px; margin: 0 auto;
+}
+.hero-logo {
+  font-size: clamp(70px, 14vw, 140px);
+  line-height:1;
+  margin-bottom: 24px;
+  filter: drop-shadow(0 10px 30px var(--primary-glow));
+  animation: logoAppear 1s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes logoAppear {
+  from { opacity:0; transform: scale(0.7) translateY(30px); }
+  to { opacity:1; transform: none; }
+}
+.hero h1 { font-size: clamp(28px, 5vw, 48px); margin-bottom:14px; font-weight:800; }
+.hero .tagline { font-size: clamp(16px, 2.2vw, 20px); color: var(--text-secondary); margin-bottom: 36px; max-width: 600px; margin-left:auto; margin-right:auto; }
+.hero .cta-btn {
+  padding: 18px 44px; font-size: 18px; font-weight:700; border-radius:16px;
+  background: var(--gradient-1); color:#fff;
+  box-shadow: 0 15px 40px var(--primary-glow);
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: ctaPulse 2.5s ease-in-out infinite;
+}
+.hero .cta-btn:hover { transform: translateY(-4px) scale(1.04); box-shadow: 0 22px 50px var(--primary-glow); }
+@keyframes ctaPulse {
+  0%,100% { box-shadow: 0 15px 40px var(--primary-glow); }
+  50% { box-shadow: 0 15px 50px var(--primary-glow), 0 0 0 12px rgba(59,130,246,0.05); }
+}
 
-    /* =========================
-       BUTTONS
-       ========================= */
-    .btn-primary {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      padding: 0.95rem 2rem;
-      font-weight: 700;
-      color: #FFFFFF;
-      background: linear-gradient(135deg, #E63030 0%, #B30000 100%);
-      border-radius: 14px;
-      overflow: hidden;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 8px 30px -8px rgba(230, 48, 48, 0.5);
-    }
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #FF1A1A 0%, #E63030 100%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    .btn-primary > * { position: relative; z-index: 1; }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 40px -8px rgba(230, 48, 48, 0.7), 0 0 30px rgba(230, 48, 48, 0.35);
-    }
-    .btn-primary:hover::before { opacity: 1; }
+/* قسم الباقات */
+.pricing-section { padding: 60px 24px; max-width: 1300px; margin: 0 auto; }
+.section-title { text-align:center; font-size: clamp(26px, 4vw, 38px); font-weight:800; margin-bottom:14px; }
+.section-subtitle { text-align:center; color: var(--text-secondary); margin-bottom: 48px; font-size:16px; }
 
-    .btn-outline {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      padding: 0.85rem 1.8rem;
-      font-weight: 600;
-      color: #FFFFFF;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 14px;
-      transition: all 0.3s ease;
-    }
-    .btn-outline:hover {
-      background: rgba(230, 48, 48, 0.08);
-      border-color: #E63030;
-      color: #E63030;
-      box-shadow: 0 0 25px rgba(230, 48, 48, 0.25);
-    }
+.packages-grid {
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap:24px;
+}
+.package-card {
+  background: var(--card-bg); border:1px solid var(--card-border);
+  border-radius:20px; padding:32px 24px; position:relative;
+  backdrop-filter: blur(var(--blur));
+  transition: transform 0.3s, border-color 0.3s;
+  display:flex; flex-direction:column;
+}
+.package-card:hover { transform: translateY(-8px); border-color: var(--primary); }
+.package-card.featured {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, rgba(59,130,246,0.18), rgba(139,92,246,0.10));
+  transform: scale(1.04);
+}
+.package-card.featured:hover { transform: scale(1.04) translateY(-8px); }
+.offer-badge {
+  position:absolute; top:-12px; inset-inline-end:20px;
+  background: linear-gradient(135deg,#F59E0B,#EF4444);
+  color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:700;
+  box-shadow: 0 6px 18px rgba(245,158,11,0.4);
+}
+.package-name { font-size:20px; font-weight:800; margin-bottom:6px; }
+.package-duration { color: var(--text-muted); font-size:14px; margin-bottom:20px; }
+.package-price { font-size:42px; font-weight:900; margin-bottom: 6px; background: var(--gradient-1); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.package-price small { font-size:18px; color: var(--text-secondary); -webkit-text-fill-color: var(--text-secondary); }
+.package-features { list-style:none; margin: 24px 0; flex-grow:1; }
+.package-features li { padding: 8px 0; color: var(--text-secondary); font-size:14px; display:flex; align-items:center; gap:8px; }
+.package-features li::before { content:'✓'; color: var(--success); font-weight:700; }
+.subscribe-btn {
+  width:100%; padding: 14px; background: var(--gradient-1); color:#fff;
+  border-radius:12px; font-weight:700; transition:all 0.25s;
+  box-shadow: 0 8px 20px var(--primary-glow);
+}
+.subscribe-btn:hover { transform: translateY(-2px); }
 
-    /* =========================
-       SECTION HELPERS
-       ========================= */
-    .section-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.4rem 1rem;
-      border: 1px solid rgba(230, 48, 48, 0.35);
-      background: rgba(230, 48, 48, 0.08);
-      color: #E63030;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
+/* تذييل الصفحة العامة */
+.public-footer {
+  border-top:1px solid var(--card-border); padding: 40px 24px; text-align:center;
+  color: var(--text-secondary); margin-top: 40px;
+}
+.public-footer .footer-logo { font-size:32px; margin-bottom:8px; }
+.public-footer a { color: var(--primary-light); }
+.footer-links { display:flex; gap:24px; justify-content:center; flex-wrap:wrap; margin: 14px 0; }
+.dev-credits { margin-top:16px; font-size:13px; color: var(--text-muted); }
 
-    .section-title {
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-    }
+/* =========================================
+   شاشة تسجيل الدخول
+========================================= */
+.login-screen { display:flex; align-items:center; justify-content:center; min-height:100vh; padding: 24px; }
+.login-card { width: 100%; max-width: 440px; padding: 44px 32px; text-align:center; }
+.login-logo { font-size: 72px; margin-bottom: 16px; }
+.login-title { font-size: 24px; font-weight:800; margin-bottom:8px; }
+.login-subtitle { color: var(--text-secondary); margin-bottom: 32px; font-size:14px; }
+.login-input-wrap { position:relative; }
+.login-input {
+  text-align:center; letter-spacing: 4px; font-size:18px; font-weight:600;
+  padding:16px; direction:ltr;
+}
+.login-input.shake { animation: shake 0.5s; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+.remember-wrap { display:flex; align-items:center; gap:8px; margin: 16px 0 22px; justify-content:center; font-size:14px; color: var(--text-secondary); cursor:pointer; }
+.remember-wrap input { width:18px; height:18px; accent-color: var(--primary); }
+.login-error { color: var(--danger); margin-top: 12px; font-size:14px; min-height: 20px; }
+.back-to-landing { margin-top: 20px; color: var(--text-muted); font-size:14px; cursor:pointer; }
+.back-to-landing:hover { color: var(--primary-light); }
 
-    .section-divider {
-      width: 60px;
-      height: 4px;
-      background: linear-gradient(90deg, #E63030, #FF1A1A);
-      border-radius: 999px;
-      box-shadow: 0 0 15px rgba(230, 48, 48, 0.6);
-    }
+/* =========================================
+   تخطيط لوحة التحكم
+========================================= */
+.app-layout { display:flex; min-height:100vh; }
+.sidebar {
+  width: 260px; background: var(--bg-secondary); border-inline-end:1px solid var(--card-border);
+  padding: 24px 16px; position:sticky; top:0; height:100vh;
+  display:flex; flex-direction:column; overflow-y:auto;
+  transition: transform 0.3s;
+}
+.sidebar-logo { font-size: 36px; text-align:center; margin-bottom: 6px; }
+.sidebar-name { text-align:center; color: var(--text-muted); font-size:13px; margin-bottom:24px; }
+.menu-item {
+  display:flex; align-items:center; gap:12px; padding: 12px 16px; border-radius:10px;
+  color: var(--text-secondary); margin-bottom:4px; font-weight:600; font-size:15px;
+  cursor:pointer; transition: all 0.2s;
+}
+.menu-item:hover { background: var(--hover-bg); color: var(--text-primary); }
+.menu-item.active { background: var(--gradient-1); color:#fff; box-shadow: 0 6px 16px var(--primary-glow); }
+.menu-icon { font-size:20px; width:24px; text-align:center; }
 
-    /* =========================
-       PRICING CARDS
-       ========================= */
-    .pricing-card {
-      position: relative;
-      background: linear-gradient(180deg, #161616 0%, #0E0E0E 100%);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 20px;
-      padding: 2rem 1.75rem;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: hidden;
-    }
-    .pricing-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 20px;
-      padding: 1px;
-      background: linear-gradient(135deg, rgba(230, 48, 48, 0) 0%, rgba(230, 48, 48, 0) 50%, rgba(230, 48, 48, 0) 100%);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-              mask-composite: exclude;
-      transition: background 0.4s ease;
-      pointer-events: none;
-    }
-    .pricing-card::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(230, 48, 48, 0.5), transparent);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .pricing-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(230, 48, 48, 0.4);
-      box-shadow:
-        0 20px 60px -15px rgba(230, 48, 48, 0.4),
-        0 0 0 1px rgba(230, 48, 48, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    }
-    .pricing-card:hover::before {
-      background: linear-gradient(135deg, rgba(230, 48, 48, 0.4) 0%, rgba(230, 48, 48, 0) 50%, rgba(230, 48, 48, 0.4) 100%);
-    }
-    .pricing-card:hover::after { opacity: 1; }
+.main-content { flex:1; min-width:0; display:flex; flex-direction:column; }
+.app-topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 18px 28px; background: var(--bg-secondary); border-bottom:1px solid var(--card-border);
+  position:sticky; top:0; z-index:30; gap:14px; flex-wrap:wrap;
+}
+.app-topbar .topbar-title { font-size:20px; font-weight:800; }
+.app-topbar .topbar-actions { display:flex; align-items:center; gap:10px; }
 
-    .pricing-card.featured {
-      background: linear-gradient(180deg, #1a0a0a 0%, #0E0E0E 100%);
-      border-color: rgba(230, 48, 48, 0.5);
-      box-shadow: 0 20px 50px -15px rgba(230, 48, 48, 0.35);
-    }
-    .pricing-card.featured::after { opacity: 1; }
+.menu-toggle { display:none; font-size:24px; background: var(--card-bg); border:1px solid var(--card-border); padding:8px 12px; border-radius:10px; }
 
-    .price-tag {
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      background: linear-gradient(135deg, #E63030 0%, #FF1A1A 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 40px rgba(230, 48, 48, 0.3);
-    }
+.page-content { padding: 24px 28px; flex:1; }
 
-    .feature-bullet {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.7rem;
-      color: #C8C8C8;
-      font-size: 0.92rem;
-      line-height: 1.5;
-    }
-    .feature-bullet i {
-      color: #E63030;
-      margin-top: 0.2rem;
-      font-size: 0.85rem;
-      flex-shrink: 0;
-    }
+.subscription-badge {
+  padding:7px 14px; border-radius:10px; font-size:13px; font-weight:700;
+  display:inline-flex; align-items:center; gap:6px;
+}
 
-    .popular-badge {
-      position: absolute;
-      top: 16px;
-      inset-inline-end: 16px;
-      padding: 0.3rem 0.75rem;
-      background: linear-gradient(135deg, #E63030, #B30000);
-      color: #FFFFFF;
-      font-size: 0.65rem;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      border-radius: 999px;
-      box-shadow: 0 4px 15px rgba(230, 48, 48, 0.5);
-    }
+/* =========================================
+   إحصائيات سريعة (Cards)
+========================================= */
+.stats-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:24px; }
+.stat-card {
+  background: var(--card-bg); border:1px solid var(--card-border); border-radius:16px;
+  padding: 22px; backdrop-filter: blur(var(--blur)); position:relative; overflow:hidden;
+}
+.stat-card::after {
+  content:''; position:absolute; top:0; inset-inline-end:0; width:4px; height:100%;
+  background: var(--gradient-1);
+}
+.stat-icon { font-size: 28px; margin-bottom: 10px; }
+.stat-label { color: var(--text-muted); font-size:13px; margin-bottom:6px; font-weight:600; }
+.stat-value { font-size: 26px; font-weight:800; }
+.stat-trend { margin-top: 8px; font-size:12px; display:flex; align-items:center; gap:4px; }
+.stat-trend.up { color: var(--success); }
+.stat-trend.down { color: var(--danger); }
 
-    /* =========================
-       FEATURE CARDS
-       ========================= */
-    .feature-card {
-      position: relative;
-      background: linear-gradient(180deg, #161616 0%, #0E0E0E 100%);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 18px;
-      padding: 2rem 1.5rem;
-      transition: all 0.4s ease;
-      overflow: hidden;
-    }
-    .feature-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(230, 48, 48, 0.35);
-      box-shadow: 0 15px 40px -10px rgba(230, 48, 48, 0.3);
-    }
-    .feature-icon-wrap {
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(230, 48, 48, 0.15), rgba(230, 48, 48, 0.04));
-      border: 1px solid rgba(230, 48, 48, 0.25);
-      color: #E63030;
-      font-size: 1.5rem;
-      margin-bottom: 1.25rem;
-      transition: all 0.4s ease;
-    }
-    .feature-card:hover .feature-icon-wrap {
-      background: linear-gradient(135deg, #E63030, #B30000);
-      color: #FFFFFF;
-      box-shadow: 0 0 25px rgba(230, 48, 48, 0.5);
-      transform: scale(1.05);
-    }
+/* =========================================
+   الجداول
+========================================= */
+.table-wrap { overflow-x:auto; border-radius:14px; border:1px solid var(--card-border); }
+table { width:100%; border-collapse: collapse; min-width: 600px; }
+th, td { padding: 14px 16px; text-align: start; border-bottom:1px solid var(--card-border); font-size:14px; }
+th { background: var(--bg-tertiary); font-weight:700; color: var(--text-secondary); white-space:nowrap; cursor:pointer; user-select:none; }
+th:hover { background: var(--hover-bg); }
+tbody tr { transition: background 0.2s; }
+tbody tr:hover { background: var(--hover-bg); }
+.table-actions { display:flex; gap:6px; }
+.icon-btn {
+  width:34px; height:34px; border-radius:9px; display:inline-flex;
+  align-items:center; justify-content:center; background: var(--bg-tertiary);
+  border:1px solid var(--card-border); color: var(--text-secondary); font-size:14px;
+  transition: all 0.2s;
+}
+.icon-btn:hover { background: var(--primary); color:#fff; border-color: var(--primary); }
+.icon-btn.danger:hover { background: var(--danger); border-color: var(--danger); }
 
-    /* =========================
-       CONTACT CARDS
-       ========================= */
-    .contact-card {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1.5rem;
-      background: linear-gradient(180deg, #161616 0%, #0E0E0E 100%);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 16px;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      color: #FFFFFF;
-    }
-    .contact-card:hover {
-      border-color: rgba(230, 48, 48, 0.4);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px -10px rgba(230, 48, 48, 0.3);
-    }
-    .contact-icon {
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #E63030, #B30000);
-      color: #FFFFFF;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-      box-shadow: 0 4px 15px rgba(230, 48, 48, 0.4);
-    }
+/* الفلاتر */
+.filters-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom: 16px; align-items:end; }
+.filters-row .form-group { margin-bottom: 0; flex:1; min-width:160px; }
 
-    /* =========================
-       INFO BOX
-       ========================= */
-    .info-box {
-      position: relative;
-      background: linear-gradient(135deg, rgba(230, 48, 48, 0.08) 0%, rgba(230, 48, 48, 0.02) 100%);
-      border: 1px solid rgba(230, 48, 48, 0.3);
-      border-radius: 16px;
-      padding: 1.5rem 1.75rem;
-      overflow: hidden;
-    }
-    .info-box::before {
-      content: '';
-      position: absolute;
-      inset-inline-start: 0;
-      top: 0;
-      bottom: 0;
-      width: 4px;
-      background: linear-gradient(180deg, #E63030, #FF1A1A);
-      box-shadow: 0 0 15px rgba(230, 48, 48, 0.5);
-    }
+/* الصفحات (Pagination) */
+.pagination { display:flex; gap:6px; margin-top: 16px; justify-content:center; flex-wrap:wrap; }
+.pagination button {
+  padding: 8px 14px; border-radius: 9px; background: var(--card-bg);
+  border:1px solid var(--card-border); color: var(--text-primary); font-weight:600;
+}
+.pagination button.active { background: var(--gradient-1); color:#fff; border-color:transparent; }
+.pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* =========================
-       FLOATING WHATSAPP
-       ========================= */
-    .float-whatsapp {
-      position: fixed;
-      bottom: 22px;
-      left: 22px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: #25D366;
-      color: #FFFFFF;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
-      z-index: 9999;
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      animation: wa-pulse 2.2s ease-in-out infinite;
-    }
-    .float-whatsapp:hover {
-      transform: scale(1.08);
-      box-shadow: 0 10px 40px rgba(37, 211, 102, 0.7);
-    }
-    .float-whatsapp .wa-tooltip {
-      position: absolute;
-      left: calc(100% + 14px);
-      top: 50%;
-      transform: translateY(-50%);
-      background: #0A0A0A;
-      color: #FFFFFF;
-      padding: 0.55rem 0.95rem;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      white-space: nowrap;
-      border: 1px solid rgba(37, 211, 102, 0.4);
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      pointer-events: none;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    }
-    body[dir="rtl"] .float-whatsapp .wa-tooltip {
-      left: auto;
-      right: calc(100% + 14px);
-    }
-    .float-whatsapp:hover .wa-tooltip {
-      opacity: 1;
-      visibility: visible;
-    }
-    @keyframes wa-pulse {
-      0%, 100% { box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5), 0 0 0 0 rgba(37, 211, 102, 0.6); }
-      50% { box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6), 0 0 0 18px rgba(37, 211, 102, 0); }
-    }
+/* =========================================
+   النماذج وأقسام النموذج
+========================================= */
+.form-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px; }
+.section-card { margin-bottom: 24px; }
+.section-card h2 { font-size: 20px; font-weight:800; margin-bottom: 18px; display:flex; align-items:center; gap:10px; }
+.section-card h3 { font-size:17px; font-weight:700; margin-bottom: 14px; }
+.muted { color: var(--text-muted); font-size:14px; }
 
-    @media (max-width: 768px) {
-      .float-whatsapp {
-        width: 55px;
-        height: 55px;
-        font-size: 1.6rem;
-        bottom: 18px;
-        left: 18px;
-      }
-    }
+/* =========================================
+   حاسبة الربح
+========================================= */
+.expense-row { display:flex; gap:10px; margin-bottom:10px; align-items:end; }
+.expense-row .form-group { flex:1; margin-bottom:0; }
+.expense-row .icon-btn.danger { flex-shrink:0; height:46px; width:46px; }
 
-    /* =========================
-       FOOTER
-       ========================= */
-    .social-icon {
-      width: 42px;
-      height: 42px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #FFFFFF;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-    }
-    .social-icon:hover {
-      background: linear-gradient(135deg, #E63030, #B30000);
-      border-color: transparent;
-      color: #FFFFFF;
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(230, 48, 48, 0.4);
-    }
+.profit-summary {
+  background: var(--gradient-2); color:#fff; border-radius:18px;
+  padding: 28px; text-align:center; margin-top: 20px;
+}
+.profit-summary .row {
+  display:flex; justify-content:space-between; padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.2); font-size:16px; font-weight:600;
+}
+.profit-summary .row.total { font-size: 28px; font-weight:900; border-bottom:none; padding-top: 16px; }
+.profit-summary .row.total.negative { color: #FCA5A5; }
 
-    /* =========================
-       MOBILE MENU
-       ========================= */
-    .mobile-menu {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease;
-    }
-    .mobile-menu.open { max-height: 400px; }
+/* =========================================
+   النوافذ المنبثقة (Modals)
+========================================= */
+.modal-overlay {
+  position:fixed; inset:0; background: rgba(0,0,0,0.6); z-index:100;
+  display:none; align-items:center; justify-content:center; padding: 20px;
+  backdrop-filter: blur(6px); animation: fadeIn 0.25s;
+}
+.modal-overlay.active { display:flex; }
+.modal {
+  background: var(--bg-secondary); border:1px solid var(--card-border);
+  border-radius:20px; max-width: 720px; width:100%; max-height: 92vh;
+  overflow-y:auto; box-shadow: var(--shadow-lg); padding: 28px;
+  animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes modalIn { from { transform: translateY(20px) scale(0.97); opacity:0; } to { transform:none; opacity:1; } }
+.modal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--card-border); }
+.modal-title { font-size:20px; font-weight:800; }
+.modal-close { width:36px; height:36px; border-radius:10px; background: var(--bg-tertiary); display:inline-flex; align-items:center; justify-content:center; font-size:18px; }
+.modal-close:hover { background: var(--danger); color:#fff; }
+.modal-footer { display:flex; gap:10px; justify-content:flex-end; margin-top: 24px; padding-top:16px; border-top:1px solid var(--card-border); }
 
-    /* =========================
-       LANG TOGGLE
-       ========================= */
-    .lang-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.45rem 0.85rem;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 10px;
-      color: #FFFFFF;
-      font-weight: 700;
-      font-size: 0.85rem;
-      transition: all 0.3s ease;
-      background: rgba(255, 255, 255, 0.02);
-      cursor: pointer;
-    }
-    .lang-toggle:hover {
-      border-color: #E63030;
-      color: #E63030;
-      background: rgba(230, 48, 48, 0.08);
-      box-shadow: 0 0 18px rgba(230, 48, 48, 0.25);
-    }
+/* الإشعارات (Toast) */
+.toast-container { position:fixed; top: 24px; inset-inline-end: 24px; z-index: 200; display:flex; flex-direction:column; gap:10px; pointer-events:none; }
+.toast {
+  background: var(--bg-secondary); border:1px solid var(--card-border);
+  border-radius:14px; padding: 14px 20px; min-width: 280px; max-width: 420px;
+  display:flex; align-items:center; gap:10px; font-weight:600;
+  box-shadow: var(--shadow-lg); pointer-events:auto;
+  animation: toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  border-inline-start: 4px solid var(--primary);
+}
+.toast.success { border-inline-start-color: var(--success); }
+.toast.error { border-inline-start-color: var(--danger); }
+.toast.warning { border-inline-start-color: var(--warning); }
+.toast .toast-icon { font-size: 20px; }
+@keyframes toastIn { from { transform: translateX(40px); opacity:0; } to { transform:none; opacity:1; } }
+html[dir="ltr"] .toast { animation-name: toastInLtr; }
+@keyframes toastInLtr { from { transform: translateX(-40px); opacity:0; } to { transform:none; opacity:1; } }
 
-    /* =========================
-       HERO STATS
-       ========================= */
-    .stat-block {
-      text-align: center;
-      padding: 1rem;
-    }
-    .stat-num {
-      font-weight: 900;
-      font-size: 2rem;
-      background: linear-gradient(135deg, #E63030, #FF1A1A);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      line-height: 1;
-    }
+/* محمل / Skeletons */
+.spinner { width:36px; height:36px; border:3px solid var(--card-border); border-top-color: var(--primary); border-radius:50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner-sm { width:18px; height:18px; border-width:2px; display:inline-block; vertical-align: middle; }
+.loading-overlay { position:fixed; inset:0; background: rgba(10,14,39,0.7); z-index:300; display:none; align-items:center; justify-content:center; backdrop-filter: blur(6px); }
+.loading-overlay.active { display:flex; }
 
-    /* =========================
-       RTL TWEAKS
-       ========================= */
-    body[dir="rtl"] .section-tag,
-    body[dir="rtl"] .feature-bullet {
-      direction: rtl;
-    }
-    body[dir="rtl"] .feature-bullet i { margin-top: 0.25rem; }
+/* الحالة الفارغة */
+.empty-state { text-align:center; padding: 40px 20px; color: var(--text-muted); }
+.empty-state .emoji { font-size: 64px; margin-bottom: 12px; opacity: 0.5; }
 
-    /* =========================
-       UTIL
-       ========================= */
-    .text-balance { text-wrap: balance; }
-    .gradient-border {
-      position: relative;
-    }
-  </style>
+/* =========================================
+   الفاتورة
+========================================= */
+.invoice-paper {
+  background:#fff; color:#1E293B; max-width: 720px; margin: 0 auto;
+  padding: 50px 40px; border-radius:16px; position:relative; overflow:hidden;
+  box-shadow: var(--shadow-lg); font-family:'Tajawal','Cairo',sans-serif;
+}
+.invoice-paper::before {
+  content:'سند'; position:absolute; inset:0; display:flex;
+  align-items:center; justify-content:center; font-size: 220px;
+  font-weight:900; color: rgba(37,99,235,0.05); pointer-events:none; z-index:0;
+}
+.invoice-paper > * { position:relative; z-index:1; }
+.invoice-header { text-align:center; padding-bottom: 24px; border-bottom: 2px solid #2563EB; margin-bottom: 24px; }
+.invoice-header .inv-logo { font-size: 64px; font-weight:900; color: #2563EB; line-height: 1; }
+.invoice-header .inv-laundry { font-size: 22px; font-weight:800; margin-top: 8px; }
+.invoice-header .inv-tagline { color: #64748B; font-size:13px; margin-top: 4px; }
+.invoice-meta { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom: 22px; padding: 14px 18px; background:#F9FAFB; border-radius:12px; font-size:14px; }
+.invoice-meta div b { color:#2563EB; }
+.invoice-table { width:100%; border-collapse:collapse; margin-bottom: 22px; }
+.invoice-table th { background:#2563EB; color:#fff; padding:12px; text-align:start; }
+.invoice-table td { padding:12px; border-bottom: 1px solid #E5E7EB; }
+.invoice-total { background: #EFF6FF; padding: 20px; border-radius:12px; text-align:center; margin: 22px 0; }
+.invoice-total .label { font-size:14px; color:#475569; }
+.invoice-total .amount { font-size:36px; font-weight:900; color:#2563EB; margin-top: 6px; }
+.invoice-thanks { text-align:center; padding: 18px; color:#475569; font-size:14px; font-weight:600; }
+.invoice-footer { text-align:center; border-top: 1px dashed #CBD5E1; padding-top: 16px; color:#64748B; font-size:12px; }
+#invoiceQrcode { display:inline-block; margin: 10px auto; }
+
+/* =========================================
+   طباعة
+========================================= */
+@media print {
+  body * { visibility:hidden; }
+  #printArea, #printArea * { visibility:visible; }
+  #printArea { position:absolute; top:0; inset-inline-start:0; width:100%; }
+  .no-print { display:none !important; }
+  .invoice-paper { box-shadow:none; padding: 30px; }
+}
+
+/* =========================================
+   استجابة الجوال
+========================================= */
+@media (max-width: 900px) {
+  .sidebar {
+    position:fixed; inset-inline-start:0; top:0; z-index:80;
+    transform: translateX(-100%); transition: transform 0.3s;
+    box-shadow: var(--shadow-lg);
+  }
+  html[dir="rtl"] .sidebar { transform: translateX(100%); }
+  .sidebar.open { transform: translateX(0) !important; }
+  .menu-toggle { display:inline-flex; }
+  .app-topbar { padding: 14px 18px; }
+  .page-content { padding: 18px; }
+  .top-nav { padding: 14px 18px; }
+  .hero { padding: 50px 18px 60px; }
+  .package-card.featured { transform: none; }
+  .modal { padding: 22px; }
+}
+
+/* =========================================
+   مساعدات إضافية
+========================================= */
+.flex { display:flex; }
+.gap-2 { gap:8px; } .gap-3 { gap:12px; } .gap-4 { gap:16px; }
+.mb-2 { margin-bottom:8px; } .mb-3 { margin-bottom:12px; } .mb-4 { margin-bottom:16px; } .mb-6 { margin-bottom:24px; }
+.text-center { text-align:center; }
+.text-success { color: var(--success); }
+.text-danger { color: var(--danger); }
+.text-muted { color: var(--text-muted); }
+.between { justify-content:space-between; }
+.items-center { align-items:center; }
+.flex-wrap { flex-wrap: wrap; }
+.grow { flex-grow: 1; }
+.tabs { display:flex; gap:8px; margin-bottom: 18px; flex-wrap:wrap; }
+.tab {
+  padding: 9px 18px; border-radius:10px; background: var(--card-bg);
+  border:1px solid var(--card-border); cursor:pointer; font-weight:600; font-size:14px;
+  color: var(--text-secondary); transition: all 0.2s;
+}
+.tab.active { background: var(--gradient-1); color:#fff; border-color: transparent; }
+.tab:hover:not(.active) { background: var(--hover-bg); }
+
+.chart-card { background: var(--card-bg); border:1px solid var(--card-border); border-radius: 16px; padding: 20px; margin-bottom: 18px; backdrop-filter: blur(var(--blur)); }
+.chart-card h3 { font-size:16px; margin-bottom: 12px; }
+.chart-wrap { position:relative; height: 320px; }
+.charts-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+
+</style>
 </head>
+<body data-theme="dark">
 
-<body class="bg-volt-black text-volt-white antialiased">
+<!-- ====================================================================
+     تأثير الخلفية والجزيئات
+==================================================================== -->
+<div class="landing-bg" id="landingBg"></div>
+<div class="particles" id="particles"></div>
 
-  <!-- ============================
-       NAVBAR
-       ============================ -->
-  <nav id="navbar" class="navbar fixed top-0 inset-x-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
-
-        <!-- Logo -->
-        <a href="#home" class="flex items-center gap-3 group">
-          <img src="assets/logo.png" alt="VOLT STORE Logo" class="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-110" />
-          <div class="leading-tight">
-            <div class="font-black text-lg tracking-tight">VOLT <span class="text-volt-red">STORE</span></div>
-            <div class="text-[10px] tracking-[0.25em] text-volt-muted uppercase font-semibold" data-i18n="navbar.tagline">DIGITAL PRODUCTS</div>
-          </div>
-        </a>
-
-        <!-- Desktop Nav -->
-        <div class="hidden lg:flex items-center gap-10">
-          <a href="#home" class="nav-link text-sm font-semibold uppercase tracking-wider" data-i18n="nav.home">Home</a>
-          <a href="#services" class="nav-link text-sm font-semibold uppercase tracking-wider" data-i18n="nav.services">Services</a>
-          <a href="#about" class="nav-link text-sm font-semibold uppercase tracking-wider" data-i18n="nav.about">About</a>
-          <a href="#contact" class="nav-link text-sm font-semibold uppercase tracking-wider" data-i18n="nav.contact">Contact</a>
-        </div>
-
-        <!-- Right side -->
-        <div class="flex items-center gap-3">
-          <button id="langToggle" class="lang-toggle" aria-label="Toggle language">
-            <i class="fa-solid fa-globe"></i>
-            <span id="langLabel">EN</span>
-          </button>
-
-          <!-- Mobile burger -->
-          <button id="burger" class="lg:hidden w-10 h-10 inline-flex items-center justify-center rounded-lg border border-white/10 hover:border-volt-red hover:text-volt-red transition-colors" aria-label="Menu">
-            <i class="fa-solid fa-bars"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Mobile Menu -->
-      <div id="mobileMenu" class="mobile-menu lg:hidden">
-        <div class="pb-6 pt-2 flex flex-col gap-2">
-          <a href="#home" class="mobile-link py-3 px-4 rounded-lg hover:bg-white/5 font-semibold" data-i18n="nav.home">Home</a>
-          <a href="#services" class="mobile-link py-3 px-4 rounded-lg hover:bg-white/5 font-semibold" data-i18n="nav.services">Services</a>
-          <a href="#about" class="mobile-link py-3 px-4 rounded-lg hover:bg-white/5 font-semibold" data-i18n="nav.about">About</a>
-          <a href="#contact" class="mobile-link py-3 px-4 rounded-lg hover:bg-white/5 font-semibold" data-i18n="nav.contact">Contact</a>
-        </div>
-      </div>
+<!-- ====================================================================
+     شاشة الترحيب
+==================================================================== -->
+<section class="screen landing active" id="screen-landing">
+  <nav class="top-nav">
+    <div class="top-nav-logo">
+      <span class="sanad-logo" style="font-size:28px">سند</span>
+    </div>
+    <div class="top-nav-actions">
+      <select id="langSelect" class="lang-select"></select>
+      <button class="theme-btn" id="themeToggle" title="Toggle theme">🌙</button>
     </div>
   </nav>
 
-  <!-- ============================
-       HERO
-       ============================ -->
-  <section id="home" class="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
-    <div class="absolute inset-0 grid-bg opacity-30"></div>
+  <div class="hero">
+    <div class="hero-logo sanad-logo">سند</div>
+    <h1 data-i18n="welcome">أهلاً بك في سند</h1>
+    <p class="tagline" data-i18n="tagline">نظام إدارة المغاسل الاحترافي</p>
+    <button class="cta-btn" onclick="showScreen('login')" data-i18n="startNow">ابدأ الآن</button>
+  </div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-      <div class="max-w-4xl mx-auto text-center">
-
-        <div class="section-tag mb-6 mx-auto" data-aos="fade-down">
-          <i class="fa-solid fa-bolt-lightning"></i>
-          <span data-i18n="hero.badge">EST. MMXXVI · DIGITAL PRODUCTS</span>
-        </div>
-
-        <h1 class="hero-title text-balance text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-6" data-aos="fade-up">
-          <span data-i18n="hero.title1">Professional Web Solutions</span>
-          <br />
-          <span class="accent" data-i18n="hero.title2">& Custom Development</span>
-        </h1>
-
-        <p class="text-volt-muted text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-10 text-balance" data-aos="fade-up" data-aos-delay="100" data-i18n="hero.sub">
-          We build websites, systems, and online stores tailored to your needs.
-        </p>
-
-        <div class="flex flex-col sm:flex-row gap-4 items-center justify-center" data-aos="fade-up" data-aos-delay="200">
-          <a href="https://wa.me/966599804296?text=Hello%20VOLT%20STORE%2C%20I%27m%20interested%20in%20your%20services" target="_blank" rel="noopener" class="btn-primary text-base">
-            <i class="fa-brands fa-whatsapp text-xl"></i>
-            <span data-i18n="hero.cta">Order via WhatsApp</span>
-          </a>
-          <a href="#services" class="btn-outline text-base">
-            <i class="fa-solid fa-layer-group"></i>
-            <span data-i18n="hero.cta2">View Packages</span>
-          </a>
-        </div>
-
-        <!-- Stats Strip -->
-        <div class="mt-16 grid grid-cols-3 gap-4 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="300">
-          <div class="stat-block">
-            <div class="stat-num">5</div>
-            <div class="text-xs uppercase tracking-widest text-volt-muted mt-1" data-i18n="hero.stat1">Packages</div>
-          </div>
-          <div class="stat-block border-x border-white/5">
-            <div class="stat-num">24/7</div>
-            <div class="text-xs uppercase tracking-widest text-volt-muted mt-1" data-i18n="hero.stat2">Support</div>
-          </div>
-          <div class="stat-block">
-            <div class="stat-num">100%</div>
-            <div class="text-xs uppercase tracking-widest text-volt-muted mt-1" data-i18n="hero.stat3">Custom</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- bottom fade -->
-    <div class="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-b from-transparent to-volt-black z-10 pointer-events-none"></div>
+  <section class="pricing-section">
+    <h2 class="section-title" data-i18n="ourPackages">باقاتنا</h2>
+    <p class="section-subtitle" data-i18n="packagesSubtitle">اختر الباقة المناسبة لمغسلتك</p>
+    <div class="packages-grid" id="publicPackages"></div>
   </section>
 
-  <!-- ============================
-       SERVICES / PACKAGES
-       ============================ -->
-  <section id="services" class="relative py-24 overflow-hidden">
-    <div class="absolute inset-0 radial-glow pointer-events-none"></div>
-
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <div class="text-center mb-16" data-aos="fade-up">
-        <div class="section-tag mb-5">
-          <i class="fa-solid fa-bolt"></i>
-          <span data-i18n="services.tag">OUR SERVICES</span>
-        </div>
-        <h2 class="section-title text-4xl sm:text-5xl md:text-6xl mb-4" data-i18n="services.title">Our Packages</h2>
-        <div class="section-divider mx-auto mb-5"></div>
-        <p class="text-volt-muted max-w-2xl mx-auto text-balance" data-i18n="services.sub">
-          Choose the perfect package for your business — clean pricing, no hidden fees, fast delivery.
-        </p>
-      </div>
-
-      <!-- Cards Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-
-        <!-- Card 1 -->
-        <div class="pricing-card" data-aos="fade-up" data-aos-delay="0">
-          <div class="feature-icon-wrap"><i class="fa-solid fa-id-card"></i></div>
-          <h3 class="text-xl font-bold mb-2" data-i18n="pkg1.name">Portfolio Website</h3>
-          <p class="text-volt-muted text-sm mb-5 min-h-[44px]" data-i18n="pkg1.desc">A clean, professional portfolio website to showcase your work, services, or brand identity.</p>
-          <div class="flex items-end gap-2 mb-6">
-            <span class="price-tag text-5xl">99</span>
-            <span class="text-volt-muted font-semibold mb-1.5" data-i18n="common.currency">SAR</span>
-          </div>
-          <ul class="space-y-3 mb-7">
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg1.f1">Modern responsive design</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg1.f2">Up to 5 pages</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg1.f3">Domain included</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg1.f4">Bilingual (AR / EN)</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg1.f5">Mobile optimized</span></li>
-          </ul>
-          <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="btn-primary w-full" data-wa-pkg="Portfolio Website — 99 SAR">
-            <i class="fa-brands fa-whatsapp"></i>
-            <span data-i18n="common.order">Order via WhatsApp</span>
-          </a>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
-          <div class="feature-icon-wrap"><i class="fa-solid fa-gauge-high"></i></div>
-          <h3 class="text-xl font-bold mb-2" data-i18n="pkg2.name">Smart Management System</h3>
-          <p class="text-volt-muted text-sm mb-5 min-h-[44px]" data-i18n="pkg2.desc">A custom system for schools, data organization, or analytics dashboards with full management features.</p>
-          <div class="flex items-end gap-2 mb-6">
-            <span class="price-tag text-5xl">199</span>
-            <span class="text-volt-muted font-semibold mb-1.5" data-i18n="common.currency">SAR</span>
-          </div>
-          <ul class="space-y-3 mb-7">
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg2.f1">Admin dashboard</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg2.f2">Database & reports</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg2.f3">User roles & permissions</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg2.f4">Custom workflows</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg2.f5">Domain included</span></li>
-          </ul>
-          <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="btn-primary w-full" data-wa-pkg="Smart Management System — 199 SAR">
-            <i class="fa-brands fa-whatsapp"></i>
-            <span data-i18n="common.order">Order via WhatsApp</span>
-          </a>
-        </div>
-
-        <!-- Card 3 (Popular) -->
-        <div class="pricing-card featured" data-aos="fade-up" data-aos-delay="200">
-          <div class="popular-badge" data-i18n="common.popular">POPULAR</div>
-          <div class="feature-icon-wrap"><i class="fa-solid fa-cart-shopping"></i></div>
-          <h3 class="text-xl font-bold mb-2" data-i18n="pkg3.name">Complete E-Commerce Store</h3>
-          <p class="text-volt-muted text-sm mb-5 min-h-[44px]" data-i18n="pkg3.desc">A full-featured online store with shopping cart, product management, and modern checkout (template-based).</p>
-          <div class="flex items-end gap-2 mb-6">
-            <span class="price-tag text-5xl">299</span>
-            <span class="text-volt-muted font-semibold mb-1.5" data-i18n="common.currency">SAR</span>
-          </div>
-          <ul class="space-y-3 mb-7">
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg3.f1">Shopping cart & checkout</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg3.f2">Product management</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg3.f3">Logo & banner design</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg3.f4">Premium template setup</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg3.f5">Domain included</span></li>
-          </ul>
-          <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="btn-primary w-full" data-wa-pkg="Complete E-Commerce Store — 299 SAR">
-            <i class="fa-brands fa-whatsapp"></i>
-            <span data-i18n="common.order">Order via WhatsApp</span>
-          </a>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="pricing-card" data-aos="fade-up" data-aos-delay="0">
-          <div class="feature-icon-wrap"><i class="fa-solid fa-code"></i></div>
-          <h3 class="text-xl font-bold mb-2" data-i18n="pkg4.name">Custom E-Commerce (From Scratch)</h3>
-          <p class="text-volt-muted text-sm mb-5 min-h-[44px]" data-i18n="pkg4.desc">A fully independent, custom-coded e-commerce store built from zero — unique design, full ownership, no templates.</p>
-          <div class="flex items-end gap-2 mb-6">
-            <span class="price-tag text-5xl">499</span>
-            <span class="text-volt-muted font-semibold mb-1.5" data-i18n="common.currency">SAR</span>
-          </div>
-          <ul class="space-y-3 mb-7">
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg4.f1">Custom code, no templates</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg4.f2">Unique premium design</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg4.f3">Full source code ownership</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg4.f4">Advanced features included</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg4.f5">Domain included</span></li>
-          </ul>
-          <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="btn-primary w-full" data-wa-pkg="Custom E-Commerce Store (From Scratch) — 499 SAR">
-            <i class="fa-brands fa-whatsapp"></i>
-            <span data-i18n="common.order">Order via WhatsApp</span>
-          </a>
-        </div>
-
-        <!-- Card 5 -->
-        <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
-          <div class="feature-icon-wrap"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-          <h3 class="text-xl font-bold mb-2" data-i18n="pkg5.name">Fully Custom Website</h3>
-          <p class="text-volt-muted text-sm mb-5 min-h-[44px]" data-i18n="pkg5.desc">Any website you imagine — fully custom design and development tailored to your exact requirements.</p>
-          <div class="flex items-end gap-2 mb-6">
-            <span class="price-tag text-5xl">799</span>
-            <span class="text-volt-muted font-semibold mb-1.5" data-i18n="common.currency">SAR</span>
-          </div>
-          <ul class="space-y-3 mb-7">
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg5.f1">Any concept, any niche</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg5.f2">100% custom UI/UX</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg5.f3">Advanced functionality</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg5.f4">Premium performance</span></li>
-            <li class="feature-bullet"><i class="fa-solid fa-check"></i><span data-i18n="pkg5.f5">Domain included</span></li>
-          </ul>
-          <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="btn-primary w-full" data-wa-pkg="Fully Custom Website — 799 SAR">
-            <i class="fa-brands fa-whatsapp"></i>
-            <span data-i18n="common.order">Order via WhatsApp</span>
-          </a>
-        </div>
-
-        <!-- Card 6 — Consultation CTA -->
-        <div class="pricing-card flex flex-col justify-center items-center text-center" data-aos="fade-up" data-aos-delay="200">
-          <div class="feature-icon-wrap mb-5"><i class="fa-solid fa-headset"></i></div>
-          <h3 class="text-xl font-bold mb-3" data-i18n="pkgX.name">Not sure which to pick?</h3>
-          <p class="text-volt-muted text-sm mb-6 text-balance" data-i18n="pkgX.desc">Chat with us on WhatsApp and we'll guide you to the perfect package for your project.</p>
-          <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="btn-primary w-full" data-wa-pkg="Free Consultation">
-            <i class="fa-brands fa-whatsapp"></i>
-            <span data-i18n="pkgX.cta">Get a Free Consultation</span>
-          </a>
-        </div>
-
-      </div>
-
-      <!-- Info Box -->
-      <div class="info-box mt-12" data-aos="fade-up">
-        <div class="flex items-start gap-4">
-          <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-volt-red/15 text-volt-red flex items-center justify-center">
-            <i class="fa-solid fa-circle-info"></i>
-          </div>
-          <div>
-            <h4 class="font-bold mb-1.5" data-i18n="info.title">Important Note</h4>
-            <p class="text-volt-muted text-sm leading-relaxed" data-i18n="info.body">All prices include the DOMAIN only. Templates and themes (if used) include product setup, logo design, and a custom banner based on the client's request.</p>
-          </div>
-        </div>
-      </div>
-
+  <footer class="public-footer">
+    <div class="footer-logo sanad-logo">سند</div>
+    <p data-i18n="tagline">نظام إدارة المغاسل الاحترافي</p>
+    <div class="footer-links">
+      <a href="#" onclick="document.querySelector('.pricing-section').scrollIntoView({behavior:'smooth'});return false;" data-i18n="pricing">الأسعار</a>
+      <a href="https://wa.me/966599804296" target="_blank">📱 0599804296</a>
     </div>
-  </section>
-
-  <!-- ============================
-       ABOUT / WHY US
-       ============================ -->
-  <section id="about" class="relative py-24 overflow-hidden border-t border-white/5">
-    <div class="absolute inset-0 grid-bg opacity-30 pointer-events-none"></div>
-
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16" data-aos="fade-up">
-        <div class="section-tag mb-5">
-          <i class="fa-solid fa-star"></i>
-          <span data-i18n="about.tag">WHY US</span>
-        </div>
-        <h2 class="section-title text-4xl sm:text-5xl md:text-6xl mb-4" data-i18n="about.title">Why VOLT STORE?</h2>
-        <div class="section-divider mx-auto mb-5"></div>
-        <p class="text-volt-muted max-w-2xl mx-auto text-balance" data-i18n="about.sub">
-          Premium quality, honest pricing, and dedicated support — built for businesses that want results.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
-          <div class="feature-icon-wrap"><i class="fa-solid fa-bolt"></i></div>
-          <h3 class="font-bold text-lg mb-2" data-i18n="feat1.title">Fast Delivery</h3>
-          <p class="text-volt-muted text-sm leading-relaxed" data-i18n="feat1.desc">Quick turnaround times without compromising on quality. Most projects ready within days.</p>
-        </div>
-        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
-          <div class="feature-icon-wrap"><i class="fa-solid fa-pen-ruler"></i></div>
-          <h3 class="font-bold text-lg mb-2" data-i18n="feat2.title">Professional Design</h3>
-          <p class="text-volt-muted text-sm leading-relaxed" data-i18n="feat2.desc">Modern, clean, premium aesthetics that elevate your brand and convert visitors.</p>
-        </div>
-        <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
-          <div class="feature-icon-wrap"><i class="fa-solid fa-language"></i></div>
-          <h3 class="font-bold text-lg mb-2" data-i18n="feat3.title">Bilingual Support</h3>
-          <p class="text-volt-muted text-sm leading-relaxed" data-i18n="feat3.desc">Full Arabic and English support — RTL ready out of the box, perfect for the Saudi market.</p>
-        </div>
-        <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
-          <div class="feature-icon-wrap"><i class="fa-solid fa-shield-halved"></i></div>
-          <h3 class="font-bold text-lg mb-2" data-i18n="feat4.title">After-Sale Support</h3>
-          <p class="text-volt-muted text-sm leading-relaxed" data-i18n="feat4.desc">We're here after launch — ongoing assistance, updates, and dedicated client care.</p>
-        </div>
-      </div>
+    <div class="dev-credits">
+      <span data-i18n="developers">المطوّر</span>: مصطفى عبد الله أحمد
     </div>
-  </section>
-
-  <!-- ============================
-       CONTACT
-       ============================ -->
-  <section id="contact" class="relative py-24 overflow-hidden border-t border-white/5">
-    <div class="absolute inset-0 radial-glow-bottom pointer-events-none"></div>
-
-    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-14" data-aos="fade-up">
-        <div class="section-tag mb-5">
-          <i class="fa-solid fa-paper-plane"></i>
-          <span data-i18n="contact.tag">CONTACT</span>
-        </div>
-        <h2 class="section-title text-4xl sm:text-5xl md:text-6xl mb-4" data-i18n="contact.title">Get In Touch</h2>
-        <div class="section-divider mx-auto mb-5"></div>
-        <p class="text-volt-muted max-w-2xl mx-auto text-balance" data-i18n="contact.sub">
-          Have a project in mind? Let's talk. We typically respond within minutes on WhatsApp.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="contact-card" data-aos="fade-up" data-aos-delay="0">
-          <div class="contact-icon"><i class="fa-brands fa-whatsapp"></i></div>
-          <div>
-            <div class="text-xs uppercase tracking-widest text-volt-muted font-bold">WhatsApp</div>
-            <div class="font-semibold mt-1" dir="ltr">+966 59 980 4296</div>
-          </div>
-        </a>
-        <a href="mailto:voltstore301@gmail.com" class="contact-card" data-aos="fade-up" data-aos-delay="100">
-          <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
-          <div>
-            <div class="text-xs uppercase tracking-widest text-volt-muted font-bold" data-i18n="contact.email">Email</div>
-            <div class="font-semibold mt-1 break-all">voltstore301@gmail.com</div>
-          </div>
-        </a>
-        <a href="https://www.tiktok.com/@volt.store77" target="_blank" rel="noopener" class="contact-card" data-aos="fade-up" data-aos-delay="200">
-          <div class="contact-icon"><i class="fa-brands fa-tiktok"></i></div>
-          <div>
-            <div class="text-xs uppercase tracking-widest text-volt-muted font-bold">TikTok</div>
-            <div class="font-semibold mt-1">@volt.store77</div>
-          </div>
-        </a>
-      </div>
-
-      <div class="mt-12 text-center" data-aos="fade-up">
-        <a href="https://wa.me/966599804296?text=Hello%20VOLT%20STORE%2C%20I%27m%20interested%20in%20your%20services" target="_blank" rel="noopener" class="btn-primary text-base">
-          <i class="fa-brands fa-whatsapp text-xl"></i>
-          <span data-i18n="contact.cta">Start a Conversation</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================
-       FOOTER
-       ============================ -->
-  <footer class="relative border-t border-white/5 pt-16 pb-8 overflow-hidden">
-    <div class="absolute inset-0 grid-bg opacity-20 pointer-events-none"></div>
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
-        <!-- Brand -->
-        <div>
-          <a href="#home" class="inline-flex items-center gap-3 mb-4">
-            <img src="assets/logo.png" alt="VOLT STORE Logo" class="h-12 w-12 object-contain" />
-            <div class="leading-tight">
-              <div class="font-black text-lg tracking-tight">VOLT <span class="text-volt-red">STORE</span></div>
-              <div class="text-[10px] tracking-[0.25em] text-volt-muted uppercase font-semibold" data-i18n="footer.brand">POWER YOUR WORKFLOW</div>
-            </div>
-          </a>
-          <p class="text-volt-muted text-sm max-w-xs leading-relaxed" data-i18n="footer.tagline">
-            Professional digital solutions, custom development, and premium online stores — crafted with care.
-          </p>
-        </div>
-
-        <!-- Quick Links -->
-        <div>
-          <h4 class="font-bold text-sm uppercase tracking-widest mb-4 text-volt-muted" data-i18n="footer.linksTitle">Quick Links</h4>
-          <div class="flex flex-col gap-2">
-            <a href="#home" class="text-sm hover:text-volt-red transition-colors" data-i18n="nav.home">Home</a>
-            <a href="#services" class="text-sm hover:text-volt-red transition-colors" data-i18n="nav.services">Services</a>
-            <a href="#about" class="text-sm hover:text-volt-red transition-colors" data-i18n="nav.about">About</a>
-            <a href="#contact" class="text-sm hover:text-volt-red transition-colors" data-i18n="nav.contact">Contact</a>
-          </div>
-        </div>
-
-        <!-- Social -->
-        <div>
-          <h4 class="font-bold text-sm uppercase tracking-widest mb-4 text-volt-muted" data-i18n="footer.socialTitle">Follow Us</h4>
-          <div class="flex items-center gap-3">
-            <a href="https://wa.me/966599804296" target="_blank" rel="noopener" class="social-icon" aria-label="WhatsApp">
-              <i class="fa-brands fa-whatsapp"></i>
-            </a>
-            <a href="https://www.tiktok.com/@volt.store77" target="_blank" rel="noopener" class="social-icon" aria-label="TikTok">
-              <i class="fa-brands fa-tiktok"></i>
-            </a>
-            <a href="mailto:voltstore301@gmail.com" class="social-icon" aria-label="Email">
-              <i class="fa-solid fa-envelope"></i>
-            </a>
-          </div>
-          <div class="mt-5 text-xs text-volt-muted">
-            <div class="font-semibold uppercase tracking-widest mb-1" data-i18n="footer.colors">PALETTE</div>
-            <div class="flex items-center gap-2 font-mono">
-              <span class="w-3 h-3 rounded-full bg-volt-black border border-white/20"></span><span>0A0A0A</span>
-              <span class="w-3 h-3 rounded-full bg-white border border-white/20 ms-2"></span><span>FFFFFF</span>
-              <span class="w-3 h-3 rounded-full bg-volt-red ms-2"></span><span>E63030</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p class="text-xs text-volt-muted" data-i18n="footer.copyright">© 2026 VOLT STORE — All Rights Reserved</p>
-        <p class="text-xs text-volt-muted font-mono">VOLT / STORE / EST. MMXXVI</p>
-      </div>
-    </div>
+    <div style="margin-top:8px;font-size:12px">© 2026 Sanad — <span data-i18n="rights">جميع الحقوق محفوظة</span></div>
   </footer>
+</section>
 
-  <!-- ============================
-       FLOATING WHATSAPP (BOTTOM-LEFT)
-       ============================ -->
-  <a href="https://wa.me/966599804296?text=Hello%20VOLT%20STORE%2C%20I%27m%20interested%20in%20your%20services"
-     id="floatWA"
-     target="_blank"
-     rel="noopener"
-     class="float-whatsapp"
-     aria-label="Chat with us on WhatsApp">
-    <i class="fa-brands fa-whatsapp"></i>
-    <span class="wa-tooltip" id="waTooltip">Chat with us</span>
-  </a>
+<!-- ====================================================================
+     شاشة تسجيل الدخول
+==================================================================== -->
+<section class="screen login-screen" id="screen-login">
+  <div class="card login-card">
+    <div class="login-logo sanad-logo">سند</div>
+    <h2 class="login-title" data-i18n="loginTitle">تسجيل الدخول</h2>
+    <p class="login-subtitle" data-i18n="loginSubtitle">أدخل رقم العضوية للوصول إلى لوحة التحكم</p>
+    <div class="login-input-wrap">
+      <input id="loginInput" class="input login-input" type="text" inputmode="numeric"
+             maxlength="10" placeholder="0000000000" autocomplete="off" />
+    </div>
+    <label class="remember-wrap">
+      <input type="checkbox" id="rememberMe" checked />
+      <span data-i18n="rememberDevice">تذكّر هذا الجهاز</span>
+    </label>
+    <button class="btn btn-primary btn-block btn-lg" id="loginBtn" data-i18n="login">دخول</button>
+    <div class="login-error" id="loginError"></div>
+    <div class="back-to-landing" onclick="showScreen('landing')" data-i18n="backToHome">← العودة للرئيسية</div>
+  </div>
+</section>
 
-  <!-- ============================
-       AOS
-       ============================ -->
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<!-- ====================================================================
+     لوحة تحكم المغسلة
+==================================================================== -->
+<section class="screen" id="screen-laundry">
+  <div class="app-layout">
+    <aside class="sidebar" id="laundrySidebar">
+      <div class="sidebar-logo sanad-logo">سند</div>
+      <div class="sidebar-name" id="laundryNameSidebar">—</div>
+      <div class="menu-item active" data-page="home"><span class="menu-icon">🏠</span><span data-i18n="navHome">الرئيسية</span></div>
+      <div class="menu-item" data-page="newOrder"><span class="menu-icon">➕</span><span data-i18n="navNewOrder">طلب جديد</span></div>
+      <div class="menu-item" data-page="orders"><span class="menu-icon">📋</span><span data-i18n="navOrders">الطلبات</span></div>
+      <div class="menu-item" data-page="reports"><span class="menu-icon">📊</span><span data-i18n="navReports">التقارير</span></div>
+      <div class="menu-item" data-page="calculator"><span class="menu-icon">💰</span><span data-i18n="navCalculator">حاسبة الربح</span></div>
+      <div class="menu-item" data-page="settings"><span class="menu-icon">⚙️</span><span data-i18n="navSettings">الإعدادات</span></div>
+    </aside>
+    <div class="main-content">
+      <div class="app-topbar">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="menu-toggle" onclick="toggleSidebar('laundrySidebar')">☰</button>
+          <div>
+            <div class="topbar-title" id="topbarLaundryName">—</div>
+            <div id="topbarSubscription"></div>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <select id="langSelect2" class="lang-select"></select>
+          <button class="theme-btn" onclick="toggleTheme()" id="themeToggle2">🌙</button>
+          <button class="btn btn-secondary" onclick="logout()" data-i18n="logout">خروج</button>
+        </div>
+      </div>
+      <div class="page-content" id="laundryContent"></div>
+    </div>
+  </div>
+</section>
 
-  <!-- ============================
-       SCRIPTS
-       ============================ -->
-  <script>
-    /* ============================
-       TRANSLATIONS
-       ============================ */
-    const I18N = {
-      en: {
-        "navbar.tagline": "DIGITAL PRODUCTS",
-        "nav.home": "Home",
-        "nav.services": "Services",
-        "nav.about": "About",
-        "nav.contact": "Contact",
+<!-- ====================================================================
+     لوحة تحكم المدير
+==================================================================== -->
+<section class="screen" id="screen-admin">
+  <div class="app-layout">
+    <aside class="sidebar" id="adminSidebar">
+      <div class="sidebar-logo sanad-logo">سند</div>
+      <div class="sidebar-name">Admin</div>
+      <div class="menu-item active" data-page="overview"><span class="menu-icon">📈</span><span data-i18n="adminOverview">نظرة عامة</span></div>
+      <div class="menu-item" data-page="laundries"><span class="menu-icon">🏢</span><span data-i18n="adminLaundries">المغاسل</span></div>
+      <div class="menu-item" data-page="packages"><span class="menu-icon">📦</span><span data-i18n="adminPackages">الباقات</span></div>
+      <div class="menu-item" data-page="settings"><span class="menu-icon">⚙️</span><span data-i18n="adminSettings">الإعدادات</span></div>
+    </aside>
+    <div class="main-content">
+      <div class="app-topbar">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="menu-toggle" onclick="toggleSidebar('adminSidebar')">☰</button>
+          <div class="topbar-title" data-i18n="adminPanel">لوحة المدير</div>
+        </div>
+        <div class="topbar-actions">
+          <select id="langSelect3" class="lang-select"></select>
+          <button class="theme-btn" onclick="toggleTheme()" id="themeToggle3">🌙</button>
+          <button class="btn btn-secondary" onclick="logout()" data-i18n="logout">خروج</button>
+        </div>
+      </div>
+      <div class="page-content" id="adminContent"></div>
+    </div>
+  </div>
+</section>
 
-        "hero.badge": "EST. MMXXVI · DIGITAL PRODUCTS",
-        "hero.title1": "Professional Web Solutions",
-        "hero.title2": "& Custom Development",
-        "hero.sub": "We build websites, systems, and online stores tailored to your needs.",
-        "hero.cta": "Order via WhatsApp",
-        "hero.cta2": "View Packages",
-        "hero.stat1": "Packages",
-        "hero.stat2": "Support",
-        "hero.stat3": "Custom",
+<!-- ====================================================================
+     النوافذ الإشعارات والتحميل
+==================================================================== -->
+<div class="toast-container" id="toastContainer"></div>
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
 
-        "services.tag": "OUR SERVICES",
-        "services.title": "Our Packages",
-        "services.sub": "Choose the perfect package for your business — clean pricing, no hidden fees, fast delivery.",
+<!-- منطقة الطباعة المخفية -->
+<div id="printArea" style="display:none"></div>
 
-        "common.currency": "SAR",
-        "common.order": "Order via WhatsApp",
-        "common.popular": "POPULAR",
+<script>
+/* ====================================================================
+   إعداد Firebase والربط بقاعدة البيانات
+==================================================================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyAC9BzBpw66oBDriZoi9A5zsThKLFZiNv8",
+  authDomain: "imam-warsh.firebaseapp.com",
+  databaseURL: "https://imam-warsh-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "imam-warsh",
+  storageBucket: "imam-warsh.firebasestorage.app",
+  messagingSenderId: "898520924315",
+  appId: "1:898520924315:web:b74dbd20340ef53b0a463e",
+  measurementId: "G-YGY41LQF8J"
+};
 
-        "pkg1.name": "Portfolio Website",
-        "pkg1.desc": "A clean, professional portfolio website to showcase your work, services, or brand identity.",
-        "pkg1.f1": "Modern responsive design",
-        "pkg1.f2": "Up to 5 pages",
-        "pkg1.f3": "Domain included",
-        "pkg1.f4": "Bilingual (AR / EN)",
-        "pkg1.f5": "Mobile optimized",
+let firebaseReady = false;
+let db = null;
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+  firebaseReady = true;
+} catch (e) {
+  console.warn('Firebase init issue:', e);
+}
 
-        "pkg2.name": "Smart Management System",
-        "pkg2.desc": "A custom system for schools, data organization, or analytics dashboards with full management features.",
-        "pkg2.f1": "Admin dashboard",
-        "pkg2.f2": "Database & reports",
-        "pkg2.f3": "User roles & permissions",
-        "pkg2.f4": "Custom workflows",
-        "pkg2.f5": "Domain included",
+/* ====================================================================
+   ثوابت محمية (Base64) — كود المدير
+   الكود الكامل: 967312986312769318790708913
+   كود الدخول (أول 10 أرقام): 9673129863
+==================================================================== */
+const _k = {
+  a: 'OTY3MzEyOTg2MzEyNzY5MzE4NzkwNzA4OTEz',  // المفتاح الكامل (b64)
+  b: 'OTY3MzEyOTg2Mw=='                         // كود الدخول (b64)
+};
+function _adminEntryCode() { return atob(_k.b); }
+function _adminMasterCode() { return atob(_k.a); }
+function _isAdminCode(v) { return v === _adminEntryCode() || v === _adminMasterCode(); }
 
-        "pkg3.name": "Complete E-Commerce Store",
-        "pkg3.desc": "A full-featured online store with shopping cart, product management, and modern checkout (template-based).",
-        "pkg3.f1": "Shopping cart & checkout",
-        "pkg3.f2": "Product management",
-        "pkg3.f3": "Logo & banner design",
-        "pkg3.f4": "Premium template setup",
-        "pkg3.f5": "Domain included",
+/* ====================================================================
+   نظام الترجمة متعدد اللغات (11 لغة)
+==================================================================== */
+const LANGS = {
+  ar: { name:'العربية', flag:'🇸🇦', dir:'rtl' },
+  en: { name:'English', flag:'🇺🇸', dir:'ltr' },
+  ur: { name:'اردو', flag:'🇮🇳', dir:'rtl' },
+  hi: { name:'हिन्दी', flag:'🇮🇳', dir:'ltr' },
+  bn: { name:'বাংলা', flag:'🇧🇩', dir:'ltr' },
+  ps: { name:'پښتو', flag:'🇦🇫', dir:'rtl' },
+  id: { name:'Bahasa Indonesia', flag:'🇮🇩', dir:'ltr' },
+  fr: { name:'Français', flag:'🇫🇷', dir:'ltr' },
+  zh: { name:'中文', flag:'🇨🇳', dir:'ltr' },
+  ja: { name:'日本語', flag:'🇯🇵', dir:'ltr' },
+  pk: { name:'اردو پاکستانی', flag:'🇵🇰', dir:'rtl' }
+};
 
-        "pkg4.name": "Custom E-Commerce (From Scratch)",
-        "pkg4.desc": "A fully independent, custom-coded e-commerce store built from zero — unique design, full ownership, no templates.",
-        "pkg4.f1": "Custom code, no templates",
-        "pkg4.f2": "Unique premium design",
-        "pkg4.f3": "Full source code ownership",
-        "pkg4.f4": "Advanced features included",
-        "pkg4.f5": "Domain included",
+/* قاموس الترجمات — العربية والإنجليزية كاملة، باقي اللغات تشمل المفاتيح الأساسية */
+const I18N = {
+  ar: {
+    welcome:"أهلاً بك في سند", tagline:"نظام إدارة المغاسل الاحترافي", startNow:"ابدأ الآن",
+    ourPackages:"باقاتنا", packagesSubtitle:"اختر الباقة المناسبة لمغسلتك",
+    pricing:"الأسعار", rights:"جميع الحقوق محفوظة", developers:"المطوّر",
+    loginTitle:"تسجيل الدخول", loginSubtitle:"أدخل رقم العضوية للوصول إلى لوحة التحكم",
+    rememberDevice:"تذكّر هذا الجهاز", login:"دخول", backToHome:"← العودة للرئيسية",
+    invalidCode:"رقم العضوية غير صحيح", expired:"الاشتراك منتهي", paused:"الاشتراك متوقف مؤقتاً",
+    navHome:"الرئيسية", navNewOrder:"طلب جديد", navOrders:"الطلبات",
+    navReports:"التقارير", navCalculator:"حاسبة الربح", navSettings:"الإعدادات",
+    adminOverview:"نظرة عامة", adminLaundries:"المغاسل", adminPackages:"الباقات",
+    adminSettings:"الإعدادات", adminPanel:"لوحة المدير",
+    logout:"خروج", search:"بحث", actions:"إجراءات",
+    customerName:"اسم العميل", phone:"رقم الجوال", pieces:"عدد القطع",
+    paymentMethod:"طريقة الدفع", price:"السعر", notes:"ملاحظات", submit:"تم",
+    cash:"كاش", card:"شبكة - بطاقة", other:"أخرى",
+    invoice:"فاتورة", invoiceNo:"رقم الفاتورة", date:"التاريخ", time:"الوقت",
+    total:"الإجمالي", thanks:"شكراً لاختياركم لنا",
+    print:"طباعة", download:"تنزيل", sendWhatsapp:"إرسال واتساب", newOrder:"طلب جديد",
+    todayRev:"إيرادات اليوم", weekRev:"هذا الأسبوع", monthRev:"هذا الشهر",
+    totalRev:"إجمالي الإيرادات", invoicesCount:"عدد الفواتير",
+    revenue:"الإيرادات", expenses:"المصاريف والخصومات", addField:"+ إضافة خانة",
+    label:"الوصف", amount:"المبلغ", netProfit:"صافي الربح",
+    totalRevenue:"إجمالي الإيرادات", totalExpenses:"إجمالي المصاريف",
+    today:"اليوم", week:"الأسبوع", month:"الشهر", custom:"مخصص",
+    fromDate:"من تاريخ", toDate:"إلى تاريخ", apply:"تطبيق",
+    addLaundry:"إضافة مغسلة", laundryName:"اسم المغسلة", membershipNo:"رقم العضوية",
+    city:"المدينة", mapLocation:"موقع جوجل مابس", selectPackage:"اختيار الباقة",
+    durationHours:"المدة بالساعات", customHours:"ساعات مخصصة",
+    status:"الحالة", active:"فعّال", inactive:"غير فعّال", expiredS:"منتهي",
+    save:"حفظ", cancel:"إلغاء", edit:"تعديل", delete:"حذف", confirm:"تأكيد",
+    confirmDelete:"هل أنت متأكد من الحذف؟",
+    addPackage:"إضافة باقة", packageName:"اسم الباقة", priceSAR:"السعر (ريال)",
+    features:"المميزات", isOffer:"عرض خاص", active2:"فعّال",
+    description:"الوصف",
+    subscribe:"اشترك الآن", offer:"عرض",
+    success:"تمت العملية بنجاح", error:"حدث خطأ", saved:"تم الحفظ",
+    deleted:"تم الحذف", updated:"تم التحديث",
+    export:"تصدير", csv:"CSV",
+    profileLaundry:"بيانات المغسلة", subscription:"الاشتراك",
+    settingsTheme:"المظهر", settingsLang:"اللغة",
+    revenueOverTime:"الإيرادات عبر الوقت", revenueByPayment:"الإيرادات حسب طريقة الدفع",
+    paymentsDist:"توزيع طرق الدفع", ordersPerDay:"الطلبات يومياً",
+    avgOrder:"متوسط قيمة الطلب", topDay:"أفضل يوم",
+    saveCalc:"حفظ الحساب",
+    totalLaundries:"إجمالي المغاسل", activeLaundries:"المغاسل النشطة",
+    newSignups:"تسجيلات جديدة", subsRevenue:"إيرادات الاشتراكات",
+    whatsappNo:"رقم الواتساب", backupData:"نسخة احتياطية",
+    importData:"استيراد بيانات", exportAll:"تصدير الكل",
+    activityLog:"سجل الأنشطة", noData:"لا توجد بيانات بعد",
+    period:"الفترة", paymentDist:"توزيع طرق الدفع",
+    laundryAdded:"تمت إضافة المغسلة", laundryDeleted:"تم حذف المغسلة",
+    packageAdded:"تمت إضافة الباقة", packageDeleted:"تم حذف الباقة",
+    pause:"إيقاف مؤقت", resume:"استئناف",
+    daysLeft:"يوم متبقي", hoursLeft:"ساعة متبقية",
+    quickStats:"إحصائيات سريعة", recentOrders:"أحدث الطلبات",
+    pkgTrial:"تجريبية - أسبوع", pkgBasic:"أساسي - شهرين",
+    pkgComp:"شامل - 6 شهور", pkgPremium:"فاخر - سنة", pkgExtra:"اكسترا - 10 سنوات",
+    enterCode:"أدخل الكود", changeCode:"تغيير الكود",
+    optionalPhone:"رقم الجوال (اختياري)", otherMethod:"حدد طريقة الدفع",
+    operatingFees:"الرسوم التشغيلية", rent:"الإيجار", salaries:"الرواتب", electricity:"الكهرباء", bills:"الفواتير",
+    welcomeBack:"مرحباً مجدداً", subActive:"اشتراك فعّال", subExpired:"اشتراك منتهي", subPaused:"اشتراك متوقف"
+  },
+  en: {
+    welcome:"Welcome to Sanad", tagline:"Professional Laundry Management System", startNow:"Get Started",
+    ourPackages:"Our Packages", packagesSubtitle:"Choose the plan that fits your laundry",
+    pricing:"Pricing", rights:"All rights reserved", developers:"Developer",
+    loginTitle:"Sign In", loginSubtitle:"Enter your membership number to access the dashboard",
+    rememberDevice:"Remember this device", login:"Login", backToHome:"← Back to home",
+    invalidCode:"Invalid membership number", expired:"Subscription expired", paused:"Subscription paused",
+    navHome:"Home", navNewOrder:"New Order", navOrders:"Orders",
+    navReports:"Reports", navCalculator:"Profit Calculator", navSettings:"Settings",
+    adminOverview:"Overview", adminLaundries:"Laundries", adminPackages:"Packages",
+    adminSettings:"Settings", adminPanel:"Admin Panel",
+    logout:"Logout", search:"Search", actions:"Actions",
+    customerName:"Customer Name", phone:"Phone Number", pieces:"Pieces",
+    paymentMethod:"Payment Method", price:"Price", notes:"Notes", submit:"Done",
+    cash:"Cash", card:"Card / Network", other:"Other",
+    invoice:"Invoice", invoiceNo:"Invoice #", date:"Date", time:"Time",
+    total:"Total", thanks:"Thank you for choosing us",
+    print:"Print", download:"Download", sendWhatsapp:"Send via WhatsApp", newOrder:"New Order",
+    todayRev:"Today's Revenue", weekRev:"This Week", monthRev:"This Month",
+    totalRev:"Total Revenue", invoicesCount:"Invoices Count",
+    revenue:"Revenue", expenses:"Expenses & Deductions", addField:"+ Add Field",
+    label:"Label", amount:"Amount", netProfit:"Net Profit",
+    totalRevenue:"Total Revenue", totalExpenses:"Total Expenses",
+    today:"Today", week:"Week", month:"Month", custom:"Custom",
+    fromDate:"From", toDate:"To", apply:"Apply",
+    addLaundry:"Add Laundry", laundryName:"Laundry Name", membershipNo:"Membership #",
+    city:"City", mapLocation:"Google Maps Location", selectPackage:"Select Package",
+    durationHours:"Duration (hours)", customHours:"Custom Hours",
+    status:"Status", active:"Active", inactive:"Inactive", expiredS:"Expired",
+    save:"Save", cancel:"Cancel", edit:"Edit", delete:"Delete", confirm:"Confirm",
+    confirmDelete:"Are you sure you want to delete?",
+    addPackage:"Add Package", packageName:"Package Name", priceSAR:"Price (SAR)",
+    features:"Features", isOffer:"Special Offer", active2:"Active",
+    description:"Description",
+    subscribe:"Subscribe Now", offer:"OFFER",
+    success:"Done successfully", error:"An error occurred", saved:"Saved",
+    deleted:"Deleted", updated:"Updated",
+    export:"Export", csv:"CSV",
+    profileLaundry:"Laundry Info", subscription:"Subscription",
+    settingsTheme:"Theme", settingsLang:"Language",
+    revenueOverTime:"Revenue Over Time", revenueByPayment:"Revenue by Payment Method",
+    paymentsDist:"Payment Method Distribution", ordersPerDay:"Orders per Day",
+    avgOrder:"Avg Order Value", topDay:"Top Day",
+    saveCalc:"Save Calculation",
+    totalLaundries:"Total Laundries", activeLaundries:"Active Laundries",
+    newSignups:"New Signups", subsRevenue:"Subscription Revenue",
+    whatsappNo:"WhatsApp Number", backupData:"Backup",
+    importData:"Import Data", exportAll:"Export All",
+    activityLog:"Activity Log", noData:"No data yet",
+    period:"Period", paymentDist:"Payment Distribution",
+    laundryAdded:"Laundry added", laundryDeleted:"Laundry deleted",
+    packageAdded:"Package added", packageDeleted:"Package deleted",
+    pause:"Pause", resume:"Resume",
+    daysLeft:"days left", hoursLeft:"hours left",
+    quickStats:"Quick Stats", recentOrders:"Recent Orders",
+    pkgTrial:"Trial - 1 Week", pkgBasic:"Basic - 2 Months",
+    pkgComp:"Comprehensive - 6 Months", pkgPremium:"Premium - 1 Year", pkgExtra:"Extra - 10 Years",
+    enterCode:"Enter code", changeCode:"Change code",
+    optionalPhone:"Phone (optional)", otherMethod:"Specify payment method",
+    operatingFees:"Operating Fees", rent:"Rent", salaries:"Salaries", electricity:"Electricity", bills:"Bills",
+    welcomeBack:"Welcome back", subActive:"Active", subExpired:"Expired", subPaused:"Paused"
+  },
+  ur: {
+    welcome:"سند میں خوش آمدید", tagline:"پیشہ ور لانڈری مینجمنٹ سسٹم", startNow:"شروع کریں",
+    ourPackages:"ہمارے پیکیجز", packagesSubtitle:"اپنی لانڈری کے لیے موزوں پیکیج منتخب کریں",
+    loginTitle:"سائن ان", login:"داخل ہوں", invalidCode:"غلط ممبرشپ نمبر",
+    navHome:"ہوم", navNewOrder:"نیا آرڈر", navOrders:"آرڈرز", navReports:"رپورٹس",
+    navCalculator:"منافع کیلکولیٹر", navSettings:"ترتیبات",
+    customerName:"کسٹمر کا نام", pieces:"اشیاء", price:"قیمت", submit:"مکمل",
+    cash:"نقد", card:"کارڈ", other:"دیگر", total:"کل",
+    logout:"خروج", thanks:"ہماری خدمات استعمال کرنے کا شکریہ",
+    subscribe:"ابھی سبسکرائب کریں", offer:"پیشکش"
+  },
+  hi: {
+    welcome:"सनद में आपका स्वागत है", tagline:"पेशेवर लॉन्ड्री प्रबंधन प्रणाली", startNow:"शुरू करें",
+    ourPackages:"हमारे पैकेज", packagesSubtitle:"अपने लॉन्ड्री के लिए सही पैकेज चुनें",
+    loginTitle:"लॉगिन", login:"प्रवेश करें", invalidCode:"गलत सदस्यता संख्या",
+    navHome:"मुख्य", navNewOrder:"नया ऑर्डर", navOrders:"ऑर्डर्स", navReports:"रिपोर्ट्स",
+    navCalculator:"लाभ कैलकुलेटर", navSettings:"सेटिंग्स",
+    customerName:"ग्राहक का नाम", pieces:"टुकड़े", price:"मूल्य", submit:"पूर्ण",
+    cash:"नकद", card:"कार्ड", other:"अन्य", total:"कुल",
+    logout:"लॉगआउट", thanks:"हमें चुनने के लिए धन्यवाद",
+    subscribe:"अभी सब्सक्राइब करें", offer:"ऑफर"
+  },
+  bn: {
+    welcome:"সানাদে স্বাগতম", tagline:"পেশাদার লন্ড্রি ব্যবস্থাপনা সিস্টেম", startNow:"শুরু করুন",
+    ourPackages:"আমাদের প্যাকেজ", packagesSubtitle:"আপনার লন্ড্রির জন্য সঠিক প্যাকেজ বেছে নিন",
+    loginTitle:"সাইন ইন", login:"প্রবেশ", invalidCode:"ভুল সদস্যপদ নম্বর",
+    navHome:"হোম", navNewOrder:"নতুন অর্ডার", navOrders:"অর্ডার", navReports:"প্রতিবেদন",
+    navCalculator:"মুনাফা ক্যালকুলেটর", navSettings:"সেটিংস",
+    customerName:"গ্রাহকের নাম", pieces:"টুকরা", price:"মূল্য", submit:"সম্পন্ন",
+    cash:"নগদ", card:"কার্ড", other:"অন্যান্য", total:"মোট",
+    logout:"লগআউট", thanks:"আমাদের বেছে নেওয়ার জন্য ধন্যবাদ",
+    subscribe:"এখনই সাবস্ক্রাইব করুন", offer:"অফার"
+  },
+  ps: {
+    welcome:"په سند کې ښه راغلاست", tagline:"مسلکي د جامو پرېولو مدیریت سیسټم", startNow:"پیل وکړئ",
+    ourPackages:"زموږ کڅوړې", packagesSubtitle:"د خپلې جامو پرېولو لپاره مناسبه کڅوړه وټاکئ",
+    loginTitle:"ننوتل", login:"ننوزئ", invalidCode:"غلط د غړیتوب شمیره",
+    navHome:"کور", navNewOrder:"نوی فرمایش", navOrders:"فرمایشونه", navReports:"راپورونه",
+    navCalculator:"د ګټې حسابګر", navSettings:"تنظیمات",
+    customerName:"د پیرودونکي نوم", pieces:"شمېر", price:"بیه", submit:"بشپړ",
+    cash:"نغد", card:"کارت", other:"نور", total:"ټول",
+    logout:"وتل", thanks:"مننه چې موږ مو وټاکلو",
+    subscribe:"اوس ګډون وکړئ", offer:"وړاندیز"
+  },
+  id: {
+    welcome:"Selamat datang di Sanad", tagline:"Sistem Manajemen Laundry Profesional", startNow:"Mulai",
+    ourPackages:"Paket Kami", packagesSubtitle:"Pilih paket yang sesuai untuk laundry Anda",
+    loginTitle:"Masuk", login:"Masuk", invalidCode:"Nomor keanggotaan tidak valid",
+    navHome:"Beranda", navNewOrder:"Pesanan Baru", navOrders:"Pesanan", navReports:"Laporan",
+    navCalculator:"Kalkulator Keuntungan", navSettings:"Pengaturan",
+    customerName:"Nama Pelanggan", pieces:"Jumlah", price:"Harga", submit:"Selesai",
+    cash:"Tunai", card:"Kartu", other:"Lainnya", total:"Total",
+    logout:"Keluar", thanks:"Terima kasih telah memilih kami",
+    subscribe:"Berlangganan Sekarang", offer:"PENAWARAN"
+  },
+  fr: {
+    welcome:"Bienvenue sur Sanad", tagline:"Système de gestion de blanchisserie professionnel", startNow:"Commencer",
+    ourPackages:"Nos forfaits", packagesSubtitle:"Choisissez le forfait adapté à votre blanchisserie",
+    loginTitle:"Connexion", login:"Se connecter", invalidCode:"Numéro de membre invalide",
+    navHome:"Accueil", navNewOrder:"Nouvelle commande", navOrders:"Commandes", navReports:"Rapports",
+    navCalculator:"Calculateur de profit", navSettings:"Paramètres",
+    customerName:"Nom du client", pieces:"Pièces", price:"Prix", submit:"Terminé",
+    cash:"Espèces", card:"Carte", other:"Autre", total:"Total",
+    logout:"Déconnexion", thanks:"Merci de nous avoir choisis",
+    subscribe:"S'abonner", offer:"OFFRE"
+  },
+  zh: {
+    welcome:"欢迎来到 Sanad", tagline:"专业洗衣管理系统", startNow:"立即开始",
+    ourPackages:"我们的套餐", packagesSubtitle:"为您的洗衣店选择合适的套餐",
+    loginTitle:"登录", login:"登录", invalidCode:"会员号无效",
+    navHome:"主页", navNewOrder:"新订单", navOrders:"订单", navReports:"报告",
+    navCalculator:"利润计算器", navSettings:"设置",
+    customerName:"客户姓名", pieces:"件数", price:"价格", submit:"完成",
+    cash:"现金", card:"卡", other:"其他", total:"总计",
+    logout:"退出", thanks:"感谢您选择我们",
+    subscribe:"立即订阅", offer:"优惠"
+  },
+  ja: {
+    welcome:"Sanad へようこそ", tagline:"プロフェッショナルなランドリー管理システム", startNow:"今すぐ始める",
+    ourPackages:"プラン", packagesSubtitle:"あなたのランドリーに合うプランを選択",
+    loginTitle:"ログイン", login:"ログイン", invalidCode:"無効な会員番号",
+    navHome:"ホーム", navNewOrder:"新規注文", navOrders:"注文", navReports:"レポート",
+    navCalculator:"利益計算機", navSettings:"設定",
+    customerName:"顧客名", pieces:"点数", price:"価格", submit:"完了",
+    cash:"現金", card:"カード", other:"その他", total:"合計",
+    logout:"ログアウト", thanks:"ご利用ありがとうございます",
+    subscribe:"今すぐ登録", offer:"オファー"
+  },
+  pk: {
+    welcome:"سند میں خوش آمدید", tagline:"پروفیشنل لانڈری مینجمنٹ سسٹم", startNow:"شروع کریں",
+    ourPackages:"ہمارے پیکیجز", packagesSubtitle:"اپنی لانڈری کے لیے بہترین پیکیج چنیں",
+    loginTitle:"لاگ ان", login:"داخل ہوں", invalidCode:"غلط ممبرشپ نمبر",
+    navHome:"ہوم", navNewOrder:"نیا آرڈر", navOrders:"آرڈرز", navReports:"رپورٹس",
+    navCalculator:"منافع کیلکولیٹر", navSettings:"سیٹنگز",
+    customerName:"کسٹمر کا نام", pieces:"اشیاء", price:"قیمت", submit:"مکمل",
+    cash:"نقد", card:"کارڈ", other:"دیگر", total:"کل",
+    logout:"خروج", thanks:"ہمیں منتخب کرنے کا شکریہ",
+    subscribe:"ابھی سبسکرائب کریں", offer:"خصوصی پیشکش"
+  }
+};
 
-        "pkg5.name": "Fully Custom Website",
-        "pkg5.desc": "Any website you imagine — fully custom design and development tailored to your exact requirements.",
-        "pkg5.f1": "Any concept, any niche",
-        "pkg5.f2": "100% custom UI/UX",
-        "pkg5.f3": "Advanced functionality",
-        "pkg5.f4": "Premium performance",
-        "pkg5.f5": "Domain included",
+function t(key) {
+  const lang = state.lang || 'ar';
+  return (I18N[lang] && I18N[lang][key]) || (I18N.en && I18N.en[key]) || (I18N.ar && I18N.ar[key]) || key;
+}
 
-        "pkgX.name": "Not sure which to pick?",
-        "pkgX.desc": "Chat with us on WhatsApp and we'll guide you to the perfect package for your project.",
-        "pkgX.cta": "Get a Free Consultation",
+/* ====================================================================
+   الحالة العامة للتطبيق
+==================================================================== */
+const state = {
+  theme: localStorage.getItem('sanad_theme') || 'dark',
+  lang: localStorage.getItem('sanad_lang') || 'ar',
+  user: null,            // المغسلة الحالية أو 'admin'
+  laundryId: null,
+  packages: {},
+  laundries: {},
+  orders: {},
+  currentPage: 'home',
+  adminPage: 'overview',
+  charts: {}
+};
 
-        "info.title": "Important Note",
-        "info.body": "All prices include the DOMAIN only. Templates and themes (if used) include product setup, logo design, and a custom banner based on the client's request.",
+/* ====================================================================
+   إعداد اللغات والثيم
+==================================================================== */
+function applyLang(lang) {
+  state.lang = lang;
+  localStorage.setItem('sanad_lang', lang);
+  document.documentElement.lang = lang;
+  document.documentElement.dir = LANGS[lang].dir;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const txt = t(key);
+    if (txt) el.textContent = txt;
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+  });
+  document.querySelectorAll('.lang-select').forEach(s => s.value = lang);
+  // إعادة رسم الصفحات الحالية
+  if (state.user === 'admin') renderAdminPage();
+  else if (state.user) renderLaundryPage();
+  renderPublicPackages();
+}
 
-        "about.tag": "WHY US",
-        "about.title": "Why VOLT STORE?",
-        "about.sub": "Premium quality, honest pricing, and dedicated support — built for businesses that want results.",
-        "feat1.title": "Fast Delivery",
-        "feat1.desc": "Quick turnaround times without compromising on quality. Most projects ready within days.",
-        "feat2.title": "Professional Design",
-        "feat2.desc": "Modern, clean, premium aesthetics that elevate your brand and convert visitors.",
-        "feat3.title": "Bilingual Support",
-        "feat3.desc": "Full Arabic and English support — RTL ready out of the box, perfect for the Saudi market.",
-        "feat4.title": "After-Sale Support",
-        "feat4.desc": "We're here after launch — ongoing assistance, updates, and dedicated client care.",
+function applyTheme(theme) {
+  state.theme = theme;
+  localStorage.setItem('sanad_theme', theme);
+  document.body.setAttribute('data-theme', theme);
+  document.querySelectorAll('#themeToggle,#themeToggle2,#themeToggle3').forEach(b => {
+    b.textContent = theme === 'dark' ? '🌙' : '☀️';
+  });
+}
+function toggleTheme() { applyTheme(state.theme === 'dark' ? 'light' : 'dark'); }
 
-        "contact.tag": "CONTACT",
-        "contact.title": "Get In Touch",
-        "contact.sub": "Have a project in mind? Let's talk. We typically respond within minutes on WhatsApp.",
-        "contact.email": "Email",
-        "contact.cta": "Start a Conversation",
+/* تعبئة قائمة اللغات */
+function fillLangSelects() {
+  const html = Object.entries(LANGS).map(([k,v]) => `<option value="${k}">${v.flag} ${v.name}</option>`).join('');
+  document.querySelectorAll('.lang-select').forEach(sel => {
+    sel.innerHTML = html;
+    sel.value = state.lang;
+    sel.onchange = (e) => applyLang(e.target.value);
+  });
+}
 
-        "footer.brand": "POWER YOUR WORKFLOW",
-        "footer.tagline": "Professional digital solutions, custom development, and premium online stores — crafted with care.",
-        "footer.linksTitle": "Quick Links",
-        "footer.socialTitle": "Follow Us",
-        "footer.colors": "PALETTE",
-        "footer.copyright": "© 2026 VOLT STORE — All Rights Reserved",
+/* ====================================================================
+   التنقل بين الشاشات
+==================================================================== */
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
 
-        "wa.tooltip": "Chat with us",
-        "wa.message": "Hello VOLT STORE, I'm interested in your services"
-      },
+function toggleSidebar(id) {
+  document.getElementById(id).classList.toggle('open');
+}
 
-      ar: {
-        "navbar.tagline": "منتجات رقمية",
-        "nav.home": "الرئيسية",
-        "nav.services": "الخدمات",
-        "nav.about": "من نحن",
-        "nav.contact": "تواصل",
+/* ====================================================================
+   إشعارات Toast والنوافذ المنبثقة
+==================================================================== */
+function toast(msg, type='info', icon='') {
+  const icons = { success:'✅', error:'❌', warning:'⚠️', info:'ℹ️' };
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = `<span class="toast-icon">${icon || icons[type] || 'ℹ️'}</span><span>${msg}</span>`;
+  document.getElementById('toastContainer').appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateY(-10px)'; setTimeout(()=>el.remove(), 300); }, 3000);
+}
 
-        "hero.badge": "تأسست عام ٢٠٢٦ · منتجات رقمية",
-        "hero.title1": "حلول رقمية احترافية",
-        "hero.title2": "وتطوير مخصص",
-        "hero.sub": "نصمم لك المواقع والأنظمة والمتاجر الإلكترونية باحترافية عالية.",
-        "hero.cta": "اطلب عبر واتساب",
-        "hero.cta2": "تصفح الباقات",
-        "hero.stat1": "باقات",
-        "hero.stat2": "دعم",
-        "hero.stat3": "مخصص",
+function openModal(html) {
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target.id === 'modalOverlay') closeModal();
+});
 
-        "services.tag": "خدماتنا",
-        "services.title": "باقاتنا",
-        "services.sub": "اختر الباقة المناسبة لمشروعك — أسعار واضحة، بدون رسوم خفية، تسليم سريع.",
+function confirmDialog(msg, onYes) {
+  openModal(`
+    <div class="modal-header"><div class="modal-title">${t('confirm')}</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <p style="margin-bottom:16px">${msg}</p>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
+      <button class="btn btn-danger" id="confirmYes">${t('confirm')}</button>
+    </div>
+  `);
+  document.getElementById('confirmYes').onclick = () => { closeModal(); onYes && onYes(); };
+}
 
-        "common.currency": "ريال",
-        "common.order": "اطلب عبر واتساب",
-        "common.popular": "الأكثر طلباً",
+function showLoading(show=true) {
+  document.getElementById('loadingOverlay').classList.toggle('active', show);
+}
 
-        "pkg1.name": "موقع عرض أعمال",
-        "pkg1.desc": "موقع احترافي وأنيق لعرض أعمالك أو خدماتك أو هويتك التجارية.",
-        "pkg1.f1": "تصميم عصري ومتجاوب",
-        "pkg1.f2": "حتى ٥ صفحات",
-        "pkg1.f3": "الدومين مشمول",
-        "pkg1.f4": "ثنائي اللغة (عربي / إنجليزي)",
-        "pkg1.f5": "متوافق مع الجوال",
+/* ====================================================================
+   الجزيئات المتحركة في الخلفية
+==================================================================== */
+function createParticles() {
+  const container = document.getElementById('particles');
+  container.innerHTML = '';
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDelay = (Math.random() * 12) + 's';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.opacity = (0.2 + Math.random() * 0.5).toString();
+    container.appendChild(p);
+  }
+}
 
-        "pkg2.name": "نظام إدارة ذكي",
-        "pkg2.desc": "نظام مخصص للمدارس أو لتنظيم وتحليل البيانات مع لوحة تحكم كاملة.",
-        "pkg2.f1": "لوحة تحكم للمدير",
-        "pkg2.f2": "قاعدة بيانات وتقارير",
-        "pkg2.f3": "صلاحيات وأدوار المستخدمين",
-        "pkg2.f4": "تدفقات عمل مخصصة",
-        "pkg2.f5": "الدومين مشمول",
+/* ====================================================================
+   الأدوات المساعدة
+==================================================================== */
+const SAR = (n) => Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + (state.lang==='ar'?'ريال':'SAR');
+const fmtInt = (n) => Number(n||0).toLocaleString('en-US');
+const fmtDate = (ts) => { const d = new Date(ts); return d.toLocaleDateString('en-GB') + ' ' + d.toLocaleTimeString('en-GB',{hour12:false,hour:'2-digit',minute:'2-digit'}); };
+const fmtDateOnly = (ts) => new Date(ts).toLocaleDateString('en-GB');
+const todayStart = () => { const d = new Date(); d.setHours(0,0,0,0); return d.getTime(); };
+const weekStart = () => { const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - d.getDay()); return d.getTime(); };
+const monthStart = () => { const d = new Date(); d.setHours(0,0,0,0); d.setDate(1); return d.getTime(); };
+const yesterdayStart = () => todayStart() - 86400000;
 
-        "pkg3.name": "متجر إلكتروني متكامل",
-        "pkg3.desc": "متجر إلكتروني كامل بسلة شراء وإدارة منتجات وتجربة شراء عصرية (قائم على قالب جاهز).",
-        "pkg3.f1": "سلة شراء وإتمام الطلب",
-        "pkg3.f2": "إدارة المنتجات",
-        "pkg3.f3": "تصميم اللوقو والبانر",
-        "pkg3.f4": "إعداد قالب احترافي",
-        "pkg3.f5": "الدومين مشمول",
+function escapeHtml(s='') {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
 
-        "pkg4.name": "متجر إلكتروني من الصفر",
-        "pkg4.desc": "متجر إلكتروني مستقل ومبني من الصفر بتصميم فريد بدون استخدام قوالب جاهزة.",
-        "pkg4.f1": "كود مخصص بدون قوالب",
-        "pkg4.f2": "تصميم فريد ومميز",
-        "pkg4.f3": "ملكية كاملة للكود",
-        "pkg4.f4": "ميزات متقدمة شاملة",
-        "pkg4.f5": "الدومين مشمول",
+function genInvoiceNumber(seq) {
+  const year = new Date().getFullYear();
+  return `INV-${year}-${String(seq).padStart(6,'0')}`;
+}
 
-        "pkg5.name": "موقع حسب الطلب",
-        "pkg5.desc": "أي موقع تتخيله — تصميم وتطوير كامل ومخصص حسب متطلباتك بالضبط.",
-        "pkg5.f1": "أي فكرة أو مجال",
-        "pkg5.f2": "تصميم وتجربة مستخدم مخصصة 100٪",
-        "pkg5.f3": "وظائف متقدمة",
-        "pkg5.f4": "أداء عالي وممتاز",
-        "pkg5.f5": "الدومين مشمول",
+/* ====================================================================
+   الباقات الافتراضية
+==================================================================== */
+const DEFAULT_PACKAGES = [
+  { key:'trial',   nameKey:'pkgTrial',   durationHours: 7*24,    price: 30,   features:['طلبات غير محدودة','فواتير احترافية','دعم فني'], isOffer:false },
+  { key:'basic',   nameKey:'pkgBasic',   durationHours: 60*24,   price: 199,  features:['كل ميزات التجريبية','تقارير متقدمة','حاسبة الربح'], isOffer:false },
+  { key:'comp',    nameKey:'pkgComp',    durationHours: 180*24,  price: 699,  features:['كل ميزات الأساسي','نسخ احتياطي','عملاء غير محدودين'], isOffer:false },
+  { key:'premium', nameKey:'pkgPremium', durationHours: 365*24,  price: 1499, features:['كل ميزات الشامل','أولوية الدعم','شعار مخصص للفاتورة'], isOffer:true },
+  { key:'extra',   nameKey:'pkgExtra',   durationHours: 365*24*10, price: 9999, features:['كل ميزات الفاخر','اشتراك طويل الأمد','دعم VIP'], isOffer:false }
+];
 
-        "pkgX.name": "غير متأكد من الباقة المناسبة؟",
-        "pkgX.desc": "تواصل معنا عبر واتساب وسنرشدك للباقة المثالية لمشروعك.",
-        "pkgX.cta": "احصل على استشارة مجانية",
+async function ensureDefaultPackages() {
+  if (!firebaseReady) return;
+  try {
+    const snap = await db.ref('sanad/packages').once('value');
+    if (!snap.exists()) {
+      const now = Date.now();
+      const updates = {};
+      DEFAULT_PACKAGES.forEach((p,i) => {
+        const id = 'pkg_' + p.key;
+        updates[id] = {
+          name: p.nameKey,
+          nameKey: p.nameKey,
+          durationHours: p.durationHours,
+          price: p.price,
+          features: p.features,
+          isOffer: p.isOffer,
+          active: true,
+          createdAt: now + i
+        };
+      });
+      await db.ref('sanad/packages').set(updates);
+    }
+  } catch (e) { console.warn(e); }
+}
 
-        "info.title": "ملاحظة مهمة",
-        "info.body": "الأسعار شاملة الدومين فقط. القوالب والثيمات (إن وُجدت) تشمل إعداد المنتج، وتصميم اللوقو، وبانر مخصص حسب طلب العميل.",
+/* ====================================================================
+   تحميل البيانات من Firebase
+==================================================================== */
+function loadPackages(cb) {
+  if (!firebaseReady) { state.packages = {}; cb && cb(); return; }
+  db.ref('sanad/packages').on('value', snap => {
+    state.packages = snap.val() || {};
+    cb && cb();
+    renderPublicPackages();
+    if (state.user === 'admin' && state.adminPage === 'packages') renderAdminPage();
+  });
+}
+function loadLaundries(cb) {
+  if (!firebaseReady) { state.laundries = {}; cb && cb(); return; }
+  db.ref('sanad/laundries').on('value', snap => {
+    state.laundries = snap.val() || {};
+    cb && cb();
+    if (state.user === 'admin') renderAdminPage();
+  });
+}
 
-        "about.tag": "لماذا نحن",
-        "about.title": "لماذا VOLT STORE؟",
-        "about.sub": "جودة احترافية، أسعار صادقة، ودعم متخصص — مصمم لأصحاب الأعمال الذين يبحثون عن نتائج حقيقية.",
-        "feat1.title": "تسليم سريع",
-        "feat1.desc": "نلتزم بمواعيد التسليم دون التأثير على جودة العمل. معظم المشاريع جاهزة خلال أيام.",
-        "feat2.title": "تصميم احترافي",
-        "feat2.desc": "تصاميم عصرية وأنيقة ترتقي بعلامتك التجارية وتزيد من تحويل الزوار.",
-        "feat3.title": "دعم لغتين",
-        "feat3.desc": "دعم كامل للعربية والإنجليزية مع تخطيط RTL جاهز — مثالي للسوق السعودي.",
-        "feat4.title": "دعم ما بعد البيع",
-        "feat4.desc": "نحن معك بعد التسليم — دعم مستمر، تحديثات، وعناية متخصصة بعملائنا.",
+/* ====================================================================
+   تسجيل الدخول
+==================================================================== */
+const loginInput = document.getElementById('loginInput');
+const loginBtn = document.getElementById('loginBtn');
+const loginError = document.getElementById('loginError');
 
-        "contact.tag": "تواصل",
-        "contact.title": "تواصل معنا",
-        "contact.sub": "عندك مشروع في بالك؟ تواصل معنا. عادةً نرد خلال دقائق عبر واتساب.",
-        "contact.email": "البريد الإلكتروني",
-        "contact.cta": "ابدأ المحادثة",
+loginInput.addEventListener('input', () => {
+  loginInput.value = loginInput.value.replace(/\D/g, '').slice(0,10);
+});
+loginInput.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
 
-        "footer.brand": "POWER YOUR WORKFLOW",
-        "footer.tagline": "حلول رقمية احترافية وتطوير مخصص ومتاجر إلكترونية متميزة — مصنوعة بعناية.",
-        "footer.linksTitle": "روابط سريعة",
-        "footer.socialTitle": "تابعنا",
-        "footer.colors": "الألوان",
-        "footer.copyright": "© 2026 VOLT STORE — جميع الحقوق محفوظة",
+loginBtn.addEventListener('click', async () => {
+  const code = loginInput.value.trim();
+  if (!code || code.length !== 10) {
+    showLoginError(t('invalidCode'));
+    return;
+  }
+  loginBtn.innerHTML = '<span class="spinner-sm"></span>';
+  loginBtn.disabled = true;
 
-        "wa.tooltip": "تواصل معنا",
-        "wa.message": "السلام عليكم، أنا مهتم بخدماتكم"
+  try {
+    if (_isAdminCode(code)) {
+      // دخول المدير
+      state.user = 'admin';
+      if (document.getElementById('rememberMe').checked) {
+        localStorage.setItem('sanad_session', JSON.stringify({ user:'admin' }));
       }
+      enterAdmin();
+      return;
+    }
+    // البحث في المغاسل
+    const lid = await findLaundryByCode(code);
+    if (!lid) {
+      showLoginError(t('invalidCode'));
+      return;
+    }
+    const lobj = state.laundries[lid];
+    // فحص الحالة والانتهاء
+    if (lobj.status === 'paused') { showLoginError(t('paused')); return; }
+    if (lobj.subscriptionEnd && lobj.subscriptionEnd < Date.now()) {
+      // وضع تلقائي للحالة منتهي
+      try { db.ref('sanad/laundries/' + lid + '/status').set('expired'); } catch(e){}
+      showLoginError(t('expired')); return;
+    }
+    state.user = 'laundry';
+    state.laundryId = lid;
+    if (document.getElementById('rememberMe').checked) {
+      localStorage.setItem('sanad_session', JSON.stringify({ user:'laundry', laundryId: lid }));
+    }
+    enterLaundry();
+  } catch (e) {
+    console.warn(e);
+    showLoginError(t('error'));
+  } finally {
+    loginBtn.innerHTML = t('login');
+    loginBtn.disabled = false;
+  }
+});
+
+function showLoginError(msg) {
+  loginError.textContent = msg;
+  loginInput.classList.add('shake');
+  setTimeout(() => loginInput.classList.remove('shake'), 500);
+}
+
+async function findLaundryByCode(code) {
+  // البحث في الكاش
+  for (const id in state.laundries) {
+    if (state.laundries[id].membershipCode === code) return id;
+  }
+  // تحديث من Firebase والمحاولة مجدداً
+  if (firebaseReady) {
+    const snap = await db.ref('sanad/laundries').once('value');
+    state.laundries = snap.val() || {};
+    for (const id in state.laundries) {
+      if (state.laundries[id].membershipCode === code) return id;
+    }
+  }
+  return null;
+}
+
+function logout() {
+  state.user = null;
+  state.laundryId = null;
+  localStorage.removeItem('sanad_session');
+  loginInput.value = '';
+  loginError.textContent = '';
+  // إيقاف الرسوم
+  Object.values(state.charts).forEach(c => { try { c.destroy(); } catch(e){} });
+  state.charts = {};
+  showScreen('landing');
+}
+
+/* استعادة الجلسة عند التحميل */
+function restoreSession() {
+  const sess = localStorage.getItem('sanad_session');
+  if (!sess) return false;
+  try {
+    const s = JSON.parse(sess);
+    if (s.user === 'admin') { state.user = 'admin'; enterAdmin(); return true; }
+    if (s.user === 'laundry' && s.laundryId) {
+      state.user = 'laundry'; state.laundryId = s.laundryId;
+      // التحقق سيتم لاحقاً عند تحميل البيانات
+      enterLaundry();
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+/* ====================================================================
+   دخول لوحة المدير
+==================================================================== */
+function enterAdmin() {
+  showScreen('admin');
+  // ربط أحداث القائمة الجانبية
+  document.querySelectorAll('#adminSidebar .menu-item').forEach(item => {
+    item.onclick = () => {
+      document.querySelectorAll('#adminSidebar .menu-item').forEach(x => x.classList.remove('active'));
+      item.classList.add('active');
+      state.adminPage = item.dataset.page;
+      renderAdminPage();
+      if (window.innerWidth <= 900) document.getElementById('adminSidebar').classList.remove('open');
     };
+  });
+  renderAdminPage();
+}
 
-    /* ============================
-       LANGUAGE LOGIC
-       ============================ */
-    const WA_NUMBER = "966599804296";
+/* ====================================================================
+   دخول لوحة المغسلة
+==================================================================== */
+function enterLaundry() {
+  showScreen('laundry');
+  document.querySelectorAll('#laundrySidebar .menu-item').forEach(item => {
+    item.onclick = () => {
+      document.querySelectorAll('#laundrySidebar .menu-item').forEach(x => x.classList.remove('active'));
+      item.classList.add('active');
+      state.currentPage = item.dataset.page;
+      renderLaundryPage();
+      if (window.innerWidth <= 900) document.getElementById('laundrySidebar').classList.remove('open');
+    };
+  });
+  // تحميل الطلبات
+  loadLaundryOrders(() => {
+    updateLaundryTopbar();
+    renderLaundryPage();
+  });
+}
 
-    function applyLanguage(lang) {
-      const dict = I18N[lang];
-      const isRTL = (lang === 'ar');
+function loadLaundryOrders(cb) {
+  if (!firebaseReady || !state.laundryId) { state.orders = {}; cb && cb(); return; }
+  db.ref('sanad/laundries/' + state.laundryId + '/orders').on('value', snap => {
+    state.orders = snap.val() || {};
+    cb && cb();
+    if (state.user === 'laundry') renderLaundryPage();
+  });
+}
 
-      // root attrs
-      document.documentElement.lang = lang;
-      document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
-      document.body.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
-
-      // toggle label = shows the OTHER lang (the one you can switch to)
-      const langLabel = document.getElementById('langLabel');
-      if (langLabel) langLabel.textContent = isRTL ? 'EN' : 'AR';
-
-      // replace all i18n strings
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (dict[key] !== undefined) {
-          el.textContent = dict[key];
-        }
-      });
-
-      // update WA tooltip
-      const tooltip = document.getElementById('waTooltip');
-      if (tooltip) tooltip.textContent = dict["wa.tooltip"];
-
-      // update floating WA href with translated msg
-      const floatWA = document.getElementById('floatWA');
-      if (floatWA) {
-        floatWA.href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(dict["wa.message"])}`;
-      }
-
-      // update all package WhatsApp links with pre-filled message
-      document.querySelectorAll('[data-wa-pkg]').forEach(link => {
-        const pkg = link.getAttribute('data-wa-pkg');
-        const prefix = isRTL
-          ? `السلام عليكم VOLT STORE، أنا مهتم بباقة: ${pkg}`
-          : `Hello VOLT STORE, I'm interested in the package: ${pkg}`;
-        link.href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(prefix)}`;
-      });
-
-      // persist
-      try { localStorage.setItem('volt_lang', lang); } catch(e) {}
-
-      // page title
-      document.title = isRTL
-        ? "VOLT STORE — حلول رقمية احترافية"
-        : "VOLT STORE — Professional Digital Solutions";
+function updateLaundryTopbar() {
+  const l = state.laundries[state.laundryId] || {};
+  document.getElementById('laundryNameSidebar').textContent = l.name || '—';
+  document.getElementById('topbarLaundryName').textContent = l.name || '—';
+  const sub = document.getElementById('topbarSubscription');
+  if (l.status === 'paused') {
+    sub.innerHTML = `<span class="subscription-badge badge-warning">${t('subPaused')}</span>`;
+  } else if (l.subscriptionEnd) {
+    const remaining = l.subscriptionEnd - Date.now();
+    if (remaining <= 0) {
+      sub.innerHTML = `<span class="subscription-badge badge-danger">${t('subExpired')}</span>`;
+    } else {
+      const days = Math.floor(remaining / 86400000);
+      const hrs = Math.floor((remaining % 86400000) / 3600000);
+      sub.innerHTML = `<span class="subscription-badge badge-success">${t('subActive')} • ${days} ${t('daysLeft')}, ${hrs} ${t('hoursLeft')}</span>`;
     }
+  } else {
+    sub.innerHTML = `<span class="subscription-badge badge-success">${t('subActive')}</span>`;
+  }
+}
 
-    function getInitialLang() {
-      try {
-        const saved = localStorage.getItem('volt_lang');
-        if (saved === 'ar' || saved === 'en') return saved;
-      } catch(e) {}
-      return 'ar'; // default per spec
+/* ====================================================================
+   عرض صفحات لوحة المغسلة
+==================================================================== */
+function renderLaundryPage() {
+  const c = document.getElementById('laundryContent');
+  const page = state.currentPage;
+  Object.values(state.charts).forEach(ch => { try { ch.destroy(); } catch(e){} });
+  state.charts = {};
+  if (page === 'home') c.innerHTML = renderLaundryHome();
+  else if (page === 'newOrder') c.innerHTML = renderNewOrder();
+  else if (page === 'orders') c.innerHTML = renderOrdersList();
+  else if (page === 'reports') c.innerHTML = renderReports();
+  else if (page === 'calculator') c.innerHTML = renderCalculator();
+  else if (page === 'settings') c.innerHTML = renderLaundrySettings();
+  attachPageHandlers();
+}
+
+function attachPageHandlers() {
+  // مستمعو الأحداث بعد التصيير
+  const page = state.currentPage;
+  if (page === 'newOrder') initNewOrderForm();
+  if (page === 'orders') initOrdersList();
+  if (page === 'reports') initReports();
+  if (page === 'calculator') initCalculator();
+  if (page === 'home') initHome();
+}
+
+/* ============== صفحة الرئيسية للمغسلة ============== */
+function getOrdersArray() {
+  return Object.entries(state.orders).map(([id,o]) => ({ id, ...o }));
+}
+
+function ordersInRange(from, to) {
+  return getOrdersArray().filter(o => o.timestamp >= from && o.timestamp <= to);
+}
+
+function renderLaundryHome() {
+  const orders = getOrdersArray();
+  const today = ordersInRange(todayStart(), Date.now());
+  const yest = ordersInRange(yesterdayStart(), todayStart());
+  const week = ordersInRange(weekStart(), Date.now());
+  const month = ordersInRange(monthStart(), Date.now());
+  const todayRev = today.reduce((s,o)=>s+(+o.price||0), 0);
+  const yestRev  = yest.reduce((s,o)=>s+(+o.price||0), 0);
+  const weekRev  = week.reduce((s,o)=>s+(+o.price||0), 0);
+  const monthRev = month.reduce((s,o)=>s+(+o.price||0), 0);
+  const totalRev = orders.reduce((s,o)=>s+(+o.price||0), 0);
+  const trend = yestRev === 0 ? 100 : Math.round(((todayRev - yestRev)/Math.max(yestRev,1))*100);
+  const recent = orders.sort((a,b)=>b.timestamp-a.timestamp).slice(0,8);
+
+  return `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-label">${t('todayRev')}</div><div class="stat-value">${SAR(todayRev)}</div>
+        <div class="stat-trend ${trend>=0?'up':'down'}">${trend>=0?'▲':'▼'} ${Math.abs(trend)}%</div></div>
+      <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-label">${t('weekRev')}</div><div class="stat-value">${SAR(weekRev)}</div></div>
+      <div class="stat-card"><div class="stat-icon">📆</div><div class="stat-label">${t('monthRev')}</div><div class="stat-value">${SAR(monthRev)}</div></div>
+      <div class="stat-card"><div class="stat-icon">📊</div><div class="stat-label">${t('totalRev')}</div><div class="stat-value">${SAR(totalRev)}</div></div>
+      <div class="stat-card"><div class="stat-icon">🧾</div><div class="stat-label">${t('invoicesCount')}</div><div class="stat-value">${fmtInt(orders.length)}</div></div>
+    </div>
+
+    <div class="card section-card">
+      <h2>📋 ${t('recentOrders')}</h2>
+      ${recent.length === 0 ? `<div class="empty-state"><div class="emoji">📭</div>${t('noData')}</div>` : `
+      <div class="table-wrap"><table>
+        <thead><tr><th>${t('invoiceNo')}</th><th>${t('customerName')}</th><th>${t('pieces')}</th><th>${t('price')}</th><th>${t('date')}</th></tr></thead>
+        <tbody>
+          ${recent.map(o => `<tr>
+            <td>${o.invoiceNumber||'—'}</td>
+            <td>${escapeHtml(o.customerName||'—')}</td>
+            <td>${o.pieces||0}</td>
+            <td>${SAR(o.price)}</td>
+            <td>${fmtDate(o.timestamp)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>`}
+    </div>
+  `;
+}
+function initHome() {}
+
+/* ============== صفحة طلب جديد ============== */
+function renderNewOrder() {
+  return `
+    <div class="card section-card">
+      <h2>➕ ${t('navNewOrder')}</h2>
+      <form id="orderForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="input-label">${t('customerName')} *</label>
+            <input class="input" id="of_name" required maxlength="120" />
+          </div>
+          <div class="form-group">
+            <label class="input-label">${t('optionalPhone')}</label>
+            <input class="input" id="of_phone" type="tel" maxlength="20" />
+          </div>
+          <div class="form-group">
+            <label class="input-label">${t('pieces')} *</label>
+            <input class="input" id="of_pieces" type="number" min="1" required />
+          </div>
+          <div class="form-group">
+            <label class="input-label">${t('paymentMethod')} *</label>
+            <select class="input" id="of_method" required>
+              <option value="cash">💵 ${t('cash')}</option>
+              <option value="card">💳 ${t('card')}</option>
+              <option value="other">🔄 ${t('other')}</option>
+            </select>
+          </div>
+          <div class="form-group" id="of_otherWrap" style="display:none">
+            <label class="input-label">${t('otherMethod')}</label>
+            <input class="input" id="of_otherMethod" />
+          </div>
+          <div class="form-group">
+            <label class="input-label">${t('price')} (${state.lang==='ar'?'ريال':'SAR'}) *</label>
+            <input class="input" id="of_price" type="number" min="0" step="0.01" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="input-label">${t('notes')}</label>
+          <textarea class="input" id="of_notes" rows="3"></textarea>
+        </div>
+        <button class="btn btn-primary btn-lg btn-block" type="submit">✓ ${t('submit')}</button>
+      </form>
+    </div>
+  `;
+}
+
+function initNewOrderForm() {
+  const form = document.getElementById('orderForm');
+  const methodSel = document.getElementById('of_method');
+  const otherWrap = document.getElementById('of_otherWrap');
+  methodSel.addEventListener('change', () => {
+    otherWrap.style.display = methodSel.value === 'other' ? 'block' : 'none';
+  });
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    // التحقق من الاشتراك
+    const l = state.laundries[state.laundryId] || {};
+    if (l.status === 'paused') { toast(t('paused'), 'error'); return; }
+    if (l.subscriptionEnd && l.subscriptionEnd < Date.now()) { toast(t('expired'), 'error'); return; }
+
+    const order = {
+      customerName: document.getElementById('of_name').value.trim(),
+      phone: document.getElementById('of_phone').value.trim(),
+      pieces: parseInt(document.getElementById('of_pieces').value || 0),
+      paymentMethod: methodSel.value,
+      paymentMethodOther: methodSel.value === 'other' ? document.getElementById('of_otherMethod').value.trim() : '',
+      price: parseFloat(document.getElementById('of_price').value || 0),
+      notes: document.getElementById('of_notes').value.trim(),
+      timestamp: Date.now()
+    };
+    // رقم الفاتورة تسلسلي
+    const seq = Object.keys(state.orders).length + 1;
+    order.invoiceNumber = genInvoiceNumber(seq);
+
+    showLoading(true);
+    try {
+      const ref = db.ref('sanad/laundries/' + state.laundryId + '/orders').push();
+      await ref.set(order);
+      toast(t('success'), 'success');
+      showInvoice({ id: ref.key, ...order });
+      form.reset();
+      otherWrap.style.display = 'none';
+    } catch (err) {
+      console.warn(err);
+      toast(t('error'), 'error');
+    } finally {
+      showLoading(false);
     }
+  });
+}
 
-    /* ============================
-       INIT
-       ============================ */
-    document.addEventListener('DOMContentLoaded', () => {
+/* ============== الفاتورة ============== */
+function buildInvoiceHtml(order) {
+  const l = state.laundries[state.laundryId] || {};
+  const d = new Date(order.timestamp);
+  const gDate = d.toLocaleDateString('en-GB');
+  const gTime = d.toLocaleTimeString('en-GB',{hour12:false,hour:'2-digit',minute:'2-digit'});
+  let hijri = '';
+  try { hijri = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day:'numeric', month:'long', year:'numeric' }).format(d); } catch(e){}
+  const methodLabel = order.paymentMethod === 'cash' ? t('cash') : order.paymentMethod === 'card' ? t('card') : (order.paymentMethodOther || t('other'));
+  return `
+    <div class="invoice-paper" id="invoicePaper">
+      <div class="invoice-header">
+        <div class="inv-logo sanad-logo">سند</div>
+        <div class="inv-laundry">${escapeHtml(l.name || '')}</div>
+        <div class="inv-tagline">${escapeHtml(l.city||'')} ${l.phone?'• 📱 '+escapeHtml(l.phone):''}</div>
+      </div>
+      <div class="invoice-meta">
+        <div><b>${t('invoiceNo')}:</b> ${order.invoiceNumber}</div>
+        <div><b>${t('date')}:</b> ${gDate} ${gTime}</div>
+        ${hijri?`<div><b>هـ:</b> ${hijri}</div>`:''}
+      </div>
+      <div style="margin-bottom:16px"><b>${t('customerName')}:</b> ${escapeHtml(order.customerName)}</div>
+      <table class="invoice-table">
+        <thead><tr><th>${t('description')||'الوصف'}</th><th>${t('pieces')}</th><th>${t('paymentMethod')}</th><th>${t('total')}</th></tr></thead>
+        <tbody><tr>
+          <td>خدمات غسيل</td>
+          <td>${order.pieces}</td>
+          <td>${methodLabel}</td>
+          <td>${SAR(order.price)}</td>
+        </tr></tbody>
+      </table>
+      ${order.notes?`<div style="margin-bottom:12px;color:#475569"><b>${t('notes')}:</b> ${escapeHtml(order.notes)}</div>`:''}
+      <div class="invoice-total">
+        <div class="label">${t('total')}</div>
+        <div class="amount">${SAR(order.price)}</div>
+      </div>
+      <div style="text-align:center"><div id="invoiceQrcode"></div></div>
+      <div class="invoice-thanks">🙏 ${t('thanks')}</div>
+      <div class="invoice-footer">
+        ${escapeHtml(l.name||'')} ${l.phone?' • 📱 '+escapeHtml(l.phone):''}<br>
+        Powered by سند Sanad © 2026
+      </div>
+    </div>
+  `;
+}
 
-      // Initial language
-      applyLanguage(getInitialLang());
+function showInvoice(order) {
+  const html = `
+    <div class="modal-header">
+      <div class="modal-title">🧾 ${t('invoice')}</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="invoiceMount">${buildInvoiceHtml(order)}</div>
+    <div class="modal-footer no-print">
+      <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
+      <button class="btn btn-secondary" onclick="downloadInvoice('${order.id}')">⬇️ ${t('download')}</button>
+      <button class="btn btn-secondary" onclick="sendWhatsappInvoice('${order.id}')">📱 ${t('sendWhatsapp')}</button>
+      <button class="btn btn-primary" onclick="printInvoice()">🖨️ ${t('print')}</button>
+    </div>
+  `;
+  openModal(html);
+  // توليد QR
+  try {
+    const url = 'https://wa.me/966599804296?text=' + encodeURIComponent('تحقق من فاتورة: ' + order.invoiceNumber);
+    new QRCode(document.getElementById('invoiceQrcode'), { text: url, width: 96, height: 96, correctLevel: QRCode.CorrectLevel.M });
+  } catch(e){}
+}
 
-      // Lang toggle
-      document.getElementById('langToggle').addEventListener('click', () => {
-        const current = document.documentElement.dir === 'rtl' ? 'ar' : 'en';
-        applyLanguage(current === 'ar' ? 'en' : 'ar');
-      });
+function printInvoice() {
+  const html = document.getElementById('invoicePaper').outerHTML;
+  document.getElementById('printArea').innerHTML = html;
+  document.getElementById('printArea').style.display = 'block';
+  window.print();
+  setTimeout(()=>{ document.getElementById('printArea').style.display='none'; }, 500);
+}
 
-      // Sticky navbar shadow
-      const navbar = document.getElementById('navbar');
-      const onScroll = () => {
-        if (window.scrollY > 30) navbar.classList.add('scrolled');
-        else navbar.classList.remove('scrolled');
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
+function downloadInvoice(orderId) {
+  // تنزيل الفاتورة كنسخة HTML قابلة للطباعة
+  const order = state.orders[orderId] ? { id: orderId, ...state.orders[orderId] } : null;
+  if (!order) return;
+  const css = document.querySelector('style').textContent;
+  const inv = buildInvoiceHtml(order);
+  const full = `<!DOCTYPE html><html dir="rtl"><head><meta charset="UTF-8"><title>${order.invoiceNumber}</title><style>${css}</style></head><body style="background:#fff;padding:20px">${inv}<script>window.onload=function(){window.print();}</`+`script></body></html>`;
+  const blob = new Blob([full], { type:'text/html;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = order.invoiceNumber + '.html'; a.click();
+  URL.revokeObjectURL(a.href);
+}
 
-      // Mobile menu
-      const burger = document.getElementById('burger');
-      const mobileMenu = document.getElementById('mobileMenu');
-      burger.addEventListener('click', () => {
-        mobileMenu.classList.toggle('open');
-      });
-      document.querySelectorAll('.mobile-link').forEach(link => {
-        link.addEventListener('click', () => mobileMenu.classList.remove('open'));
-      });
+function sendWhatsappInvoice(orderId) {
+  const order = state.orders[orderId];
+  if (!order) return;
+  const l = state.laundries[state.laundryId] || {};
+  const msg = `🧾 ${t('invoice')}\n${l.name}\n${t('invoiceNo')}: ${order.invoiceNumber}\n${t('customerName')}: ${order.customerName}\n${t('pieces')}: ${order.pieces}\n${t('total')}: ${SAR(order.price)}\n${t('thanks')}`;
+  const phone = order.phone ? order.phone.replace(/\D/g,'') : '';
+  const url = phone ? `https://wa.me/${phone.startsWith('966')?phone:'966'+phone.replace(/^0/,'')}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
 
-      // AOS init
-      if (window.AOS) {
-        AOS.init({
-          duration: 700,
-          easing: 'ease-out-cubic',
-          once: true,
-          offset: 60
-        });
-      }
+/* ============== قائمة الطلبات ============== */
+let ordersPage = 1;
+const PER_PAGE = 50;
+
+function renderOrdersList() {
+  return `
+    <div class="card section-card">
+      <h2>📋 ${t('navOrders')}</h2>
+      <div class="filters-row">
+        <div class="form-group">
+          <label class="input-label">${t('search')}</label>
+          <input class="input" id="ol_search" placeholder="${t('customerName')}" />
+        </div>
+        <div class="form-group">
+          <label class="input-label">${t('paymentMethod')}</label>
+          <select class="input" id="ol_method">
+            <option value="">${t('actions')||'الكل'}</option>
+            <option value="cash">${t('cash')}</option>
+            <option value="card">${t('card')}</option>
+            <option value="other">${t('other')}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="input-label">${t('fromDate')}</label>
+          <input class="input" id="ol_from" type="date" />
+        </div>
+        <div class="form-group">
+          <label class="input-label">${t('toDate')}</label>
+          <input class="input" id="ol_to" type="date" />
+        </div>
+        <button class="btn btn-secondary" id="ol_apply">${t('apply')}</button>
+        <button class="btn btn-success" id="ol_csv">⬇️ ${t('csv')}</button>
+      </div>
+      <div id="ordersTableWrap"></div>
+      <div class="pagination" id="ordersPagination"></div>
+    </div>
+  `;
+}
+
+function initOrdersList() {
+  const apply = () => { ordersPage = 1; renderOrdersTable(); };
+  document.getElementById('ol_apply').onclick = apply;
+  document.getElementById('ol_search').oninput = apply;
+  document.getElementById('ol_method').onchange = apply;
+  document.getElementById('ol_from').onchange = apply;
+  document.getElementById('ol_to').onchange = apply;
+  document.getElementById('ol_csv').onclick = exportOrdersCSV;
+  renderOrdersTable();
+}
+
+function getFilteredOrders() {
+  const q = (document.getElementById('ol_search')?.value || '').toLowerCase().trim();
+  const method = document.getElementById('ol_method')?.value || '';
+  const from = document.getElementById('ol_from')?.value;
+  const to = document.getElementById('ol_to')?.value;
+  let arr = getOrdersArray();
+  if (q) arr = arr.filter(o => (o.customerName||'').toLowerCase().includes(q) || (o.invoiceNumber||'').toLowerCase().includes(q));
+  if (method) arr = arr.filter(o => o.paymentMethod === method);
+  if (from) arr = arr.filter(o => o.timestamp >= new Date(from).getTime());
+  if (to) { const toMs = new Date(to).getTime() + 86399999; arr = arr.filter(o => o.timestamp <= toMs); }
+  arr.sort((a,b)=>b.timestamp-a.timestamp);
+  return arr;
+}
+
+function renderOrdersTable() {
+  const arr = getFilteredOrders();
+  const total = arr.length;
+  const pages = Math.max(1, Math.ceil(total / PER_PAGE));
+  if (ordersPage > pages) ordersPage = pages;
+  const slice = arr.slice((ordersPage-1)*PER_PAGE, ordersPage*PER_PAGE);
+  const wrap = document.getElementById('ordersTableWrap');
+  if (!slice.length) { wrap.innerHTML = `<div class="empty-state"><div class="emoji">📭</div>${t('noData')}</div>`; document.getElementById('ordersPagination').innerHTML=''; return; }
+  wrap.innerHTML = `
+    <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>${t('customerName')}</th><th>${t('pieces')}</th><th>${t('paymentMethod')}</th><th>${t('price')}</th><th>${t('date')}</th><th>${t('actions')}</th></tr></thead>
+      <tbody>
+        ${slice.map(o=>`<tr>
+          <td>${o.invoiceNumber||'—'}</td>
+          <td>${escapeHtml(o.customerName||'')}</td>
+          <td>${o.pieces||0}</td>
+          <td>${o.paymentMethod==='cash'?t('cash'):o.paymentMethod==='card'?t('card'):(o.paymentMethodOther||t('other'))}</td>
+          <td>${SAR(o.price)}</td>
+          <td>${fmtDate(o.timestamp)}</td>
+          <td><div class="table-actions">
+            <button class="icon-btn" onclick="viewOrder('${o.id}')" title="${t('invoice')}">🧾</button>
+            <button class="icon-btn" onclick="sendWhatsappInvoice('${o.id}')" title="WhatsApp">📱</button>
+            <button class="icon-btn danger" onclick="deleteOrder('${o.id}')" title="${t('delete')}">🗑️</button>
+          </div></td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>
+  `;
+  // pagination
+  const pag = document.getElementById('ordersPagination');
+  let buttons = `<button onclick="ordersGo(${ordersPage-1})" ${ordersPage<=1?'disabled':''}>‹</button>`;
+  for (let i=1;i<=pages;i++) {
+    if (Math.abs(i-ordersPage) < 3 || i===1 || i===pages) buttons += `<button class="${i===ordersPage?'active':''}" onclick="ordersGo(${i})">${i}</button>`;
+    else if (Math.abs(i-ordersPage)===3) buttons += `<span>…</span>`;
+  }
+  buttons += `<button onclick="ordersGo(${ordersPage+1})" ${ordersPage>=pages?'disabled':''}>›</button>`;
+  pag.innerHTML = buttons;
+}
+function ordersGo(p) { ordersPage = p; renderOrdersTable(); }
+function viewOrder(id) {
+  const o = state.orders[id]; if (!o) return;
+  showInvoice({ id, ...o });
+}
+function deleteOrder(id) {
+  confirmDialog(t('confirmDelete'), async () => {
+    showLoading(true);
+    try { await db.ref('sanad/laundries/'+state.laundryId+'/orders/'+id).remove(); toast(t('deleted'),'success'); }
+    catch(e){ toast(t('error'),'error'); }
+    finally { showLoading(false); }
+  });
+}
+function exportOrdersCSV() {
+  const arr = getFilteredOrders();
+  const headers = ['Invoice','Customer','Phone','Pieces','Method','Price','Notes','Date'];
+  const rows = arr.map(o => [o.invoiceNumber||'', o.customerName||'', o.phone||'', o.pieces||0, o.paymentMethod||'', o.price||0, (o.notes||'').replace(/\n/g,' '), fmtDate(o.timestamp)]);
+  const csv = [headers, ...rows].map(r => r.map(x => `"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['﻿'+csv], { type:'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'sanad_orders_' + Date.now() + '.csv'; a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+/* ============== التقارير ============== */
+function renderReports() {
+  const orders = getOrdersArray();
+  const today = ordersInRange(todayStart(), Date.now());
+  const yest = ordersInRange(yesterdayStart(), todayStart());
+  const week = ordersInRange(weekStart(), Date.now());
+  const month = ordersInRange(monthStart(), Date.now());
+  const todayRev = today.reduce((s,o)=>s+(+o.price||0),0);
+  const yestRev = yest.reduce((s,o)=>s+(+o.price||0),0);
+  const weekRev = week.reduce((s,o)=>s+(+o.price||0),0);
+  const monthRev = month.reduce((s,o)=>s+(+o.price||0),0);
+  const totalRev = orders.reduce((s,o)=>s+(+o.price||0),0);
+  const avgVal = orders.length ? totalRev/orders.length : 0;
+  const trend = yestRev === 0 ? 100 : Math.round(((todayRev - yestRev)/Math.max(yestRev,1))*100);
+
+  return `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-label">${t('todayRev')}</div><div class="stat-value">${SAR(todayRev)}</div><div class="stat-trend ${trend>=0?'up':'down'}">${trend>=0?'▲':'▼'} ${Math.abs(trend)}%</div></div>
+      <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-label">${t('weekRev')}</div><div class="stat-value">${SAR(weekRev)}</div></div>
+      <div class="stat-card"><div class="stat-icon">📆</div><div class="stat-label">${t('monthRev')}</div><div class="stat-value">${SAR(monthRev)}</div></div>
+      <div class="stat-card"><div class="stat-icon">📊</div><div class="stat-label">${t('totalRev')}</div><div class="stat-value">${SAR(totalRev)}</div></div>
+      <div class="stat-card"><div class="stat-icon">🧾</div><div class="stat-label">${t('invoicesCount')}</div><div class="stat-value">${fmtInt(orders.length)}</div></div>
+      <div class="stat-card"><div class="stat-icon">📈</div><div class="stat-label">${t('avgOrder')}</div><div class="stat-value">${SAR(avgVal)}</div></div>
+    </div>
+
+    <div class="card section-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+        <h2 style="margin:0">📊 ${t('revenueOverTime')}</h2>
+        <div class="tabs">
+          <div class="tab active" data-trange="day">${t('today')}</div>
+          <div class="tab" data-trange="week">${t('week')}</div>
+          <div class="tab" data-trange="month">${t('month')}</div>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartRevenue"></canvas></div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card"><h3>📊 ${t('paymentDist')}</h3><div class="chart-wrap"><canvas id="chartPie"></canvas></div></div>
+      <div class="chart-card"><h3>📊 ${t('revenueByPayment')}</h3><div class="chart-wrap"><canvas id="chartBar"></canvas></div></div>
+      <div class="chart-card"><h3>📊 ${t('ordersPerDay')}</h3><div class="chart-wrap"><canvas id="chartOrders"></canvas></div></div>
+    </div>
+
+    <div class="card section-card" style="margin-top:18px">
+      <h3>📅 ${t('period')}</h3>
+      <div class="filters-row">
+        <div class="form-group"><label class="input-label">${t('fromDate')}</label><input class="input" id="rep_from" type="date" /></div>
+        <div class="form-group"><label class="input-label">${t('toDate')}</label><input class="input" id="rep_to" type="date" /></div>
+        <button class="btn btn-primary" id="rep_apply">${t('apply')}</button>
+        <button class="btn btn-success" onclick="printReports()">🖨️ ${t('print')}</button>
+      </div>
+      <div id="rep_table"></div>
+    </div>
+  `;
+}
+
+function initReports() {
+  document.querySelectorAll('[data-trange]').forEach(tab => {
+    tab.onclick = () => {
+      document.querySelectorAll('[data-trange]').forEach(x => x.classList.remove('active'));
+      tab.classList.add('active');
+      drawRevenueChart(tab.dataset.trange);
+    };
+  });
+  drawRevenueChart('week');
+  drawPaymentCharts();
+  drawOrdersChart();
+  const apply = () => renderReportTable();
+  document.getElementById('rep_apply').onclick = apply;
+  renderReportTable();
+}
+
+function drawRevenueChart(range) {
+  const ctx = document.getElementById('chartRevenue');
+  if (!ctx) return;
+  let labels = [], data = [];
+  const now = Date.now();
+  if (range === 'day') {
+    for (let h=0; h<24; h++) {
+      const from = todayStart() + h*3600000;
+      const to = from + 3599999;
+      const sum = ordersInRange(from,to).reduce((s,o)=>s+(+o.price||0),0);
+      labels.push(h+':00'); data.push(sum);
+    }
+  } else if (range === 'week') {
+    for (let i=6; i>=0; i--) {
+      const from = todayStart() - i*86400000;
+      const to = from + 86399999;
+      labels.push(new Date(from).toLocaleDateString('en-GB',{weekday:'short'}));
+      data.push(ordersInRange(from,to).reduce((s,o)=>s+(+o.price||0),0));
+    }
+  } else {
+    for (let i=29; i>=0; i--) {
+      const from = todayStart() - i*86400000;
+      const to = from + 86399999;
+      labels.push(new Date(from).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'}));
+      data.push(ordersInRange(from,to).reduce((s,o)=>s+(+o.price||0),0));
+    }
+  }
+  if (state.charts.revenue) state.charts.revenue.destroy();
+  state.charts.revenue = new Chart(ctx, {
+    type:'line',
+    data:{ labels, datasets:[{ label:t('revenue'), data, borderColor:'#3B82F6', backgroundColor:'rgba(59,130,246,0.18)', fill:true, tension:0.35, borderWidth:2.5 }] },
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } }, scales:{ x:{ grid:{ color:'rgba(148,163,184,0.1)' } }, y:{ grid:{ color:'rgba(148,163,184,0.1)' } } } }
+  });
+}
+
+function drawPaymentCharts() {
+  const orders = getOrdersArray();
+  const sums = { cash:0, card:0, other:0 };
+  orders.forEach(o => { sums[o.paymentMethod||'other'] = (sums[o.paymentMethod||'other']||0) + (+o.price||0); });
+  const labels = [t('cash'), t('card'), t('other')];
+  const data = [sums.cash, sums.card, sums.other];
+  const colors = ['#10B981','#3B82F6','#F59E0B'];
+  if (document.getElementById('chartPie')) {
+    if (state.charts.pie) state.charts.pie.destroy();
+    state.charts.pie = new Chart(document.getElementById('chartPie'), {
+      type:'doughnut',
+      data:{ labels, datasets:[{ data, backgroundColor: colors, borderWidth:0 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom' } } }
     });
-  </script>
+  }
+  if (document.getElementById('chartBar')) {
+    if (state.charts.bar) state.charts.bar.destroy();
+    state.charts.bar = new Chart(document.getElementById('chartBar'), {
+      type:'bar',
+      data:{ labels, datasets:[{ label:t('revenue'), data, backgroundColor:colors, borderRadius:8 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } } }
+    });
+  }
+}
+
+function drawOrdersChart() {
+  const ctx = document.getElementById('chartOrders');
+  if (!ctx) return;
+  const labels = [], data = [];
+  for (let i=29; i>=0; i--) {
+    const from = todayStart() - i*86400000;
+    const to = from + 86399999;
+    labels.push(new Date(from).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'}));
+    data.push(ordersInRange(from,to).length);
+  }
+  if (state.charts.orders) state.charts.orders.destroy();
+  state.charts.orders = new Chart(ctx, {
+    type:'bar',
+    data:{ labels, datasets:[{ label:t('navOrders'), data, backgroundColor:'rgba(139,92,246,0.7)', borderRadius:6 }] },
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } } }
+  });
+}
+
+function renderReportTable() {
+  const from = document.getElementById('rep_from').value;
+  const to = document.getElementById('rep_to').value;
+  let fromMs = from ? new Date(from).getTime() : monthStart();
+  let toMs = to ? new Date(to).getTime() + 86399999 : Date.now();
+  const arr = ordersInRange(fromMs, toMs);
+  if (!arr.length) { document.getElementById('rep_table').innerHTML = `<div class="empty-state"><div class="emoji">📭</div>${t('noData')}</div>`; return; }
+  // تجميع يومي
+  const byDay = {};
+  arr.forEach(o => { const d = new Date(o.timestamp); d.setHours(0,0,0,0); const k = d.getTime(); byDay[k] = byDay[k] || { count:0, sum:0 }; byDay[k].count++; byDay[k].sum += +o.price||0; });
+  const rows = Object.entries(byDay).sort((a,b)=>b[0]-a[0]).map(([k,v])=>`<tr><td>${fmtDateOnly(+k)}</td><td>${v.count}</td><td>${SAR(v.sum)}</td></tr>`).join('');
+  document.getElementById('rep_table').innerHTML = `
+    <div class="table-wrap"><table>
+      <thead><tr><th>${t('date')}</th><th>${t('invoicesCount')}</th><th>${t('revenue')}</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+  `;
+}
+
+function printReports() {
+  document.getElementById('printArea').innerHTML = document.getElementById('laundryContent').innerHTML;
+  document.getElementById('printArea').style.display = 'block';
+  window.print();
+  setTimeout(()=>document.getElementById('printArea').style.display='none', 500);
+}
+
+/* ============== حاسبة الربح ============== */
+let calcPeriod = 'month';
+
+function renderCalculator() {
+  const orders = getOrdersArray();
+  let from = monthStart(), to = Date.now();
+  if (calcPeriod === 'today') from = todayStart();
+  else if (calcPeriod === 'week') from = weekStart();
+  else if (calcPeriod === 'all') from = 0;
+  const rev = ordersInRange(from, to).reduce((s,o)=>s+(+o.price||0),0);
+
+  return `
+    <div class="card section-card">
+      <h2>💰 ${t('navCalculator')}</h2>
+      <div class="tabs">
+        <div class="tab ${calcPeriod==='today'?'active':''}" data-cp="today">${t('today')}</div>
+        <div class="tab ${calcPeriod==='week'?'active':''}" data-cp="week">${t('week')}</div>
+        <div class="tab ${calcPeriod==='month'?'active':''}" data-cp="month">${t('month')}</div>
+        <div class="tab ${calcPeriod==='all'?'active':''}" data-cp="all">${t('totalRev')}</div>
+      </div>
+      <div class="profit-summary" style="margin-bottom:24px">
+        <div style="font-size:14px;opacity:0.85">${t('totalRevenue')}</div>
+        <div style="font-size:38px;font-weight:900;margin-top:6px" id="calcRevenue">${SAR(rev)}</div>
+      </div>
+
+      <h3>📝 ${t('expenses')}</h3>
+      <div id="expenseRows"></div>
+      <button class="btn btn-secondary" id="addExpense">${t('addField')}</button>
+
+      <div class="profit-summary" id="profitSummary"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap">
+        <button class="btn btn-secondary" id="saveCalcBtn">💾 ${t('saveCalc')}</button>
+        <button class="btn btn-primary" onclick="printCalc()">🖨️ ${t('print')}</button>
+      </div>
+    </div>
+  `;
+}
+
+function initCalculator() {
+  document.querySelectorAll('[data-cp]').forEach(t => {
+    t.onclick = () => { calcPeriod = t.dataset.cp; renderLaundryPage(); };
+  });
+  const rows = document.getElementById('expenseRows');
+  const examples = [t('operatingFees'), t('rent'), t('salaries'), t('electricity'), t('bills')];
+  let idx = 0;
+  function addRow(label='', amt='') {
+    const div = document.createElement('div');
+    div.className = 'expense-row';
+    div.innerHTML = `
+      <div class="form-group"><label class="input-label">${t('label')}</label><input class="input expLabel" placeholder="${examples[idx%examples.length]||t('label')}" value="${escapeHtml(label)}"></div>
+      <div class="form-group"><label class="input-label">${t('amount')}</label><input class="input expAmt" type="number" step="0.01" min="0" placeholder="0" value="${amt}"></div>
+      <button class="icon-btn danger" type="button">🗑️</button>
+    `;
+    rows.appendChild(div);
+    div.querySelector('button').onclick = () => { if (rows.children.length>1) { div.remove(); recalc(); } };
+    div.querySelectorAll('input').forEach(i => i.addEventListener('input', recalc));
+    idx++;
+    recalc();
+  }
+  addRow(t('operatingFees'), 200);
+  document.getElementById('addExpense').onclick = () => addRow();
+  document.getElementById('saveCalcBtn').onclick = saveCalculation;
+  recalc();
+}
+
+function recalc() {
+  const rev = parseFloat(document.getElementById('calcRevenue').textContent.replace(/[^\d.-]/g,'')) || 0;
+  const labels = document.querySelectorAll('.expLabel');
+  const amts = document.querySelectorAll('.expAmt');
+  let total = 0;
+  for (let i=0;i<amts.length;i++) total += parseFloat(amts[i].value)||0;
+  const net = rev - total;
+  document.getElementById('profitSummary').innerHTML = `
+    <div class="row"><span>${t('totalRevenue')}</span><span>${SAR(rev)}</span></div>
+    <div class="row"><span>${t('totalExpenses')}</span><span>${SAR(total)}</span></div>
+    <div class="row total ${net<0?'negative':''}"><span>${t('netProfit')}</span><span>${SAR(net)}</span></div>
+  `;
+}
+
+async function saveCalculation() {
+  const labels = [...document.querySelectorAll('.expLabel')].map(i => i.value.trim());
+  const amts = [...document.querySelectorAll('.expAmt')].map(i => parseFloat(i.value)||0);
+  const expenses = labels.map((l,i)=>({label:l, amount:amts[i]}));
+  const rev = parseFloat(document.getElementById('calcRevenue').textContent.replace(/[^\d.-]/g,''))||0;
+  const totalExp = amts.reduce((s,x)=>s+x,0);
+  const calc = { revenue:rev, expenses, totalExpenses:totalExp, netProfit:rev-totalExp, period:calcPeriod, timestamp:Date.now() };
+  showLoading(true);
+  try { await db.ref('sanad/laundries/'+state.laundryId+'/calculations').push(calc); toast(t('saved'),'success'); }
+  catch(e){ toast(t('error'),'error'); }
+  finally { showLoading(false); }
+}
+
+function printCalc() {
+  document.getElementById('printArea').innerHTML = document.getElementById('laundryContent').innerHTML;
+  document.getElementById('printArea').style.display = 'block';
+  window.print();
+  setTimeout(()=>document.getElementById('printArea').style.display='none', 500);
+}
+
+/* ============== إعدادات المغسلة ============== */
+function renderLaundrySettings() {
+  const l = state.laundries[state.laundryId] || {};
+  const pkg = state.packages[l.packageId];
+  return `
+    <div class="card section-card">
+      <h2>⚙️ ${t('navSettings')}</h2>
+      <div class="form-grid">
+        <div><div class="muted">${t('settingsLang')}</div><strong>${LANGS[state.lang].name}</strong></div>
+        <div><div class="muted">${t('settingsTheme')}</div><strong>${state.theme==='dark'?'Dark':'Light'}</strong></div>
+      </div>
+    </div>
+    <div class="card section-card">
+      <h2>🏢 ${t('profileLaundry')}</h2>
+      <div class="form-grid">
+        <div><div class="muted">${t('laundryName')}</div><strong>${escapeHtml(l.name||'')}</strong></div>
+        <div><div class="muted">${t('city')}</div><strong>${escapeHtml(l.city||'')}</strong></div>
+        <div><div class="muted">${t('phone')}</div><strong>${escapeHtml(l.phone||'')}</strong></div>
+        <div><div class="muted">${t('membershipNo')}</div><strong style="direction:ltr">${escapeHtml(l.membershipCode||'')}</strong></div>
+        ${l.mapLocation?`<div><div class="muted">${t('mapLocation')}</div><a href="${escapeHtml(l.mapLocation)}" target="_blank">🗺️ ${t('mapLocation')}</a></div>`:''}
+      </div>
+    </div>
+    <div class="card section-card">
+      <h2>📦 ${t('subscription')}</h2>
+      <div class="form-grid">
+        <div><div class="muted">${t('selectPackage')}</div><strong>${pkg?translatePackageName(pkg):'—'}</strong></div>
+        <div><div class="muted">${t('status')}</div><strong>${l.status==='paused'?t('subPaused'):(l.subscriptionEnd && l.subscriptionEnd<Date.now()?t('subExpired'):t('subActive'))}</strong></div>
+        ${l.subscriptionEnd?`<div><div class="muted">${t('toDate')}</div><strong>${fmtDateOnly(l.subscriptionEnd)}</strong></div>`:''}
+      </div>
+    </div>
+  `;
+}
+
+/* ====================================================================
+   لوحة المدير — الصفحات
+==================================================================== */
+function renderAdminPage() {
+  const c = document.getElementById('adminContent');
+  Object.values(state.charts).forEach(ch => { try { ch.destroy(); } catch(e){} });
+  state.charts = {};
+  if (state.adminPage === 'overview') c.innerHTML = renderAdminOverview();
+  else if (state.adminPage === 'laundries') c.innerHTML = renderAdminLaundries();
+  else if (state.adminPage === 'packages') c.innerHTML = renderAdminPackages();
+  else if (state.adminPage === 'settings') c.innerHTML = renderAdminSettings();
+  attachAdminHandlers();
+}
+
+function attachAdminHandlers() {
+  if (state.adminPage === 'overview') initAdminOverview();
+  if (state.adminPage === 'laundries') initAdminLaundries();
+  if (state.adminPage === 'packages') initAdminPackages();
+  if (state.adminPage === 'settings') initAdminSettings();
+}
+
+function renderAdminOverview() {
+  const ls = Object.values(state.laundries);
+  const total = ls.length;
+  const active = ls.filter(l => l.status !== 'paused' && (!l.subscriptionEnd || l.subscriptionEnd >= Date.now())).length;
+  const expired = ls.filter(l => l.subscriptionEnd && l.subscriptionEnd < Date.now()).length;
+  const month = monthStart();
+  const newCount = ls.filter(l => l.createdAt >= month).length;
+  // إيرادات الاشتراكات
+  let subsRev = 0;
+  ls.forEach(l => { const p = state.packages[l.packageId]; if (p) subsRev += +p.price || 0; });
+
+  return `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon">🏢</div><div class="stat-label">${t('totalLaundries')}</div><div class="stat-value">${fmtInt(total)}</div></div>
+      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-label">${t('activeLaundries')}</div><div class="stat-value">${fmtInt(active)}</div></div>
+      <div class="stat-card"><div class="stat-icon">⏰</div><div class="stat-label">${t('expiredS')}</div><div class="stat-value">${fmtInt(expired)}</div></div>
+      <div class="stat-card"><div class="stat-icon">🆕</div><div class="stat-label">${t('newSignups')}</div><div class="stat-value">${fmtInt(newCount)}</div></div>
+      <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-label">${t('subsRevenue')}</div><div class="stat-value">${SAR(subsRev)}</div></div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card"><h3>📊 ${t('status')}</h3><div class="chart-wrap"><canvas id="adminStatusChart"></canvas></div></div>
+      <div class="chart-card"><h3>📦 ${t('adminPackages')}</h3><div class="chart-wrap"><canvas id="adminPackagesChart"></canvas></div></div>
+    </div>
+  `;
+}
+
+function initAdminOverview() {
+  const ls = Object.values(state.laundries);
+  const active = ls.filter(l => l.status !== 'paused' && (!l.subscriptionEnd || l.subscriptionEnd >= Date.now())).length;
+  const expired = ls.filter(l => l.subscriptionEnd && l.subscriptionEnd < Date.now()).length;
+  const paused = ls.filter(l => l.status === 'paused').length;
+  const c1 = document.getElementById('adminStatusChart');
+  if (c1) {
+    state.charts.s1 = new Chart(c1, {
+      type:'doughnut',
+      data:{ labels:[t('active'), t('expiredS'), t('subPaused')], datasets:[{ data:[active, expired, paused], backgroundColor:['#10B981','#EF4444','#F59E0B'], borderWidth:0 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom' } } }
+    });
+  }
+  const c2 = document.getElementById('adminPackagesChart');
+  if (c2) {
+    const pkgCounts = {};
+    ls.forEach(l => { const p = state.packages[l.packageId]; const name = p ? translatePackageName(p) : 'N/A'; pkgCounts[name] = (pkgCounts[name]||0)+1; });
+    state.charts.s2 = new Chart(c2, {
+      type:'bar',
+      data:{ labels:Object.keys(pkgCounts), datasets:[{ data:Object.values(pkgCounts), backgroundColor:'#3B82F6', borderRadius:6 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } } }
+    });
+  }
+}
+
+/* ============== إدارة المغاسل ============== */
+function renderAdminLaundries() {
+  const list = Object.entries(state.laundries).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));
+  return `
+    <div class="card section-card">
+      <h2>🏢 ${t('adminLaundries')}</h2>
+      <div class="filters-row">
+        <div class="form-group"><label class="input-label">${t('search')}</label><input class="input" id="lq" placeholder="${t('laundryName')}" /></div>
+        <button class="btn btn-primary" onclick="openLaundryForm()">➕ ${t('addLaundry')}</button>
+      </div>
+      <div id="laundriesTable">
+        ${list.length===0 ? `<div class="empty-state"><div class="emoji">🏢</div>${t('noData')}</div>` : `
+        <div class="table-wrap"><table>
+          <thead><tr><th>${t('laundryName')}</th><th>${t('city')}</th><th>${t('phone')}</th><th>${t('selectPackage')}</th><th>${t('status')}</th><th>${t('toDate')}</th><th>${t('actions')}</th></tr></thead>
+          <tbody>
+            ${list.map(([id,l]) => {
+              const p = state.packages[l.packageId];
+              const expired = l.subscriptionEnd && l.subscriptionEnd < Date.now();
+              const statusBadge = l.status==='paused'?'<span class="badge badge-warning">'+t('subPaused')+'</span>':expired?'<span class="badge badge-danger">'+t('expiredS')+'</span>':'<span class="badge badge-success">'+t('active')+'</span>';
+              return `<tr>
+                <td><strong>${escapeHtml(l.name||'')}</strong><div class="muted" style="direction:ltr">${l.membershipCode||''}</div></td>
+                <td>${escapeHtml(l.city||'')}</td>
+                <td style="direction:ltr">${escapeHtml(l.phone||'')}</td>
+                <td>${p?translatePackageName(p):'—'}</td>
+                <td>${statusBadge}</td>
+                <td>${l.subscriptionEnd?fmtDateOnly(l.subscriptionEnd):'∞'}</td>
+                <td><div class="table-actions">
+                  <button class="icon-btn" onclick="openLaundryForm('${id}')" title="${t('edit')}">✏️</button>
+                  <button class="icon-btn" onclick="toggleLaundryStatus('${id}')" title="${t('pause')}">${l.status==='paused'?'▶️':'⏸️'}</button>
+                  <button class="icon-btn danger" onclick="deleteLaundry('${id}')" title="${t('delete')}">🗑️</button>
+                </div></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table></div>`}
+      </div>
+    </div>
+  `;
+}
+
+function initAdminLaundries() {
+  const q = document.getElementById('lq');
+  q && q.addEventListener('input', () => {
+    const v = q.value.toLowerCase();
+    document.querySelectorAll('#laundriesTable tbody tr').forEach(r => {
+      r.style.display = r.textContent.toLowerCase().includes(v) ? '' : 'none';
+    });
+  });
+}
+
+function openLaundryForm(id) {
+  const l = id ? state.laundries[id] : { membershipCode: genMembershipCode(), status:'active' };
+  const pkgs = Object.entries(state.packages).filter(([,p])=>p.active!==false);
+  openModal(`
+    <div class="modal-header"><div class="modal-title">${id?t('edit'):t('addLaundry')}</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <form id="laundryForm">
+      <div class="form-grid">
+        <div class="form-group"><label class="input-label">${t('laundryName')} *</label><input class="input" name="name" value="${escapeHtml(l.name||'')}" required maxlength="120"></div>
+        <div class="form-group"><label class="input-label">${t('membershipNo')} *</label><input class="input" name="membershipCode" value="${escapeHtml(l.membershipCode||'')}" required pattern="[0-9]{10}" maxlength="10" minlength="10" style="direction:ltr"></div>
+        <div class="form-group"><label class="input-label">${t('city')}</label><input class="input" name="city" value="${escapeHtml(l.city||'')}"></div>
+        <div class="form-group"><label class="input-label">${t('phone')}</label><input class="input" name="phone" value="${escapeHtml(l.phone||'')}" style="direction:ltr"></div>
+        <div class="form-group" style="grid-column:1/-1"><label class="input-label">${t('mapLocation')}</label><input class="input" name="mapLocation" placeholder="https://maps.google.com/..." value="${escapeHtml(l.mapLocation||'')}"></div>
+        <div class="form-group"><label class="input-label">${t('selectPackage')}</label>
+          <select class="input" name="packageId" id="lfPkg">
+            <option value="">—</option>
+            ${pkgs.map(([k,p])=>`<option value="${k}" ${l.packageId===k?'selected':''}>${translatePackageName(p)} — ${SAR(p.price)}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group"><label class="input-label">${t('customHours')}</label><input class="input" name="customHours" type="number" min="1" placeholder="${t('customHours')}" id="lfHours"></div>
+      </div>
+    </form>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
+      <button class="btn btn-primary" onclick="saveLaundry('${id||''}')">${t('save')}</button>
+    </div>
+  `);
+}
+
+function genMembershipCode() {
+  let code = '';
+  for (let i=0;i<10;i++) code += Math.floor(Math.random()*10);
+  // تجنب التضارب
+  for (const id in state.laundries) if (state.laundries[id].membershipCode === code) return genMembershipCode();
+  return code;
+}
+
+async function saveLaundry(id) {
+  const form = document.getElementById('laundryForm');
+  const fd = new FormData(form);
+  const obj = Object.fromEntries(fd.entries());
+  if (!obj.name) { toast(t('error'),'error'); return; }
+  if (!/^\d{10}$/.test(obj.membershipCode)) { toast(t('invalidCode'),'error'); return; }
+  // تحقق عدم تكرار الكود
+  for (const lid in state.laundries) {
+    if (lid !== id && state.laundries[lid].membershipCode === obj.membershipCode) {
+      toast(t('invalidCode'),'error'); return;
+    }
+  }
+  const pkg = state.packages[obj.packageId];
+  const customH = parseInt(obj.customHours || 0);
+  const hours = customH > 0 ? customH : (pkg ? pkg.durationHours : 0);
+  const now = Date.now();
+  const existing = id ? state.laundries[id] : null;
+
+  const data = {
+    name: obj.name,
+    membershipCode: obj.membershipCode,
+    city: obj.city || '',
+    phone: obj.phone || '',
+    mapLocation: obj.mapLocation || '',
+    packageId: obj.packageId || '',
+    status: existing && existing.status === 'paused' ? 'paused' : 'active',
+    createdAt: existing ? existing.createdAt : now,
+    subscriptionStart: existing && existing.subscriptionStart ? existing.subscriptionStart : now,
+    subscriptionEnd: hours ? (existing && existing.subscriptionEnd && id ? existing.subscriptionEnd : now + hours*3600000) : null
+  };
+  // عند التعديل وتغيير الباقة/الساعات نُعيد الحساب
+  if (id && (customH > 0 || (existing && existing.packageId !== obj.packageId))) {
+    data.subscriptionEnd = hours ? now + hours*3600000 : null;
+  }
+
+  showLoading(true);
+  try {
+    if (id) await db.ref('sanad/laundries/'+id).update(data);
+    else await db.ref('sanad/laundries').push(data);
+    toast(id?t('updated'):t('laundryAdded'),'success');
+    closeModal();
+  } catch(e) { console.warn(e); toast(t('error'),'error'); }
+  finally { showLoading(false); }
+}
+
+function toggleLaundryStatus(id) {
+  const l = state.laundries[id]; if (!l) return;
+  const newStatus = l.status === 'paused' ? 'active' : 'paused';
+  db.ref('sanad/laundries/'+id+'/status').set(newStatus).then(() => toast(t('updated'),'success'));
+}
+
+function deleteLaundry(id) {
+  confirmDialog(t('confirmDelete'), async () => {
+    showLoading(true);
+    try { await db.ref('sanad/laundries/'+id).remove(); toast(t('laundryDeleted'),'success'); }
+    catch(e){ toast(t('error'),'error'); }
+    finally { showLoading(false); }
+  });
+}
+
+/* ============== إدارة الباقات ============== */
+function translatePackageName(p) {
+  if (!p) return '';
+  if (p.nameKey && I18N[state.lang] && I18N[state.lang][p.nameKey]) return I18N[state.lang][p.nameKey];
+  if (p.nameTranslations && p.nameTranslations[state.lang]) return p.nameTranslations[state.lang];
+  if (p.nameKey && I18N.ar[p.nameKey]) return I18N.ar[p.nameKey];
+  return p.name || '';
+}
+
+function renderAdminPackages() {
+  const list = Object.entries(state.packages).sort((a,b)=>(a[1].createdAt||0)-(b[1].createdAt||0));
+  return `
+    <div class="card section-card">
+      <h2>📦 ${t('adminPackages')}</h2>
+      <div style="margin-bottom:14px"><button class="btn btn-primary" onclick="openPackageForm()">➕ ${t('addPackage')}</button></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>${t('packageName')}</th><th>${t('durationHours')}</th><th>${t('priceSAR')}</th><th>${t('status')}</th><th>${t('actions')}</th></tr></thead>
+        <tbody>
+          ${list.map(([id,p])=>`<tr>
+            <td><strong>${translatePackageName(p)}</strong>${p.isOffer?` <span class="badge badge-warning">${t('offer')}</span>`:''}</td>
+            <td>${fmtInt(p.durationHours)} h</td>
+            <td>${SAR(p.price)}</td>
+            <td>${p.active===false?'<span class="badge badge-danger">'+t('inactive')+'</span>':'<span class="badge badge-success">'+t('active')+'</span>'}</td>
+            <td><div class="table-actions">
+              <button class="icon-btn" onclick="openPackageForm('${id}')" title="${t('edit')}">✏️</button>
+              <button class="icon-btn danger" onclick="deletePackage('${id}')" title="${t('delete')}">🗑️</button>
+            </div></td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>
+    </div>
+  `;
+}
+function initAdminPackages() {}
+
+function openPackageForm(id) {
+  const p = id ? state.packages[id] : { features:[], active:true, isOffer:false };
+  const features = (p.features||[]).join('\n');
+  const name = p.nameKey ? translatePackageName(p) : (p.name||'');
+  openModal(`
+    <div class="modal-header"><div class="modal-title">${id?t('edit'):t('addPackage')}</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <form id="pkgForm">
+      <div class="form-grid">
+        <div class="form-group"><label class="input-label">${t('packageName')} *</label><input class="input" name="name" value="${escapeHtml(name)}" required></div>
+        <div class="form-group"><label class="input-label">${t('priceSAR')} *</label><input class="input" name="price" type="number" min="0" step="0.01" value="${p.price||0}" required></div>
+        <div class="form-group"><label class="input-label">${t('durationHours')} *</label><input class="input" name="durationHours" type="number" min="1" value="${p.durationHours||168}" required></div>
+        <div class="form-group" style="display:flex;align-items:center;gap:18px;padding-top:24px">
+          <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" name="isOffer" ${p.isOffer?'checked':''}> ${t('isOffer')}</label>
+          <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" name="active" ${p.active!==false?'checked':''}> ${t('active2')}</label>
+        </div>
+      </div>
+      <div class="form-group"><label class="input-label">${t('features')} (سطر لكل ميزة)</label><textarea class="input" name="features" rows="5">${escapeHtml(features)}</textarea></div>
+    </form>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
+      <button class="btn btn-primary" onclick="savePackage('${id||''}')">${t('save')}</button>
+    </div>
+  `);
+}
+
+async function savePackage(id) {
+  const form = document.getElementById('pkgForm');
+  const fd = new FormData(form);
+  const data = {
+    name: fd.get('name'),
+    price: parseFloat(fd.get('price'))||0,
+    durationHours: parseInt(fd.get('durationHours'))||0,
+    features: (fd.get('features')||'').split('\n').map(s=>s.trim()).filter(Boolean),
+    isOffer: !!fd.get('isOffer'),
+    active: !!fd.get('active'),
+    createdAt: id ? (state.packages[id].createdAt || Date.now()) : Date.now()
+  };
+  showLoading(true);
+  try {
+    if (id) await db.ref('sanad/packages/'+id).update(data);
+    else await db.ref('sanad/packages').push(data);
+    toast(id?t('updated'):t('packageAdded'),'success');
+    closeModal();
+  } catch(e){ toast(t('error'),'error'); }
+  finally { showLoading(false); }
+}
+
+function deletePackage(id) {
+  confirmDialog(t('confirmDelete'), async () => {
+    showLoading(true);
+    try { await db.ref('sanad/packages/'+id).remove(); toast(t('packageDeleted'),'success'); }
+    catch(e){ toast(t('error'),'error'); }
+    finally { showLoading(false); }
+  });
+}
+
+/* ============== إعدادات المدير ============== */
+function renderAdminSettings() {
+  return `
+    <div class="card section-card">
+      <h2>⚙️ ${t('adminSettings')}</h2>
+      <div class="form-group"><label class="input-label">${t('whatsappNo')}</label>
+        <input class="input" id="adminWA" value="966599804296" style="direction:ltr">
+      </div>
+      <button class="btn btn-primary" onclick="saveAdminSettings()">${t('save')}</button>
+    </div>
+    <div class="card section-card">
+      <h2>💾 ${t('backupData')}</h2>
+      <p class="muted" style="margin-bottom:12px">صدّر/استورد جميع البيانات (مغاسل، طلبات، باقات)</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-success" onclick="exportAll()">⬇️ ${t('exportAll')}</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 ${t('importData')}</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importAll(this.files[0])">
+      </div>
+    </div>
+  `;
+}
+
+async function initAdminSettings() {
+  try {
+    const snap = await db.ref('sanad/admin/whatsapp').once('value');
+    if (snap.val()) document.getElementById('adminWA').value = snap.val();
+  } catch(e){}
+}
+
+async function saveAdminSettings() {
+  const wa = document.getElementById('adminWA').value.trim();
+  showLoading(true);
+  try { await db.ref('sanad/admin/whatsapp').set(wa); toast(t('saved'),'success'); }
+  catch(e){ toast(t('error'),'error'); }
+  finally { showLoading(false); }
+}
+
+async function exportAll() {
+  showLoading(true);
+  try {
+    const snap = await db.ref('sanad').once('value');
+    const data = snap.val() || {};
+    const blob = new Blob([JSON.stringify(data,null,2)], { type:'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'sanad_backup_' + new Date().toISOString().slice(0,10) + '.json'; a.click();
+    URL.revokeObjectURL(a.href);
+    toast(t('success'),'success');
+  } catch(e){ toast(t('error'),'error'); }
+  finally { showLoading(false); }
+}
+
+function importAll(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      confirmDialog('استبدال كل البيانات الحالية بالنسخة المستوردة؟', async () => {
+        showLoading(true);
+        try { await db.ref('sanad').set(data); toast(t('success'),'success'); }
+        catch(err){ toast(t('error'),'error'); }
+        finally { showLoading(false); }
+      });
+    } catch(err){ toast(t('error'),'error'); }
+  };
+  reader.readAsText(file);
+}
+
+/* ====================================================================
+   باقات الصفحة العامة (Landing)
+==================================================================== */
+function renderPublicPackages() {
+  const container = document.getElementById('publicPackages');
+  if (!container) return;
+  const list = Object.entries(state.packages).filter(([,p])=>p.active!==false).sort((a,b)=>(+a[1].price||0)-(+b[1].price||0));
+  if (!list.length) { container.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">📦</div>${t('noData')}</div>`; return; }
+  container.innerHTML = list.map(([id,p])=>`
+    <div class="package-card ${p.isOffer?'featured':''}">
+      ${p.isOffer?`<div class="offer-badge">🔥 ${t('offer')}</div>`:''}
+      <div class="package-name">${translatePackageName(p)}</div>
+      <div class="package-duration">${Math.round((p.durationHours||0)/24)} ${state.lang==='ar'?'يوم':'days'}</div>
+      <div class="package-price">${fmtInt(p.price)} <small>${state.lang==='ar'?'ريال':'SAR'}</small></div>
+      <ul class="package-features">${(p.features||[]).map(f=>`<li>${escapeHtml(f)}</li>`).join('')}</ul>
+      <button class="subscribe-btn" onclick="subscribeWA('${translatePackageName(p).replace(/'/g,"\\'")}',${p.price})">${t('subscribe')}</button>
+    </div>
+  `).join('');
+}
+
+function subscribeWA(name, price) {
+  const msg = `السلام عليكم، أريد الاشتراك في باقة ${name} بسعر ${price} ريال`;
+  window.open('https://wa.me/966599804296?text=' + encodeURIComponent(msg), '_blank');
+}
+
+/* ====================================================================
+   اختصارات لوحة المفاتيح
+==================================================================== */
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key.toLowerCase() === 'n' && state.user === 'laundry') {
+    e.preventDefault();
+    state.currentPage = 'newOrder';
+    document.querySelectorAll('#laundrySidebar .menu-item').forEach(x => x.classList.toggle('active', x.dataset.page === 'newOrder'));
+    renderLaundryPage();
+  }
+  if (e.key === 'Escape') closeModal();
+});
+
+/* ====================================================================
+   تهيئة التطبيق
+==================================================================== */
+async function initApp() {
+  applyTheme(state.theme);
+  fillLangSelects();
+  applyLang(state.lang);
+  createParticles();
+
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  // تأكد من وجود الباقات الافتراضية
+  await ensureDefaultPackages();
+  // تحميل البيانات
+  loadPackages();
+  loadLaundries(() => {
+    // محاولة استعادة الجلسة
+    restoreSession();
+  });
+
+  // فحص دوري لانتهاء الاشتراك
+  setInterval(() => {
+    if (state.user === 'laundry') {
+      const l = state.laundries[state.laundryId];
+      if (l && l.subscriptionEnd && l.subscriptionEnd < Date.now()) {
+        toast(t('expired'),'error');
+        logout();
+      }
+      updateLaundryTopbar();
+    }
+  }, 60000);
+}
+
+initApp();
+
+</script>
 </body>
 </html>
